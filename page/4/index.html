@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="theme-next use-motion ">
+<html class="theme-next use-motion theme-next-mist">
 <head>
   
 
@@ -56,8 +56,8 @@
 
 <script type="text/javascript" id="hexo.configuration">
   var CONFIG = {
-    scheme: '',
-    sidebar: 'post'
+    scheme: 'Mist',
+    sidebar: 'always'
   };
 </script>
 
@@ -128,6 +128,26 @@
         </li>
       
         
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
@@ -163,124 +183,6 @@
       <div class="main-inner">
         <div id="content" class="content"> 
   <section id="posts" class="posts-expand">
-    
-      
-
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                <a class="post-title-link" href="/移动安全/2015-01-24-NDK开发初体验/2015-01-24.html" itemprop="url">
-                  NDK开发初体验
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2015-01-24T00:00:00+08:00" content="2015-01-24">
-              2015-01-24
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/移动安全/" itemprop="url" rel="index">
-                    <span itemprop="name">移动安全</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <p>1.下载NDK开发工具包(android-ndk-r9-windows-x86.zip)，解压至某一文件夹（我这里是 <strong>D:\Coding\Java</strong>），将NDK的路径（我这里是 <strong>D:\Coding\Java\android-ndk-r9</strong>）放入系统环境变量的path路径中。检验是否成功的方法：打开CMD窗口，输入命令 <strong>ndk-build</strong> 看是否有一下的回显，若有，则是配置正确。</p>
-<blockquote>
-<p>Android NDK: Could not find application project directory !<br>Android NDK: Please define the NDK_PROJECT_PATH variable to point to it.<br>D:\Coding\Java\android-ndk-r9\build/core/build-local.mk:130: <em>*</em> Android NDK: Ab<br>orting    .  Stop.  </p>
-</blockquote>
-<p>2.在NDK的开发包中有实例代码可以供我们学习，打开Eclipse，文件 - 导入 -展开Android - Existing Android Code…… - Next， Brose 选择路径(我这里是 D:\Coding\Java\android-ndk-r9\samples\hello-jni),然后会出现两个项目，暂时只选择第一个项目（如图），点确定。<br><img src="http://i.imgur.com/GDZWzrn.png" alt=""></p>
-<p>3.编译并运行这个项目。编译过程参考<a href="http://www.cnblogs.com/skyseraph/p/3979238.html" target="_blank" rel="external">链接</a> 的第二种方法即可成功编译</p>
-<p>4.可以把编译好的程序安装运行。</p>
-<p>5.也可以编译一个c/c++的程序（无界面）到手机中进行运行</p>
-<p>6.JAVA代码的分析</p>
-<pre><code><span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span>
-</span>{
-    TextView  tv = <span class="keyword">new</span> TextView(<span class="keyword">this</span>);
-    tv.setText( stringFromJNI() ); <span class="comment">//返回so中函数执行的后返回值</span>
-    setContentView(tv);
-}
-<span class="keyword">public</span> <span class="keyword">native</span> <span class="function">String  <span class="title">stringFromJNI</span><span class="params">()</span></span>; <span class="comment">//申明这是一个JNI的函数</span>
-
-<span class="keyword">public</span> <span class="keyword">native</span> <span class="function">String  <span class="title">unimplementedStringFromJNI</span><span class="params">()</span></span>;
-<span class="keyword">static</span> {
-    System.loadLibrary(<span class="string">"hello-jni"</span>); <span class="comment">//访问到.C编译后的so库</span>
-}
-</code></pre><p>7.C代码的分析</p>
-<pre><code>jstring
-Java_com_example_hellojni_HelloJni_stringFromJNI( JNIEnv* env,
-                                                  jobject thiz )
-{
-    <span class="keyword">return</span> <span class="function"><span class="params">(*env)</span>-&gt;</span>NewStringUTF(env, <span class="string">"Hello from JNI !"</span>);
-}
-</code></pre>
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
     
       
 
@@ -530,6 +432,144 @@ Java_com_example_hellojni_HelloJni_stringFromJNI( JNIEnv* env,
 
 
     
+      
+
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                <a class="post-title-link" href="/逆向分析/2014-11-12-linux下逆向分析小结/2014-11-12.html" itemprop="url">
+                  linux下逆向分析小结
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2014-11-12T00:00:00+08:00" content="2014-11-12">
+              2014-11-12
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/逆向分析/" itemprop="url" rel="index">
+                    <span itemprop="name">逆向分析</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <p>因为要做一些CTF，里面的逆向大多是elf格式的，所以上github看了下国外逆向elf格式文件的一些个姿势，自己也实践了一下，记录有些分散，在这里把这些汇总串联起来。现在了解到的linux下的逆向有如下的几个方法：  </p>
+<ul>
+<li><code>strings</code> 命令</li>
+<li><code>ltrace</code> 命令</li>
+<li><code>EDG</code> 动态调试</li>
+<li><code>gdb</code> 动态调试</li>
+<li><code>IDA</code> 远程调试</li>
+</ul>
+<h2 id="0x1_strings">0x1 strings</h2><p>strings 命令是linux命令行下的一个命令，功能是把指定文件中的可见字符串输出出来。个人理解，相当于OD下的字符串查找功能。用这个功能能把应用程序中的一些明文信息直接输出出来，有助于了解这个程序的一些提示信息（遇到password正确的提示就能很快的定位关键点了）。配合grep命令，例如grep 本次竞赛的flag格式的固定字符串有收获也说不定呢。</p>
+<h2 id="0x2_ltrace命令">0x2 ltrace命令</h2><p>和strings一样，也是linux下的一个命令，功能是把指定程序的函数调用流输出出来。他的原理大致如下：类似于调试运行这个程序，发现此程序调用了so中的函数时，将函数调用的参数，返回值都打印出来。和上面一样，利用grep命令效果更好，如果一不小心一些关键的函数尤其是字符串处理函数（例如strcmp strcpy等等）暴露了也能快速定位关键代码。</p>
+<h2 id="0x3_EDG">0x3 EDG</h2><p>EDG是linux下的一个调试工具，模仿OD，作者说要做linux下的OD。所以界面 和 使用方面和OD差不多。在64位 ubuntu下安装这个工具的时候有点坑，总是提示插件路径不对，反复读作者的说明也未能实验成功，最后在google的帮助下找到了原因：64位的lib目录为 <code>lib64</code> 而作者把插件的路径写死成了lib 所以总提示中找不到插件。</p>
+<h2 id="0x4_gdb">0x4 gdb</h2><p>大名鼎鼎的调试工具，不过在无源码的情况下的调试还是和有源码调试的时候不太一样，比如说我们不能直白的使用<code>b main</code> 这样的指令，因为没有符号信息在里面,为了便于调试，总结一些常见指令以备用。</p>
+<ul>
+<li>启动GDB 调试程序<br>gdb ./xxx</li>
+<li>设置参数<br>set args <code>参数1</code> <code>参数2</code> …… </li>
+<li>设置反汇编语法为intel （我个人还是习惯看这种语法的反汇编代码）<br>set disassembly-flavor intel</li>
+<li>查看入口点函数地址<br>info file  （记下入口点的地址）</li>
+<li>在入口点设置断点<br>b *入口点地址</li>
+<li>让程序跑起来<br>r</li>
+<li>查看当前位置20行的反汇编代码<br>x/20i $pc  </li>
+<li>查看断点<br>info b</li>
+<li>查看当前寄存器的值<br>info r </li>
+<li>查看当前内存的值<br>x /nfu <addr><ul>
+<li>n表示要显示基本块的个数</li>
+<li>f表示对基本块的解释方式, 可取如下值<ul>
+<li>x 按十六进制格式显示变量。</li>
+<li>d 按十进制格式显示变量。</li>
+<li>u 按十进制格式显示无符号整型。</li>
+<li>o 按八进制格式显示变量。</li>
+<li>t 按二进制格式显示变量。</li>
+<li>a 按十六进制格式显示变量。</li>
+<li>i 指令地址格式</li>
+<li>c 按字符格式显示变量。</li>
+<li>f 按浮点数格式显示变量。</li>
+</ul>
+</li>
+<li>u表示一个基本块的占几个字节<ul>
+<li>b表示单字节，</li>
+<li>h表示双字节，</li>
+<li>w表示四字节，</li>
+<li>g表示八字节</li>
+</ul>
+</li>
+</ul>
+</addr></li>
+</ul>
+<p>比如：x/3uh 3个基本块，每个块都是双字，按照16进制格式显示</p>
+<h2 id="0x5_IDA">0x5 IDA</h2><p>IDA调试的用法我比较倾向于在win下调试虚拟机中的elf文件，因为win下的ida是破解过的高版本，有比较好的库识别。</p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
   </section>
 
   
@@ -565,23 +605,23 @@ Java_com_example_hellojni_HelloJni_stringFromJNI( JNIEnv* env,
 
       <section class="site-overview sidebar-panel  sidebar-panel-active ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" src="/images/default_avatar.jpg" alt="Lnju" itemprop="image"/>
+          <img class="site-author-image" src="http://bbs.pediy.com/image.php?u=661065&dateline=1419083289&type=thumb" alt="Lnju" itemprop="image"/>
           <p class="site-author-name" itemprop="name">Lnju</p>
         </div>
         <p class="site-description motion-element" itemprop="description"></p>
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">14</span>
+              <span class="site-state-item-count">13</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
-            
+            <a href="/categories">
               <span class="site-state-item-count">7</span>
               <span class="site-state-item-name">分类</span>
-              
+              </a>
           </div>
 
           <div class="site-state-item site-state-tags">
@@ -635,7 +675,7 @@ Java_com_example_hellojni_HelloJni_stringFromJNI( JNIEnv* env,
 <div class="theme-info">
   主题 -
   <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT
+    NexT.Mist
   </a>
 </div>
 

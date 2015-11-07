@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="theme-next use-motion ">
+<html class="theme-next use-motion theme-next-mist">
 <head>
   
 
@@ -56,8 +56,8 @@
 
 <script type="text/javascript" id="hexo.configuration">
   var CONFIG = {
-    scheme: '',
-    sidebar: 'post'
+    scheme: 'Mist',
+    sidebar: 'always'
   };
 </script>
 
@@ -128,6 +128,26 @@
         </li>
       
         
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
@@ -163,101 +183,6 @@
       <div class="main-inner">
         <div id="content" class="content"> 
   <section id="posts" class="posts-expand">
-    
-      
-
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                <a class="post-title-link" href="/移动安全/2015-02-11-更新SDK/2015-02-11.html" itemprop="url">
-                  2015-02-11-国内SDK慢的解决方法
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2015-02-11T00:00:00+08:00" content="2015-02-11">
-              2015-02-11
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/移动安全/" itemprop="url" rel="index">
-                    <span itemprop="name">移动安全</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <p>android SDK一直更新不了，找来找去找到一个开源镜像站，提供android SDK的更新，还有其他常用的部分更新源，例如kali……网址：</p>
-<pre><code><span class="string">http:</span><span class="comment">//mirrors.neusoft.edu.cn/</span>
-</code></pre><p><code>android SDK</code> 的代理更新配置方法</p>
-<pre><code><span class="label">http:</span>//mirrors.neusoft.edu.cn/more.we<span class="preprocessor">#android</span>
-</code></pre><p>配置完成之后明显SDK可以更新了。速度在50K左右，慢慢等好了。</p>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
     
       
 
@@ -482,6 +407,124 @@
 
 
     
+      
+
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                <a class="post-title-link" href="/移动安全/2015-01-24-NDK开发初体验/2015-01-24.html" itemprop="url">
+                  NDK开发初体验
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2015-01-24T00:00:00+08:00" content="2015-01-24">
+              2015-01-24
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/移动安全/" itemprop="url" rel="index">
+                    <span itemprop="name">移动安全</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <p>1.下载NDK开发工具包(android-ndk-r9-windows-x86.zip)，解压至某一文件夹（我这里是 <strong>D:\Coding\Java</strong>），将NDK的路径（我这里是 <strong>D:\Coding\Java\android-ndk-r9</strong>）放入系统环境变量的path路径中。检验是否成功的方法：打开CMD窗口，输入命令 <strong>ndk-build</strong> 看是否有一下的回显，若有，则是配置正确。</p>
+<blockquote>
+<p>Android NDK: Could not find application project directory !<br>Android NDK: Please define the NDK_PROJECT_PATH variable to point to it.<br>D:\Coding\Java\android-ndk-r9\build/core/build-local.mk:130: <em>*</em> Android NDK: Ab<br>orting    .  Stop.  </p>
+</blockquote>
+<p>2.在NDK的开发包中有实例代码可以供我们学习，打开Eclipse，文件 - 导入 -展开Android - Existing Android Code…… - Next， Brose 选择路径(我这里是 D:\Coding\Java\android-ndk-r9\samples\hello-jni),然后会出现两个项目，暂时只选择第一个项目（如图），点确定。<br><img src="http://i.imgur.com/GDZWzrn.png" alt=""></p>
+<p>3.编译并运行这个项目。编译过程参考<a href="http://www.cnblogs.com/skyseraph/p/3979238.html" target="_blank" rel="external">链接</a> 的第二种方法即可成功编译</p>
+<p>4.可以把编译好的程序安装运行。</p>
+<p>5.也可以编译一个c/c++的程序（无界面）到手机中进行运行</p>
+<p>6.JAVA代码的分析</p>
+<pre><code><span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span>
+</span>{
+    TextView  tv = <span class="keyword">new</span> TextView(<span class="keyword">this</span>);
+    tv.setText( stringFromJNI() ); <span class="comment">//返回so中函数执行的后返回值</span>
+    setContentView(tv);
+}
+<span class="keyword">public</span> <span class="keyword">native</span> <span class="function">String  <span class="title">stringFromJNI</span><span class="params">()</span></span>; <span class="comment">//申明这是一个JNI的函数</span>
+
+<span class="keyword">public</span> <span class="keyword">native</span> <span class="function">String  <span class="title">unimplementedStringFromJNI</span><span class="params">()</span></span>;
+<span class="keyword">static</span> {
+    System.loadLibrary(<span class="string">"hello-jni"</span>); <span class="comment">//访问到.C编译后的so库</span>
+}
+</code></pre><p>7.C代码的分析</p>
+<pre><code>jstring
+Java_com_example_hellojni_HelloJni_stringFromJNI( JNIEnv* env,
+                                                  jobject thiz )
+{
+    <span class="keyword">return</span> <span class="function"><span class="params">(*env)</span>-&gt;</span>NewStringUTF(env, <span class="string">"Hello from JNI !"</span>);
+}
+</code></pre>
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
   </section>
 
   
@@ -517,23 +560,23 @@
 
       <section class="site-overview sidebar-panel  sidebar-panel-active ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" src="/images/default_avatar.jpg" alt="Lnju" itemprop="image"/>
+          <img class="site-author-image" src="http://bbs.pediy.com/image.php?u=661065&dateline=1419083289&type=thumb" alt="Lnju" itemprop="image"/>
           <p class="site-author-name" itemprop="name">Lnju</p>
         </div>
         <p class="site-description motion-element" itemprop="description"></p>
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">14</span>
+              <span class="site-state-item-count">13</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
-            
+            <a href="/categories">
               <span class="site-state-item-count">7</span>
               <span class="site-state-item-name">分类</span>
-              
+              </a>
           </div>
 
           <div class="site-state-item site-state-tags">
@@ -587,7 +630,7 @@
 <div class="theme-info">
   主题 -
   <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT
+    NexT.Mist
   </a>
 </div>
 

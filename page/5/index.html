@@ -210,8 +210,8 @@
             
             
               
-                <a class="post-title-link" href="/CTF/2014-11-09-XCTF第一站-HUCTF/2014-11-09.html" itemprop="url">
-                  HUCTF
+                <a class="post-title-link" href="/移动安全/2015-02-11-2015阿里移动安全后记/2015-02-11.html" itemprop="url">
+                  2015阿里移动安全笔记(未完待续)
                 </a>
               
             
@@ -221,8 +221,8 @@
         <div class="post-meta">
           <span class="post-time">
             发表于
-            <time itemprop="dateCreated" datetime="2014-11-09T00:00:00+08:00" content="2014-11-09">
-              2014-11-09
+            <time itemprop="dateCreated" datetime="2015-02-11T00:00:00+08:00" content="2015-02-11">
+              2015-02-11
             </time>
           </span>
 
@@ -231,8 +231,8 @@
               &nbsp; | &nbsp; 分类于
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/CTF/" itemprop="url" rel="index">
-                    <span itemprop="name">CTF</span>
+                  <a href="/categories/移动安全/" itemprop="url" rel="index">
+                    <span itemprop="name">移动安全</span>
                   </a>
                 </span>
 
@@ -263,15 +263,258 @@
         
           <span itemprop="articleBody">
             
-              <p>##0x1 babyCrack</p>
-<p>不得不吐槽一下出题的哥们把题目写错了，只要第一个参数满足条件，就会提示正确，唯一能看到的明码字符串提交上去也不正确（具体记不清了）～一开始还以为有什么特殊的技巧，因为看着已经有人做出来了……还好没多久，主办方修改了key，终于提交成功～</p>
-<p>##0x2 babyCrack2</p>
-<p>这题是个.NET程序，用大名鼎鼎的.NET逆向工具打开，找到程序的反编译出来的源码即可得到明文字符串的key。最多考察一下相关工具的使用吧。</p>
-<p>##0x3 wow</p>
-<p>这题是这次比赛收获比较大的一道linux逆向题目，帮助我练习了一下linux下的逆向，然后还有一点点小trick的积累。首先是运行，发现直接跑是跑不起来的，发现so文件缺失，心里想着先用IDA直接反编译吧。反编译之后，发现可以根据残留的函数命名找到关键的函数位置。来到算法的地方，经过一番分析之后，抽象出来这实际上是一道数学问题– 解n元n次方程组的问题。我似乎想起了线代老师倩丽的身影，可是缺想不到怎么去解这个方程。学渣的心酸吖。正准备45度仰望星空感叹的时候，扫见了桌上的python书，记得借python书的时候旁边有本书写python用于科学计算的。于是搜了搜python有没有解N元N次方程的题目的库，没想到百度百科上居然都有，我是有多落伍……果断把numpy这个库下下来，只需一秒，结果马上出来了。又一次感慨搞算法的人的强大之处。</p>
-<p>##0x4 总结</p>
-<p>终于结束了，后半场都没有怎么输出（回去睡觉了）…… 逆向题目该能做的都做出来了，关于APK的题目目前还是两眼一抹瞎，移动端可是未来的主流，而android是未来的windows，所以移动安全真的很重要，所以该好好关注一下安卓逆向了（IOS也买不起吖）。然后就是感觉在一次比赛中能有所收获，有经验的积累自己就很满足了。尽管认识到和高手们的差距还是很大。不过古语云：不积跬步，无以致千里。一点一滴的扎实的积累才是真正的成长！</p>
+              <p><a href="https://github.com/987432340/987432340.github.io/releases/download/2015Ali%E7%A7%BB%E5%8A%A8%E5%AE%89%E5%85%A81-5/2015.1-5.zip" target="_blank" rel="external">阿里2015安卓逆向1-5题下载</a></p>
+<h3 id="第一题分析">第一题分析</h3><ol>
+<li><p>直接把APK文件拖放到模拟器之中，模拟器会自动安装并运行程序（我这里用到的是<a href="http://www.genymotion.net/" target="_blank" rel="external">genymotion模拟器</a>），可以看到就是一个简单的输入框，点击确定，看输入密码是否正确的程序。</p>
+</li>
+<li><p>将apk拖放进ApkIDE中，反编译程序。发现一系列的异常  <br></p>
+<blockquote>
+<p>正在反编译Apk…  - 失败：W: Could not decode attr value, using undecoded value instead: ns=android, name=versionCode, value=0x00000002<br>Cleaning up unclosed ZipFile for archive C:\Users\Administrator\apktool\framework\1.apk<br>W: Could not decode attr value, using undecoded value instead: ns=android, name=versionName, value=0x00000010<br>Exception in thread “main” java.lang.NullPointerException</p>
+<pre><code>at brut<span class="class">.androlib</span><span class="class">.res</span><span class="class">.decoder</span><span class="class">.XmlPullStreamDecoder</span>$<span class="number">1</span>.<span class="function"><span class="title">parseManifest</span><span class="params">(XmlPullStreamDecoder.java:<span class="number">101</span>)</span></span> 
+</code></pre></blockquote>
+</li>
+</ol>
+<p><br></p>
+<ol>
+<li>使用刚刚了解到的一款工具 <code>AndroidKiller</code>尝试反编译APK，发现反编译出来了 <code>smali</code>文件，根据上面的判断，我们应该找到工程的 <code>MainActivity</code>中的 <code>onClick</code>方法，查看按钮事件。可以使用集成工具的搜索功能快速定位   </li>
+<li>关键代码如下：  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View paramAnonymousView)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">  String str1 = localEditText.getText().toString();</span><br><span class="line">  String str2 = MainActivity.<span class="keyword">this</span>.getTableFromPic();</span><br><span class="line">  String str3 = MainActivity.<span class="keyword">this</span>.getPwdFromPic();</span><br><span class="line">  Log.i(<span class="string">"lil"</span>, <span class="string">"table:"</span> + str2);</span><br><span class="line">  Log.i(<span class="string">"lil"</span>, <span class="string">"pw:"</span> + str3);</span><br><span class="line">  String str4 = <span class="string">""</span>;</span><br><span class="line">  <span class="keyword">try</span></span><br><span class="line">  &#123;</span><br><span class="line">    str4 = MainActivity.bytesToAliSmsCode(str2, str1.getBytes(<span class="string">"utf-8"</span>));</span><br><span class="line">    Log.i(<span class="string">"lil"</span>, <span class="string">"enPassword:"</span> + str4);</span><br><span class="line">    <span class="keyword">if</span> ((str3 != <span class="keyword">null</span>) &amp;&amp; (!str3.equals(<span class="string">""</span>)) &amp;&amp; (str3.equals(str4)))</span><br><span class="line">    &#123;</span><br><span class="line">      MainActivity.<span class="keyword">this</span>.showDialog();</span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></li>
+<li>分析上面的代码可以知道str1是我们输入的内容，str2,str3是通过2个自定义的方法的返回值，而这两个方法偏偏无法被正常反编译出来，但是再往下看，眼前一亮，底下有log直接把str2和str3输出出来了。那么在 <code>bytesToAliSmsCode</code>的函数中2个输入的参数都是已知的，<code>str2</code>和 <code>str1</code>经过运算得到的 <code>str4</code>要和 <code>str3</code>相等，则密码正确，整个逻辑已经通顺了。</li>
+<li>解决问题：使用<code>AndroidKiller</code>的logcat进行查看str2 str3.发现输入进去的位数和经过运算后的str4是相等的，又试验，1234，2134，3214，4321几个数字，发现经过运算和位置是没有关系的，好像是什么古典密码学的简单查表，于是直接输入1234567890，一下子密码就都出来了。<img src="https://github.com/987432340/987432340.github.io/releases/download/123/123.jpg" alt="">  <img src="https://github.com/987432340/987432340.github.io/releases/download/123/1234567890.jpg" alt=""></li>
+<li>密码是：581026 <img src="https://github.com/987432340/987432340.github.io/releases/download/123/QQ.20150211221043.jpg" alt=""></li>
+<li>总结<ol>
+<li>要知道log是我们的忠实的伙伴</li>
+<li>有些时候可以跳过加密算法黑盒解决问题</li>
+</ol>
+</li>
+</ol>
+<hr>
 
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                <a class="post-title-link" href="/资源/2015-02-10-Android安全学习资源汇总/2015-02-10.html" itemprop="url">
+                  Android安全学习资源汇总
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2015-02-10T00:00:00+08:00" content="2015-02-10">
+              2015-02-10
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/资源/" itemprop="url" rel="index">
+                    <span itemprop="name">资源</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <ul>
+<li><p>跟随大牛的blog</p>
+<ul>
+<li><a href="http://0nly3nd.sinaapp.com/" target="_blank" rel="external">0nly3nd</a></li>
+<li><a href="http://secauo.com/" target="_blank" rel="external">secauo</a></li>
+<li><a href="http://blog.csdn.net/guiguzi1110" target="_blank" rel="external">鬼哥</a></li>
+<li><a href="http://www.9hao.info/" target="_blank" rel="external">91hao</a></li>
+<li><a href="http://blog.csdn.net/androidsecurity" target="_blank" rel="external">CSDN安卓安全</a></li>
+<li><a href="wiki.secmobi.com">secmobi</a> 大牛推荐的资源</li>
+<li><a href="http://www.droidsec.org/wiki/" target="_blank" rel="external">droidsec</a> 有关于安卓安全的论文、工具、exp、CrackMe（居然有各个CTF的题）、其他网站、相关书籍</li>
+<li><a href="http://ashishb.net/security/android-security-related-tools/" target="_blank" rel="external">ashishb</a> <code>分享</code> 安卓在线分析网站、各种分析工具、逆向工程工具、源代码、一些paper</li>
+<li><a href="https://androidsecuritywiki.com/" target="_blank" rel="external">androidsecuritywiki</a> 分类超级全面：有上面那些有的，也有混淆，加壳的一些分享 棒棒哒</li>
+</ul>
+</li>
+<li><p><a href="http://androidxref.com/" target="_blank" rel="external">android源码在线浏览</a></p>
+</li>
+<li><a href="http://segmentfault.com/blog/stormzhang/1190000002401964" target="_blank" rel="external">史上最详细的Android Studio系列教程</a></li>
+</ul>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                <a class="post-title-link" href="/移动安全/2015-01-24-NDK开发初体验/2015-01-24.html" itemprop="url">
+                  NDK开发初体验
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2015-01-24T00:00:00+08:00" content="2015-01-24">
+              2015-01-24
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/移动安全/" itemprop="url" rel="index">
+                    <span itemprop="name">移动安全</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <p>1.下载NDK开发工具包(android-ndk-r9-windows-x86.zip)，解压至某一文件夹（我这里是 <strong>D:\Coding\Java</strong>），将NDK的路径（我这里是 <strong>D:\Coding\Java\android-ndk-r9</strong>）放入系统环境变量的path路径中。检验是否成功的方法：打开CMD窗口，输入命令 <strong>ndk-build</strong> 看是否有一下的回显，若有，则是配置正确。</p>
+<blockquote>
+<p>Android NDK: Could not find application project directory !<br>Android NDK: Please define the NDK_PROJECT_PATH variable to point to it.<br>D:\Coding\Java\android-ndk-r9\build/core/build-local.mk:130: <em>*</em> Android NDK: Ab<br>orting    .  Stop.  </p>
+</blockquote>
+<p>2.在NDK的开发包中有实例代码可以供我们学习，打开Eclipse，文件 - 导入 -展开Android - Existing Android Code…… - Next， Brose 选择路径(我这里是 D:\Coding\Java\android-ndk-r9\samples\hello-jni),然后会出现两个项目，暂时只选择第一个项目（如图），点确定。<br><img src="http://i.imgur.com/GDZWzrn.png" alt=""></p>
+<p>3.编译并运行这个项目。编译过程参考<a href="http://www.cnblogs.com/skyseraph/p/3979238.html" target="_blank" rel="external">链接</a> 的第二种方法即可成功编译</p>
+<p>4.可以把编译好的程序安装运行。</p>
+<p>5.也可以编译一个c/c++的程序（无界面）到手机中进行运行</p>
+<p>6.JAVA代码的分析</p>
+<pre><code><span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span>
+</span>{
+    TextView  tv = <span class="keyword">new</span> TextView(<span class="keyword">this</span>);
+    tv.setText( stringFromJNI() ); <span class="comment">//返回so中函数执行的后返回值</span>
+    setContentView(tv);
+}
+<span class="keyword">public</span> <span class="keyword">native</span> <span class="function">String  <span class="title">stringFromJNI</span><span class="params">()</span></span>; <span class="comment">//申明这是一个JNI的函数</span>
+
+<span class="keyword">public</span> <span class="keyword">native</span> <span class="function">String  <span class="title">unimplementedStringFromJNI</span><span class="params">()</span></span>;
+<span class="keyword">static</span> {
+    System.loadLibrary(<span class="string">"hello-jni"</span>); <span class="comment">//访问到.C编译后的so库</span>
+}
+</code></pre><p>7.C代码的分析</p>
+<pre><code>jstring
+Java_com_example_hellojni_HelloJni_stringFromJNI( JNIEnv* env,
+                                                  jobject thiz )
+{
+    <span class="keyword">return</span> <span class="function"><span class="params">(*env)</span>-&gt;</span>NewStringUTF(env, <span class="string">"Hello from JNI !"</span>);
+}
+</code></pre>
             
           </span>
         
@@ -296,7 +539,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span>
+    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -334,7 +577,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">13</span>
+              <span class="site-state-item-count">19</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -348,7 +591,7 @@
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">10</span>
+              <span class="site-state-item-count">12</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
@@ -383,7 +626,7 @@
       <div class="footer-inner"> <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2015</span>
+  <span itemprop="copyrightYear">2016</span>
   <span class="with-love">
     <i class="icon-next-heart fa fa-heart"></i>
   </span>

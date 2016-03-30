@@ -67,7 +67,7 @@
 12push ebpmov ebp,esp
 当这两句执行完之后，">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Stack_Trace">
+<meta property="og:title" content="调试器栈回溯如何实现">
 <meta property="og:url" content="http://www.plaype.cc/编程/Stack-Trace/2015-11-18.html">
 <meta property="og:site_name" content="Lnju's notepad">
 <meta property="og:description" content="去面试被问到一个问题，
@@ -79,9 +79,9 @@
 通常一个函数的开头是
 12push ebpmov ebp,esp
 当这两句执行完之后，">
-<meta property="og:updated_time" content="2015-11-18T16:28:45.000Z">
+<meta property="og:updated_time" content="2016-03-30T13:34:48.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Stack_Trace">
+<meta name="twitter:title" content="调试器栈回溯如何实现">
 <meta name="twitter:description" content="去面试被问到一个问题，
 
 调试器是怎么实现栈桢回溯的?
@@ -108,7 +108,7 @@
   };
 </script>
 
-  <title> Stack_Trace | Lnju's notepad </title>
+  <title> 调试器栈回溯如何实现 | Lnju's notepad </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -214,7 +214,7 @@
             
               <i class="menu-item-icon fa fa-question-circle fa-fw"></i> <br />
             
-            menu.wiki
+            Mywiki
           </a>
         </li>
       
@@ -256,7 +256,7 @@
             
             
               
-                Stack_Trace
+                调试器栈回溯如何实现
               
             
           </h1>
@@ -321,7 +321,7 @@
 <p>这个问题应该是属于<strong>基础</strong>的问题，可是当时答的不好，可能是好久都没有看代码了，已经脑子僵化了，今天回来有兴致google了一下具体的方法.</p>
 <p>总结来讲：分2类情况谈论，具体情况是，编译器在编译的过程中，是否有做过优化，再具体而言，就是ebp是否是指向 <em>栈桢</em> 。</p>
 <p>通常一个函数的开头是</p>
-<figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">push</span> <span class="literal">ebp</span></span><br><span class="line"><span class="keyword">mov</span> <span class="literal">ebp</span>,<span class="literal">esp</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">push ebp</span><br><span class="line">mov ebp,esp</span><br></pre></td></tr></table></figure>
 <p>当这两句执行完之后，栈上的情况如下：</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">局部变量 <span class="number">1</span></span><br><span class="line">局部变量 <span class="number">2</span></span><br><span class="line">…… ……</span><br><span class="line">局部变量 n</span><br><span class="line">push进来的ebp</span><br><span class="line">函数的返回地址</span><br><span class="line">参数 <span class="number">1</span></span><br><span class="line">参数 <span class="number">2</span></span><br><span class="line">参数 <span class="number">3</span></span><br><span class="line">… …</span><br><span class="line">参数 n</span><br></pre></td></tr></table></figure>
 <p>在编译器没有优化的时候，是这种情况，这个时候，返回地址实际上就是 <code>[ebp+4]</code></p>
@@ -360,8 +360,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/逆向分析/RC4/2015-11-20.html" rel="prev" title="RC4">
-                RC4 <i class="fa fa-chevron-right"></i>
+              <a href="/逆向分析/RC4/2015-11-20.html" rel="prev" title="RC4算法总结">
+                RC4算法总结 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -430,7 +430,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">19</span>
+              <span class="site-state-item-count">17</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -447,7 +447,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-count">14</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

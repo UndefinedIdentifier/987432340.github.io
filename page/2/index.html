@@ -191,7 +191,7 @@
             
               <i class="menu-item-icon fa fa-question-circle fa-fw"></i> <br />
             
-            menu.wiki
+            Mywiki
           </a>
         </li>
       
@@ -212,255 +212,6 @@
           <div id="content" class="content">
             
   <section id="posts" class="posts-expand">
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/逆向分析/RC4/2015-11-20.html" itemprop="url">
-                  RC4
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2015-11-20T15:13:11+08:00" content="2015-11-20">
-              2015-11-20
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/逆向分析/" itemprop="url" rel="index">
-                    <span itemprop="name">逆向分析</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="特征：">特征：</h3><ol>
-<li>算法简单-&gt; 运行速度快-&gt; 被采用的多 </li>
-<li>只有一个密钥（对称加密算法），密钥长度可变，1-256字节，常见密钥长度128bit，16字节</li>
-</ol>
-<h3 id="几个关键因素">几个关键因素</h3><ol>
-<li><strong>密钥流</strong>：明文 + 密钥 -&gt; 密钥流 因为在加密时，密文第i字节=明文第i字节^密钥流第i字节.密钥流是在逐个字节xor加密过程中一直不断生成的，明文有多长，密钥流就有多长</li>
-<li><strong>状态向量S</strong>：256字节长度的数组。256个字节是0～255的不同排列组合</li>
-<li><strong>临时向量T</strong>：256字节长度的数组。如果密钥的长度是256字节，就直接把密钥的值赋给T，否则（一般情况下16字节），轮转地将密钥的每个字节赋给T，这个T向量可有可无，因为可以用轮转的i简化掉T</li>
-<li><strong>密钥K</strong>：通常密钥的长度趣味16字节(128bit).不过密钥长度在1-256字节范围内可变</li>
-</ol>
-<h3 id="步骤">步骤</h3><h5 id="1-初始化长度为256的S盒。">1.初始化长度为256的S盒。</h5><p> 第一个for循环将0到255的互不重复的元素装入S盒。</p>
-<p> 第二个for循环根据密钥打乱S盒。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 初始化第一个for，给256长度逐个字节赋值 </span></span><br><span class="line"><span class="keyword">for</span> i from <span class="number">0</span> to <span class="number">255</span></span><br><span class="line">     S[i] := i</span><br><span class="line"> endfor</span><br><span class="line"></span><br><span class="line"> <span class="comment">// 初始化第二个for，打乱S盒。</span></span><br><span class="line"> <span class="comment">// 具体打乱的细节：初始化一个指针j=0，用j =j+ S[i]+K[i]</span></span><br><span class="line"> <span class="comment">// S[i] + k[i(对key长度取余保证你能循环)] </span></span><br><span class="line"> j := <span class="number">0</span></span><br><span class="line"> <span class="keyword">for</span>( i=<span class="number">0</span> ; i&lt;<span class="number">256</span> ; i++)</span><br><span class="line">     j := (j + S[i] + key[i mod keylength]) % <span class="number">256</span></span><br><span class="line">     swap values of S[i] and S[j]</span><br><span class="line"> endfor</span><br></pre></td></tr></table></figure>
-<p>有些书上可能为了教学方便，会对第二个for进行变化。在第二个for前，生成T[256].</p>
-<figure class="highlight prolog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="name">T</span>[<span class="atom">i</span>] =  <span class="atom">key</span>[<span class="atom">i</span> <span class="atom">mod</span> <span class="atom">keylength</span>]</span><br><span class="line"><span class="atom">j</span> = (<span class="atom">j</span> + <span class="name">S</span>[<span class="atom">i</span>] + <span class="name">T</span>[<span class="atom">i</span>]) <span class="comment">% 256</span></span><br></pre></td></tr></table></figure>
-<h5 id="2-_i,j是两个指针,每次循环中交换S[i]_S[j],且_明文xor_(S[i]+S[j])">2. i,j是两个指针,每次循环中交换S[i] S[j],且 明文xor (S[i]+S[j])</h5><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 两个指针</span></span><br><span class="line"> i := <span class="number">0</span></span><br><span class="line"> j := <span class="number">0</span></span><br><span class="line"> <span class="keyword">while</span> True:</span><br><span class="line">     i := (i + <span class="number">1</span>) mod <span class="number">256</span>   <span class="comment">//第一个指针 ＝ 当前循环变量i+1</span></span><br><span class="line">     j := (j + S[i]) mod <span class="number">256</span> <span class="comment">//第二个指针 +＝ S[i]</span></span><br><span class="line">     swap values of S[i] and S[j]  <span class="comment">// 打乱S盒 </span></span><br><span class="line">     k := inputByte ^ S[(S[i] + S[j]) % <span class="number">256</span>] </span><br><span class="line">     output K</span><br><span class="line"> endwhile</span><br></pre></td></tr></table></figure>
-<h3 id="算法特征提取">算法特征提取</h3><h5 id="1-_从循环的角度看">1. 从循环的角度看</h5><p>前2次循环都是256次，一般是for循环；后一次循环次数＝明文的长度。</p>
-<h5 id="2-_从S盒参与运算的输入输出情况看">2. 从S盒参与运算的输入输出情况看</h5><p>第一次，S盒作为输出<br>第二次，S盒，密钥key作为输入，输出j指针；j指针输入，输出S盒。<br>第三次，S盒输入，输出j指针；i，j指针输入，输出S盒；明文，S盒，i,j输入，输出密文</p>
-<p>以后可以参考这些判断RC4算法。</p>
-<p><strong>参考链接 </strong> <a href="https://zh.wikipedia.org/wiki/RC4" target="_blank" rel="external">https://zh.wikipedia.org/wiki/RC4</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/编程/Stack-Trace/2015-11-18.html" itemprop="url">
-                  Stack_Trace
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2015-11-18T23:53:33+08:00" content="2015-11-18">
-              2015-11-18
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/编程/" itemprop="url" rel="index">
-                    <span itemprop="name">编程</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>去面试被问到一个问题，</p>
-<blockquote>
-<p>调试器是怎么实现栈桢回溯的?</p>
-</blockquote>
-<p>这个问题应该是属于<strong>基础</strong>的问题，可是当时答的不好，可能是好久都没有看代码了，已经脑子僵化了，今天回来有兴致google了一下具体的方法.</p>
-<p>总结来讲：分2类情况谈论，具体情况是，编译器在编译的过程中，是否有做过优化，再具体而言，就是ebp是否是指向 <em>栈桢</em> 。</p>
-<p>通常一个函数的开头是</p>
-<figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">push</span> <span class="literal">ebp</span></span><br><span class="line"><span class="keyword">mov</span> <span class="literal">ebp</span>,<span class="literal">esp</span></span><br></pre></td></tr></table></figure>
-<p>当这两句执行完之后，栈上的情况如下：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">局部变量 <span class="number">1</span></span><br><span class="line">局部变量 <span class="number">2</span></span><br><span class="line">…… ……</span><br><span class="line">局部变量 n</span><br><span class="line">push进来的ebp</span><br><span class="line">函数的返回地址</span><br><span class="line">参数 <span class="number">1</span></span><br><span class="line">参数 <span class="number">2</span></span><br><span class="line">参数 <span class="number">3</span></span><br><span class="line">… …</span><br><span class="line">参数 n</span><br></pre></td></tr></table></figure>
-<p>在编译器没有优化的时候，是这种情况，这个时候，返回地址实际上就是 <code>[ebp+4]</code></p>
-<p>找到一段代码</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> Debug::TraceStackTrace(<span class="keyword">unsigned</span> <span class="keyword">int</span> MaxFrames)</span><br><span class="line">&#123;</span><br><span class="line">	 <span class="comment">// Stack contains:</span></span><br><span class="line">    <span class="comment">//  Second function argument 类方法，this指针</span></span><br><span class="line">    <span class="comment">//  First function argument (MaxFrames) 第一个函数参数</span></span><br><span class="line">    <span class="comment">//  Return address in calling function  返回地址</span></span><br><span class="line">    <span class="comment">//  ebp of calling function (pointed to by current ebp) ebp指针</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> * ebp = &amp;MaxFrames - <span class="number">2</span>; </span><br><span class="line">    <span class="comment">//MaxFrames 取地址是指针，-2 就是 -8</span></span><br><span class="line">    <span class="comment">//通过这个函数的参数，找到当前函数的栈桢ebp</span></span><br><span class="line">    <span class="comment">//同时，这个参数的值也能表示要找几层栈桢</span></span><br><span class="line">    Trace(<span class="string">"Stack trace:\n"</span>);</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">unsigned</span> <span class="keyword">int</span> frame = <span class="number">0</span>; frame &lt; MaxFrames; ++frame)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">unsigned</span> <span class="keyword">int</span> eip = ebp[<span class="number">1</span>]; <span class="comment">//找到函数返回地址</span></span><br><span class="line">        <span class="keyword">if</span>(eip == <span class="number">0</span>)</span><br><span class="line">            <span class="comment">// No caller on stack</span></span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="comment">// Unwind to previous stack frame</span></span><br><span class="line">        <span class="comment">// 找到上一层的栈桢ebp</span></span><br><span class="line">        ebp = <span class="keyword">reinterpret_cast</span>&lt;<span class="keyword">unsigned</span> <span class="keyword">int</span> *&gt;(ebp[<span class="number">0</span>]);</span><br><span class="line">        <span class="keyword">unsigned</span> <span class="keyword">int</span> * arguments = &amp;ebp[<span class="number">2</span>];</span><br><span class="line">        Trace(<span class="string">"  0x&#123;0:16&#125;     \n"</span>, eip);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>还有一种情况是编译器已经优化了代码，或者说写代码的人使用了非默认的编译选项，这种情况就应该使用调试信息，符号表什么的。这种情况在参考链接的讨论页面有所讨论到。</p>
-<p>参考链接: <a href="http://wiki.osdev.org/Stack_Trace" target="_blank" rel="external">http://wiki.osdev.org/Stack_Trace</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
     
       
 
@@ -637,11 +388,247 @@ fwrite(addr,<span class="number">1</span>,<span class="built_in">length</span>,f
 
 
     
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/移动安全/2015-03-16-轻松+愉快调试Android/2015-03-16.html" itemprop="url">
+                  轻松+愉快调试Android
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-03-16T00:00:00+08:00" content="2015-03-16">
+              2015-03-16
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/移动安全/" itemprop="url" rel="index">
+                    <span itemprop="name">移动安全</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>经常会遇到安卓调试的时候，DDMS看不到所有的进程列表，在百般无助的时候，学长向我伸出援手，给了我这个链接，果然好用，记录备用。</p>
+<p><a href="http://www.kanxue.com/bbs/showthread.php?p=1291716" target="_blank" rel="external">引用：看雪论坛</a></p>
+<blockquote>
+<p>根据android的官方文档，如果要调试一个apk里面的dex代码，必须满足以下两个条件中的任何一个：</p>
+<ol>
+<li>apk中的AndroidManifest.xml文件中的Application标签包含属性android:debuggable=”true”</li>
+<li>/default.prop中ro.debuggable的值为1<br>由于正常的软件发布时都不会把android:debuggable设置为false（当然也不排除某些很2的应用偏偏就是true），所以要达成条件1需要对app进行重新打包，这不仅每次分析一个apk都重复操作，而且很多软件会对自身进行校验，重打包后执行会被检测到，所以想办法满足第2个条件是个一劳永逸的办法。<br>由于default.prop是保存在boot.img的ramdisk中，这部分每次重新启动都会重新从rom中加载，所以要到目的必须修改boot.img中的ramdisk并重新刷到设备中。修改步骤如下（我没试过，有兴趣的倒腾下）：</li>
+</ol>
+</blockquote>
+<p>像我这样的新手看到这么多的步骤就吓哭了……这游戏还能不能玩儿……有没有简单的方法呢？答案是肯定的！那就是使用Xposed的HOOK插件xinstaller开启系统中所有应用的调试功能：</p>
+<h3 id="第一步，非常简单，在已经ROOT好的手机或虚拟机里安装好xpose框架和xinstaller插件">第一步，非常简单，在已经ROOT好的手机或虚拟机里安装好xpose框架和xinstaller插件</h3><p><a href="http://repo.xposed.info/module/de.robv.android.xposed.installer" target="_blank" rel="external">xposed</a></p>
+<p><a href="http://repo.xposed.info/module/com.pyler.xinstaller" target="_blank" rel="external">xinstaller</a></p>
+<h3 id="第二步，开启模块，点击【xinstall插件】设置_【专家模式】，进入【其他设置】开启【调试应用】，最后【重启】">第二步，开启模块，点击【xinstall插件】设置 【专家模式】，进入【其他设置】开启【调试应用】，最后【重启】</h3><p><a href="http://appscan.360.cn/blog/?p=73" target="_blank" rel="external">原文链接</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/移动安全/2015-03-06-安卓反破解小姿势/2015-03-06.html" itemprop="url">
+                  安卓反破解小姿势
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-03-06T00:00:00+08:00" content="2015-03-06">
+              2015-03-06
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/移动安全/" itemprop="url" rel="index">
+                    <span itemprop="name">移动安全</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>以下2个方法来自<a href="http://www.52pojie.cn/thread-263205-1-1.html" target="_blank" rel="external">爱加密反破解教程</a></p>
+<h4 id="0x1_伪加密">0x1 <code>伪加密</code></h4><p><code>伪加密</code>不是真正的加密，而是通过修改 <code>.apk</code>文件的一个字段，达到让解压缩工具在解压apk包内的各个数据的时候，让<code>解压缩工具(例如：好压)</code>以为这个压缩apk包是有密码的，提示让用户输入解压缩密码。</p>
+<p>具体做法是：用16进制工具（我这里用的Hex Workshop）打开apk文件，搜索16进制值“504b0102”,找到后修改 02 之后的第五位,把偶数改成奇数，这里我改成了09，如图所示：</p>
+<p><img src="https://github.com/987432340/987432340.github.io/releases/download/2014-3-6/1.jpg" alt=""></p>
+<p>解压文件效果：</p>
+<p><img src="https://github.com/987432340/987432340.github.io/releases/download/2014-3-6/2.jpg" alt=""></p>
+<h4 id="0x2_反破解工具破解">0x2 <code>反破解工具破解</code></h4><p>Android系统对APK的识别是从标志头到标志尾，其他多余数据都会无视。而PC端认为apk文件是压缩包，所以在文件结束的地方，添加一些无用的数据，则解压工具出错。</p>
+<p>经过测试，好压可以正确的解压缩修改后的apk文件（可能好压也是从从标志头到标志尾这样算的），WinRar没用实验，ApkIDE（改之理）反编译失败，如图：</p>
+<p><img src="https://github.com/987432340/987432340.github.io/releases/download/2014-3-6/3.jpg" alt=""></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -682,7 +669,7 @@ fwrite(addr,<span class="number">1</span>,<span class="built_in">length</span>,f
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">19</span>
+              <span class="site-state-item-count">17</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -699,7 +686,7 @@ fwrite(addr,<span class="number">1</span>,<span class="built_in">length</span>,f
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-count">14</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

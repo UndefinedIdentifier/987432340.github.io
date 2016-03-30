@@ -234,6 +234,128 @@
             
               
                 
+                <a class="post-title-link" href="/编程/Stack-Trace/2015-11-18.html" itemprop="url">
+                  调试器栈回溯如何实现
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-11-18T23:53:33+08:00" content="2015-11-18">
+              2015-11-18
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/编程/" itemprop="url" rel="index">
+                    <span itemprop="name">编程</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>去面试被问到一个问题，</p>
+<blockquote>
+<p>调试器是怎么实现栈桢回溯的?</p>
+</blockquote>
+<p>这个问题应该是属于<strong>基础</strong>的问题，可是当时答的不好，可能是好久都没有看代码了，已经脑子僵化了，今天回来有兴致google了一下具体的方法.</p>
+<p>总结来讲：分2类情况谈论，具体情况是，编译器在编译的过程中，是否有做过优化，再具体而言，就是ebp是否是指向 <em>栈桢</em> 。</p>
+<p>通常一个函数的开头是</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">push ebp</span><br><span class="line">mov ebp,esp</span><br></pre></td></tr></table></figure>
+<p>当这两句执行完之后，栈上的情况如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">局部变量 <span class="number">1</span></span><br><span class="line">局部变量 <span class="number">2</span></span><br><span class="line">…… ……</span><br><span class="line">局部变量 n</span><br><span class="line">push进来的ebp</span><br><span class="line">函数的返回地址</span><br><span class="line">参数 <span class="number">1</span></span><br><span class="line">参数 <span class="number">2</span></span><br><span class="line">参数 <span class="number">3</span></span><br><span class="line">… …</span><br><span class="line">参数 n</span><br></pre></td></tr></table></figure>
+<p>在编译器没有优化的时候，是这种情况，这个时候，返回地址实际上就是 <code>[ebp+4]</code></p>
+<p>找到一段代码</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> Debug::TraceStackTrace(<span class="keyword">unsigned</span> <span class="keyword">int</span> MaxFrames)</span><br><span class="line">&#123;</span><br><span class="line">	 <span class="comment">// Stack contains:</span></span><br><span class="line">    <span class="comment">//  Second function argument 类方法，this指针</span></span><br><span class="line">    <span class="comment">//  First function argument (MaxFrames) 第一个函数参数</span></span><br><span class="line">    <span class="comment">//  Return address in calling function  返回地址</span></span><br><span class="line">    <span class="comment">//  ebp of calling function (pointed to by current ebp) ebp指针</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> * ebp = &amp;MaxFrames - <span class="number">2</span>; </span><br><span class="line">    <span class="comment">//MaxFrames 取地址是指针，-2 就是 -8</span></span><br><span class="line">    <span class="comment">//通过这个函数的参数，找到当前函数的栈桢ebp</span></span><br><span class="line">    <span class="comment">//同时，这个参数的值也能表示要找几层栈桢</span></span><br><span class="line">    Trace(<span class="string">"Stack trace:\n"</span>);</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">unsigned</span> <span class="keyword">int</span> frame = <span class="number">0</span>; frame &lt; MaxFrames; ++frame)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">unsigned</span> <span class="keyword">int</span> eip = ebp[<span class="number">1</span>]; <span class="comment">//找到函数返回地址</span></span><br><span class="line">        <span class="keyword">if</span>(eip == <span class="number">0</span>)</span><br><span class="line">            <span class="comment">// No caller on stack</span></span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="comment">// Unwind to previous stack frame</span></span><br><span class="line">        <span class="comment">// 找到上一层的栈桢ebp</span></span><br><span class="line">        ebp = <span class="keyword">reinterpret_cast</span>&lt;<span class="keyword">unsigned</span> <span class="keyword">int</span> *&gt;(ebp[<span class="number">0</span>]);</span><br><span class="line">        <span class="keyword">unsigned</span> <span class="keyword">int</span> * arguments = &amp;ebp[<span class="number">2</span>];</span><br><span class="line">        Trace(<span class="string">"  0x&#123;0:16&#125;     \n"</span>, eip);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>还有一种情况是编译器已经优化了代码，或者说写代码的人使用了非默认的编译选项，这种情况就应该使用调试信息，符号表什么的。这种情况在参考链接的讨论页面有所讨论到。</p>
+<p>参考链接: <a href="http://wiki.osdev.org/Stack_Trace" target="_blank" rel="external">http://wiki.osdev.org/Stack_Trace</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/移动安全/对DexHunter的学习笔记/2015-11-13.html" itemprop="url">
                   对DexHunter的学习笔记
                 </a>
@@ -508,122 +630,6 @@ fwrite(addr,<span class="number">1</span>,<span class="built_in">length</span>,f
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/移动安全/2015-03-06-安卓反破解小姿势/2015-03-06.html" itemprop="url">
-                  安卓反破解小姿势
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2015-03-06T00:00:00+08:00" content="2015-03-06">
-              2015-03-06
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/移动安全/" itemprop="url" rel="index">
-                    <span itemprop="name">移动安全</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>以下2个方法来自<a href="http://www.52pojie.cn/thread-263205-1-1.html" target="_blank" rel="external">爱加密反破解教程</a></p>
-<h4 id="0x1_伪加密">0x1 <code>伪加密</code></h4><p><code>伪加密</code>不是真正的加密，而是通过修改 <code>.apk</code>文件的一个字段，达到让解压缩工具在解压apk包内的各个数据的时候，让<code>解压缩工具(例如：好压)</code>以为这个压缩apk包是有密码的，提示让用户输入解压缩密码。</p>
-<p>具体做法是：用16进制工具（我这里用的Hex Workshop）打开apk文件，搜索16进制值“504b0102”,找到后修改 02 之后的第五位,把偶数改成奇数，这里我改成了09，如图所示：</p>
-<p><img src="https://github.com/987432340/987432340.github.io/releases/download/2014-3-6/1.jpg" alt=""></p>
-<p>解压文件效果：</p>
-<p><img src="https://github.com/987432340/987432340.github.io/releases/download/2014-3-6/2.jpg" alt=""></p>
-<h4 id="0x2_反破解工具破解">0x2 <code>反破解工具破解</code></h4><p>Android系统对APK的识别是从标志头到标志尾，其他多余数据都会无视。而PC端认为apk文件是压缩包，所以在文件结束的地方，添加一些无用的数据，则解压工具出错。</p>
-<p>经过测试，好压可以正确的解压缩修改后的apk文件（可能好压也是从从标志头到标志尾这样算的），WinRar没用实验，ApkIDE（改之理）反编译失败，如图：</p>
-<p><img src="https://github.com/987432340/987432340.github.io/releases/download/2014-3-6/3.jpg" alt=""></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -669,7 +675,7 @@ fwrite(addr,<span class="number">1</span>,<span class="built_in">length</span>,f
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-count">18</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -677,7 +683,7 @@ fwrite(addr,<span class="number">1</span>,<span class="built_in">length</span>,f
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-count">8</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -686,7 +692,7 @@ fwrite(addr,<span class="number">1</span>,<span class="built_in">length</span>,f
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-count">16</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

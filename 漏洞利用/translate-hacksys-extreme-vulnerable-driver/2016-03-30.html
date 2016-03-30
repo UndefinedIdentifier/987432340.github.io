@@ -41,7 +41,7 @@
 <link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="调试器 栈桢," />
+  <meta name="keywords" content="漏洞利用,翻译," />
 
 
 
@@ -57,40 +57,28 @@
 
 
 
-<meta name="description" content="去面试被问到一个问题，
-
-调试器是怎么实现栈桢回溯的?
-
-这个问题应该是属于基础的问题，可是当时答的不好，可能是好久都没有看代码了，已经脑子僵化了，今天回来有兴致google了一下具体的方法.
-总结来讲：分2类情况谈论，具体情况是，编译器在编译的过程中，是否有做过优化，再具体而言，就是ebp是否是指向 栈桢 。
-通常一个函数的开头是
-12push ebpmov ebp,esp
-当这两句执行完之后，">
+<meta name="description" content="这篇博客给了一个驱动练习内核溢出的程序。
+介绍HackSys Extreme Vulnerable Driver是为了安全爱好者学习、增强内核溢出技术而故意开发的有漏洞的windows驱动程序。
+HackSys Extreme Vulnerable Driver提供从简单地缓冲区溢出到复杂的UAF以及 Pool Overflows等广阔漏洞范围，这允许安全研究者从所有实现的漏洞去探索溢出技术。
+什">
 <meta property="og:type" content="article">
-<meta property="og:title" content="调试器栈回溯如何实现">
-<meta property="og:url" content="http://www.plaype.cc/编程/Stack-Trace/2015-11-18.html">
+<meta property="og:title" content="一个windows内核漏洞练习驱动">
+<meta property="og:url" content="http://www.plaype.cc/漏洞利用/translate-hacksys-extreme-vulnerable-driver/2016-03-30.html">
 <meta property="og:site_name" content="Lnju's notepad">
-<meta property="og:description" content="去面试被问到一个问题，
-
-调试器是怎么实现栈桢回溯的?
-
-这个问题应该是属于基础的问题，可是当时答的不好，可能是好久都没有看代码了，已经脑子僵化了，今天回来有兴致google了一下具体的方法.
-总结来讲：分2类情况谈论，具体情况是，编译器在编译的过程中，是否有做过优化，再具体而言，就是ebp是否是指向 栈桢 。
-通常一个函数的开头是
-12push ebpmov ebp,esp
-当这两句执行完之后，">
-<meta property="og:updated_time" content="2016-03-30T13:34:48.000Z">
+<meta property="og:description" content="这篇博客给了一个驱动练习内核溢出的程序。
+介绍HackSys Extreme Vulnerable Driver是为了安全爱好者学习、增强内核溢出技术而故意开发的有漏洞的windows驱动程序。
+HackSys Extreme Vulnerable Driver提供从简单地缓冲区溢出到复杂的UAF以及 Pool Overflows等广阔漏洞范围，这允许安全研究者从所有实现的漏洞去探索溢出技术。
+什">
+<meta property="og:image" content="http://www.payatu.com/wp-content/uploads/2015/05/2015-06-03_22h27_24.png">
+<meta property="og:image" content="http://www.payatu.com/wp-content/uploads/2015/05/2015-05-27_20h22_35.png">
+<meta property="og:image" content="http://www.payatu.com/wp-content/uploads/2015/05/2015-05-27_20h28_07.png">
+<meta property="og:updated_time" content="2016-03-30T15:14:31.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="调试器栈回溯如何实现">
-<meta name="twitter:description" content="去面试被问到一个问题，
-
-调试器是怎么实现栈桢回溯的?
-
-这个问题应该是属于基础的问题，可是当时答的不好，可能是好久都没有看代码了，已经脑子僵化了，今天回来有兴致google了一下具体的方法.
-总结来讲：分2类情况谈论，具体情况是，编译器在编译的过程中，是否有做过优化，再具体而言，就是ebp是否是指向 栈桢 。
-通常一个函数的开头是
-12push ebpmov ebp,esp
-当这两句执行完之后，">
+<meta name="twitter:title" content="一个windows内核漏洞练习驱动">
+<meta name="twitter:description" content="这篇博客给了一个驱动练习内核溢出的程序。
+介绍HackSys Extreme Vulnerable Driver是为了安全爱好者学习、增强内核溢出技术而故意开发的有漏洞的windows驱动程序。
+HackSys Extreme Vulnerable Driver提供从简单地缓冲区溢出到复杂的UAF以及 Pool Overflows等广阔漏洞范围，这允许安全研究者从所有实现的漏洞去探索溢出技术。
+什">
 
 
 
@@ -108,7 +96,7 @@
   };
 </script>
 
-  <title> 调试器栈回溯如何实现 | Lnju's notepad </title>
+  <title> 一个windows内核漏洞练习驱动 | Lnju's notepad </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -256,7 +244,7 @@
             
             
               
-                调试器栈回溯如何实现
+                一个windows内核漏洞练习驱动
               
             
           </h1>
@@ -268,8 +256,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2015-11-18T23:53:33+08:00" content="2015-11-18">
-              2015-11-18
+            <time itemprop="dateCreated" datetime="2016-03-30T00:00:00+08:00" content="2016-03-30">
+              2016-03-30
             </time>
           </span>
 
@@ -282,8 +270,8 @@
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/编程/" itemprop="url" rel="index">
-                    <span itemprop="name">编程</span>
+                  <a href="/categories/漏洞利用/" itemprop="url" rel="index">
+                    <span itemprop="name">漏洞利用</span>
                   </a>
                 </span>
 
@@ -314,21 +302,47 @@
       
 
       
-        <p>去面试被问到一个问题，</p>
-<blockquote>
-<p>调试器是怎么实现栈桢回溯的?</p>
-</blockquote>
-<p>这个问题应该是属于<strong>基础</strong>的问题，可是当时答的不好，可能是好久都没有看代码了，已经脑子僵化了，今天回来有兴致google了一下具体的方法.</p>
-<p>总结来讲：分2类情况谈论，具体情况是，编译器在编译的过程中，是否有做过优化，再具体而言，就是ebp是否是指向 <em>栈桢</em> 。</p>
-<p>通常一个函数的开头是</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">push ebp</span><br><span class="line">mov ebp,esp</span><br></pre></td></tr></table></figure>
-<p>当这两句执行完之后，栈上的情况如下：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">局部变量 <span class="number">1</span></span><br><span class="line">局部变量 <span class="number">2</span></span><br><span class="line">…… ……</span><br><span class="line">局部变量 n</span><br><span class="line">push进来的ebp</span><br><span class="line">函数的返回地址</span><br><span class="line">参数 <span class="number">1</span></span><br><span class="line">参数 <span class="number">2</span></span><br><span class="line">参数 <span class="number">3</span></span><br><span class="line">… …</span><br><span class="line">参数 n</span><br></pre></td></tr></table></figure>
-<p>在编译器没有优化的时候，是这种情况，这个时候，返回地址实际上就是 <code>[ebp+4]</code></p>
-<p>找到一段代码</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> Debug::TraceStackTrace(<span class="keyword">unsigned</span> <span class="keyword">int</span> MaxFrames)</span><br><span class="line">&#123;</span><br><span class="line">	 <span class="comment">// Stack contains:</span></span><br><span class="line">    <span class="comment">//  Second function argument 类方法，this指针</span></span><br><span class="line">    <span class="comment">//  First function argument (MaxFrames) 第一个函数参数</span></span><br><span class="line">    <span class="comment">//  Return address in calling function  返回地址</span></span><br><span class="line">    <span class="comment">//  ebp of calling function (pointed to by current ebp) ebp指针</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> * ebp = &amp;MaxFrames - <span class="number">2</span>; </span><br><span class="line">    <span class="comment">//MaxFrames 取地址是指针，-2 就是 -8</span></span><br><span class="line">    <span class="comment">//通过这个函数的参数，找到当前函数的栈桢ebp</span></span><br><span class="line">    <span class="comment">//同时，这个参数的值也能表示要找几层栈桢</span></span><br><span class="line">    Trace(<span class="string">"Stack trace:\n"</span>);</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">unsigned</span> <span class="keyword">int</span> frame = <span class="number">0</span>; frame &lt; MaxFrames; ++frame)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">unsigned</span> <span class="keyword">int</span> eip = ebp[<span class="number">1</span>]; <span class="comment">//找到函数返回地址</span></span><br><span class="line">        <span class="keyword">if</span>(eip == <span class="number">0</span>)</span><br><span class="line">            <span class="comment">// No caller on stack</span></span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="comment">// Unwind to previous stack frame</span></span><br><span class="line">        <span class="comment">// 找到上一层的栈桢ebp</span></span><br><span class="line">        ebp = <span class="keyword">reinterpret_cast</span>&lt;<span class="keyword">unsigned</span> <span class="keyword">int</span> *&gt;(ebp[<span class="number">0</span>]);</span><br><span class="line">        <span class="keyword">unsigned</span> <span class="keyword">int</span> * arguments = &amp;ebp[<span class="number">2</span>];</span><br><span class="line">        Trace(<span class="string">"  0x&#123;0:16&#125;     \n"</span>, eip);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>还有一种情况是编译器已经优化了代码，或者说写代码的人使用了非默认的编译选项，这种情况就应该使用调试信息，符号表什么的。这种情况在参考链接的讨论页面有所讨论到。</p>
-<p>参考链接: <a href="http://wiki.osdev.org/Stack_Trace" target="_blank" rel="external">http://wiki.osdev.org/Stack_Trace</a></p>
+        <p>这篇<a href="http://www.payatu.com/hacksys-extreme-vulnerable-driver/" target="_blank" rel="external">博客</a>给了一个驱动练习内核溢出的程序。</p>
+<h1 id="介绍">介绍</h1><p><strong>HackSys Extreme Vulnerable Driver</strong>是为了安全爱好者学习、增强内核溢出技术而故意开发的有漏洞的windows驱动程序。</p>
+<p><strong>HackSys Extreme Vulnerable Driver</strong>提供从简单地缓冲区溢出到复杂的UAF以及 Pool Overflows等广阔漏洞范围，这允许安全研究者从所有实现的漏洞去探索溢出技术。</p>
+<h2 id="什么是HACKSYS_EXTREME_VULNERABLE_DRIVER？">什么是HACKSYS EXTREME VULNERABLE DRIVER？</h2><p>我已经在 <a href="http://null.co.in/profile/411-ashfaq-ansari" target="_blank" rel="external">null Security Community’s Pune Chapter</a>谈论过很多关于windows内核溢出技术。所以我认为，最好能写一个包含所有主要漏洞的驱动程序。这个写驱动的想法提供参与者更好地视角去看到在漏洞代码的背后发生了什么，同时在我讨论、练习时会有很大的帮助。</p>
+<h2 id="实现的漏洞列表">实现的漏洞列表</h2><ul>
+<li><strong>Pool Overflow</strong></li>
+<li><strong>Use After Free</strong></li>
+<li><strong>Type Confusion</strong></li>
+<li><strong>Stack Overflow</strong></li>
+<li><strong>Integer Overflow</strong></li>
+<li><strong>Stack Overflow GS</strong></li>
+<li><strong>Arbitrary Overwrite</strong></li>
+<li><strong>Null Pointer Dereference</strong></li>
+</ul>
+<h2 id="屏幕截图">屏幕截图</h2><ul>
+<li><p>帮助界面</p>
+<p><img src="http://www.payatu.com/wp-content/uploads/2015/05/2015-06-03_22h27_24.png" alt="http://www.payatu.com/wp-content/uploads/2015/05/2015-06-03_22h27_24.png"></p>
+<p>​</p>
+</li>
+<li><p>溢出</p>
+<p>​</p>
+<p><img src="http://www.payatu.com/wp-content/uploads/2015/05/2015-05-27_20h22_35.png" alt="http://www.payatu.com/wp-content/uploads/2015/05/2015-05-27_20h22_35.png"></p>
+<p>​</p>
+</li>
+<li><p>驱动调试输出</p>
+</li>
+</ul>
+<p><img src="http://www.payatu.com/wp-content/uploads/2015/05/2015-05-27_20h28_07.png" alt="http://www.payatu.com/wp-content/uploads/2015/05/2015-05-27_20h28_07.png"></p>
+<ul>
+<li>源代码</li>
+</ul>
+<p>源代码在<a href="https://github.com/hacksysteam/HackSysExtremeVulnerableDriver" target="_blank" rel="external">github</a>上可以下载</p>
+<h2 id="支持的windows版本">支持的windows版本</h2><p>驱动在 <strong>Windows XP SP3 (x86)</strong>, <strong>Windows 2003 SP3 (x86)</strong> 和<strong>Windows 7 SP1 (x86)</strong>测试成功, 同样支持<strong>Windows 8/8.1 (x86)</strong> . <strong>Windows 8/8.1</strong>尚未测试。</p>
+<h2 id="WHAT_ABOUT_EXPLOITS?">WHAT ABOUT EXPLOITS?</h2><p>溢出和这个工程一起提供。溢出在<strong>Windows 7 SP1 (x86)</strong> 被测试通过，同时稍作调整可以支持其他windows系统。</p>
+<h2 id="编译驱动">编译驱动</h2><ol>
+<li>安装<a href="https://www.microsoft.com/en-in/download/details.aspx?id=11800" target="_blank" rel="external">WDK</a></li>
+<li>改变在Build_HEVD_Secure.bat or Build_HEVD_Vulnerable.bat中的 %localSymbolServerPath%</li>
+<li>运行对应的驱动编译脚本 Build_HEVD_Secure.bat或Build_HEVD_Vulnerable.bat</li>
+</ol>
+<h2 id="安装驱动">安装驱动</h2><p>使用<a href="https://www.osronline.com/article.cfm?article=157" target="_blank" rel="external">OSR Driver Loader</a>安装<strong>HackSys Extreme Vulnerable Driver</strong></p>
+<p>文章后面给了课程链接，我先注册社区，进去发现课程是现实中的沙龙会议那种，感觉写了也没用就省略了。</p>
 
       
     </div>
@@ -343,7 +357,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/调试器-栈桢/" rel="tag">#调试器 栈桢</a>
+            <a href="/tags/漏洞利用/" rel="tag">#漏洞利用</a>
+          
+            <a href="/tags/翻译/" rel="tag">#翻译</a>
           
         </div>
       
@@ -352,17 +368,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/移动安全/对DexHunter的学习笔记/2015-11-13.html" rel="next" title="对DexHunter的学习笔记">
-                <i class="fa fa-chevron-left"></i> 对DexHunter的学习笔记
+              <a href="/逆向分析/RC4/2015-11-20.html" rel="next" title="RC4算法总结">
+                <i class="fa fa-chevron-left"></i> RC4算法总结
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/移动安全/gen-mterp.py分析/2015-11-20.html" rel="prev" title="gen-mterp.py分析">
-                gen-mterp.py分析 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -478,7 +490,7 @@
               
             
             
-              <p class="post-toc-empty">此文章未包含目录</p>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是HACKSYS_EXTREME_VULNERABLE_DRIVER？"><span class="nav-number">1.1.</span> <span class="nav-text">什么是HACKSYS EXTREME VULNERABLE DRIVER？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现的漏洞列表"><span class="nav-number">1.2.</span> <span class="nav-text">实现的漏洞列表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#屏幕截图"><span class="nav-number">1.3.</span> <span class="nav-text">屏幕截图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#支持的windows版本"><span class="nav-number">1.4.</span> <span class="nav-text">支持的windows版本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WHAT_ABOUT_EXPLOITS?"><span class="nav-number">1.5.</span> <span class="nav-text">WHAT ABOUT EXPLOITS?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编译驱动"><span class="nav-number">1.6.</span> <span class="nav-text">编译驱动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装驱动"><span class="nav-number">1.7.</span> <span class="nav-text">安装驱动</span></a></li></ol></li></ol></div>
             
           </div>
         </section>

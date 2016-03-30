@@ -234,6 +234,122 @@
             
               
                 
+                <a class="post-title-link" href="/移动安全/2015-03-06-安卓反破解小姿势/2015-03-06.html" itemprop="url">
+                  安卓反破解小姿势
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-03-06T00:00:00+08:00" content="2015-03-06">
+              2015-03-06
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/移动安全/" itemprop="url" rel="index">
+                    <span itemprop="name">移动安全</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>以下2个方法来自<a href="http://www.52pojie.cn/thread-263205-1-1.html" target="_blank" rel="external">爱加密反破解教程</a></p>
+<h4 id="0x1_伪加密">0x1 <code>伪加密</code></h4><p><code>伪加密</code>不是真正的加密，而是通过修改 <code>.apk</code>文件的一个字段，达到让解压缩工具在解压apk包内的各个数据的时候，让<code>解压缩工具(例如：好压)</code>以为这个压缩apk包是有密码的，提示让用户输入解压缩密码。</p>
+<p>具体做法是：用16进制工具（我这里用的Hex Workshop）打开apk文件，搜索16进制值“504b0102”,找到后修改 02 之后的第五位,把偶数改成奇数，这里我改成了09，如图所示：</p>
+<p><img src="https://github.com/987432340/987432340.github.io/releases/download/2014-3-6/1.jpg" alt=""></p>
+<p>解压文件效果：</p>
+<p><img src="https://github.com/987432340/987432340.github.io/releases/download/2014-3-6/2.jpg" alt=""></p>
+<h4 id="0x2_反破解工具破解">0x2 <code>反破解工具破解</code></h4><p>Android系统对APK的识别是从标志头到标志尾，其他多余数据都会无视。而PC端认为apk文件是压缩包，所以在文件结束的地方，添加一些无用的数据，则解压工具出错。</p>
+<p>经过测试，好压可以正确的解压缩修改后的apk文件（可能好压也是从从标志头到标志尾这样算的），WinRar没用实验，ApkIDE（改之理）反编译失败，如图：</p>
+<p><img src="https://github.com/987432340/987432340.github.io/releases/download/2014-3-6/3.jpg" alt=""></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/mac/2015-02-13-mac快捷键的使用/2015-02-13.html" itemprop="url">
                   2015-02-13-mac快捷键
                 </a>
@@ -443,119 +559,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/mac/2015-02-12-android-studio-折腾/2015-02-12.html" itemprop="url">
-                  mac上搭建android-studio
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2015-02-12T00:00:00+08:00" content="2015-02-12">
-              2015-02-12
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/mac/" itemprop="url" rel="index">
-                    <span itemprop="name">mac</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>有想在mac上搞eclipse，mac比较快，以后学习安卓的变成的时候也事半功倍，但是想在eclipse都淘汰了，大家貌似都用android studio了，于是有了这个文章，我真的太能折腾了。</p>
-<p>从官网傻姑娘下载了安装包，安装好打开会打不开，一直加载 <code>Fetching android sdk component information</code> 还不能跳过，他还要亲自帮我下载，我可是在大天朝啊，怎么可能下载的到呢？在网上苦苦寻觅，终于找到了解决方法。</p>
-<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">　　<span class="number">1</span>）进入应用程序，找到Android Studio，右键<span class="comment">--&gt;显示包内容--&gt;Contents--&gt;bin，找到文件idea.properties，使用文本工具打开</span></span><br><span class="line"></span><br><span class="line">　　<span class="number">2</span>）在idea.properties文件末尾添加一行：disable.android.<span class="keyword">first</span>.<span class="command">run</span>=<span class="constant">true</span>，然后保存文件。</span><br><span class="line"></span><br><span class="line">　　<span class="number">3</span>）关闭Android Studio后重新启动，便可进入界面。</span><br></pre></td></tr></table></figure>
-<p>进去之后要选择SDK</p>
-<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">configure→<span class="keyword">project</span> defaults→<span class="keyword">project</span> structure</span><br></pre></td></tr></table></figure>
-<p>总结起来简单吖，只是这些小的trick分散在不同的地方，在这里收集一下，以备以后还会遇到，麻烦去找。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -601,7 +604,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-count">18</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -609,7 +612,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-count">8</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -618,7 +621,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-count">16</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

@@ -234,7 +234,127 @@
             
               
                 
-                <a class="post-title-link" href="/移动安全/2015-03-06-安卓反破解小姿势/2015-03-06.html" itemprop="url">
+                <a class="post-title-link" href="/移动安全/轻松+愉快调试Android/2015-03-16.html" itemprop="url">
+                  轻松+愉快调试Android
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-03-16T00:00:00+08:00" content="2015-03-16">
+              2015-03-16
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/移动安全/" itemprop="url" rel="index">
+                    <span itemprop="name">移动安全</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>经常会遇到安卓调试的时候，DDMS看不到所有的进程列表，在百般无助的时候，学长向我伸出援手，给了我这个链接，果然好用，记录备用。</p>
+<p><a href="http://www.kanxue.com/bbs/showthread.php?p=1291716" target="_blank" rel="external">引用：看雪论坛</a></p>
+<blockquote>
+<p>根据android的官方文档，如果要调试一个apk里面的dex代码，必须满足以下两个条件中的任何一个：</p>
+<ol>
+<li>apk中的AndroidManifest.xml文件中的Application标签包含属性android:debuggable=”true”</li>
+<li>/default.prop中ro.debuggable的值为1<br>由于正常的软件发布时都不会把android:debuggable设置为false（当然也不排除某些很2的应用偏偏就是true），所以要达成条件1需要对app进行重新打包，这不仅每次分析一个apk都重复操作，而且很多软件会对自身进行校验，重打包后执行会被检测到，所以想办法满足第2个条件是个一劳永逸的办法。<br>由于default.prop是保存在boot.img的ramdisk中，这部分每次重新启动都会重新从rom中加载，所以要到目的必须修改boot.img中的ramdisk并重新刷到设备中。修改步骤如下（我没试过，有兴趣的倒腾下）：</li>
+</ol>
+</blockquote>
+<p>像我这样的新手看到这么多的步骤就吓哭了……这游戏还能不能玩儿……有没有简单的方法呢？答案是肯定的！那就是使用Xposed的HOOK插件xinstaller开启系统中所有应用的调试功能：</p>
+<h3 id="第一步，非常简单，在已经ROOT好的手机或虚拟机里安装好xpose框架和xinstaller插件">第一步，非常简单，在已经ROOT好的手机或虚拟机里安装好xpose框架和xinstaller插件</h3><p><a href="http://repo.xposed.info/module/de.robv.android.xposed.installer" target="_blank" rel="external">xposed</a></p>
+<p><a href="http://repo.xposed.info/module/com.pyler.xinstaller" target="_blank" rel="external">xinstaller</a></p>
+<h3 id="第二步，开启模块，点击【xinstall插件】设置_【专家模式】，进入【其他设置】开启【调试应用】，最后【重启】">第二步，开启模块，点击【xinstall插件】设置 【专家模式】，进入【其他设置】开启【调试应用】，最后【重启】</h3><p><a href="http://appscan.360.cn/blog/?p=73" target="_blank" rel="external">原文链接</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/移动安全/安卓反破解小姿势/2015-03-06.html" itemprop="url">
                   安卓反破解小姿势
                 </a>
               
@@ -350,7 +470,7 @@
             
               
                 
-                <a class="post-title-link" href="/mac/2015-02-13-mac快捷键的使用/2015-02-13.html" itemprop="url">
+                <a class="post-title-link" href="/mac/mac快捷键的使用/2015-02-13.html" itemprop="url">
                   2015-02-13-mac快捷键
                 </a>
               
@@ -449,121 +569,11 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/github/2015-02-12-github删除远程库文件/2015-02-12.html" itemprop="url">
-                  删除远程库的文件
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2015-02-12T00:00:00+08:00" content="2015-02-12">
-              2015-02-12
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/github/" itemprop="url" rel="index">
-                    <span itemprop="name">github</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p>$ git rm -r –cached  some-file     //删除远程库的some-file文件<br>$ git commit -m “xxx”<br>$ git push origin master</p>
-</blockquote>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -604,7 +614,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">21</span>
+              <span class="site-state-item-count">22</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -612,7 +622,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">10</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -621,7 +631,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-count">17</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

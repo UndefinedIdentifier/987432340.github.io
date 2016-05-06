@@ -234,7 +234,139 @@
             
               
                 
-                <a class="post-title-link" href="/资源/2015-02-10-Android安全学习资源汇总/2015-02-10.html" itemprop="url">
+                <a class="post-title-link" href="/移动安全/2015阿里移动安全后记/2015-02-11.html" itemprop="url">
+                  2015阿里移动安全笔记(未完待续)
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-02-11T00:00:00+08:00" content="2015-02-11">
+              2015-02-11
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/移动安全/" itemprop="url" rel="index">
+                    <span itemprop="name">移动安全</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><a href="https://github.com/987432340/987432340.github.io/releases/download/2015Ali%E7%A7%BB%E5%8A%A8%E5%AE%89%E5%85%A81-5/2015.1-5.zip" target="_blank" rel="external">阿里2015安卓逆向1-5题下载</a></p>
+<h3 id="第一题分析">第一题分析</h3><ol>
+<li><p>直接把APK文件拖放到模拟器之中，模拟器会自动安装并运行程序（我这里用到的是<a href="http://www.genymotion.net/" target="_blank" rel="external">genymotion模拟器</a>），可以看到就是一个简单的输入框，点击确定，看输入密码是否正确的程序。</p>
+</li>
+<li><p>将apk拖放进ApkIDE中，反编译程序。发现一系列的异常  <br></p>
+<blockquote>
+<p>正在反编译Apk…  - 失败：W: Could not decode attr value, using undecoded value instead: ns=android, name=versionCode, value=0x00000002<br>Cleaning up unclosed ZipFile for archive C:\Users\Administrator\apktool\framework\1.apk<br>W: Could not decode attr value, using undecoded value instead: ns=android, name=versionName, value=0x00000010<br>Exception in thread “main” java.lang.NullPointerException</p>
+<pre><code>at brut<span class="class">.androlib</span><span class="class">.res</span><span class="class">.decoder</span><span class="class">.XmlPullStreamDecoder</span>$<span class="number">1</span>.<span class="function"><span class="title">parseManifest</span><span class="params">(XmlPullStreamDecoder.java:<span class="number">101</span>)</span></span> 
+</code></pre></blockquote>
+</li>
+</ol>
+<p><br></p>
+<ol>
+<li>使用刚刚了解到的一款工具 <code>AndroidKiller</code>尝试反编译APK，发现反编译出来了 <code>smali</code>文件，根据上面的判断，我们应该找到工程的 <code>MainActivity</code>中的 <code>onClick</code>方法，查看按钮事件。可以使用集成工具的搜索功能快速定位   </li>
+<li>关键代码如下：  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View paramAnonymousView)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">  String str1 = localEditText.getText().toString();</span><br><span class="line">  String str2 = MainActivity.<span class="keyword">this</span>.getTableFromPic();</span><br><span class="line">  String str3 = MainActivity.<span class="keyword">this</span>.getPwdFromPic();</span><br><span class="line">  Log.i(<span class="string">"lil"</span>, <span class="string">"table:"</span> + str2);</span><br><span class="line">  Log.i(<span class="string">"lil"</span>, <span class="string">"pw:"</span> + str3);</span><br><span class="line">  String str4 = <span class="string">""</span>;</span><br><span class="line">  <span class="keyword">try</span></span><br><span class="line">  &#123;</span><br><span class="line">    str4 = MainActivity.bytesToAliSmsCode(str2, str1.getBytes(<span class="string">"utf-8"</span>));</span><br><span class="line">    Log.i(<span class="string">"lil"</span>, <span class="string">"enPassword:"</span> + str4);</span><br><span class="line">    <span class="keyword">if</span> ((str3 != <span class="keyword">null</span>) &amp;&amp; (!str3.equals(<span class="string">""</span>)) &amp;&amp; (str3.equals(str4)))</span><br><span class="line">    &#123;</span><br><span class="line">      MainActivity.<span class="keyword">this</span>.showDialog();</span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></li>
+<li>分析上面的代码可以知道str1是我们输入的内容，str2,str3是通过2个自定义的方法的返回值，而这两个方法偏偏无法被正常反编译出来，但是再往下看，眼前一亮，底下有log直接把str2和str3输出出来了。那么在 <code>bytesToAliSmsCode</code>的函数中2个输入的参数都是已知的，<code>str2</code>和 <code>str1</code>经过运算得到的 <code>str4</code>要和 <code>str3</code>相等，则密码正确，整个逻辑已经通顺了。</li>
+<li>解决问题：使用<code>AndroidKiller</code>的logcat进行查看str2 str3.发现输入进去的位数和经过运算后的str4是相等的，又试验，1234，2134，3214，4321几个数字，发现经过运算和位置是没有关系的，好像是什么古典密码学的简单查表，于是直接输入1234567890，一下子密码就都出来了。<img src="https://github.com/987432340/987432340.github.io/releases/download/123/123.jpg" alt="">  <img src="https://github.com/987432340/987432340.github.io/releases/download/123/1234567890.jpg" alt=""></li>
+<li>密码是：581026 <img src="https://github.com/987432340/987432340.github.io/releases/download/123/QQ.20150211221043.jpg" alt=""></li>
+<li>总结<ol>
+<li>要知道log是我们的忠实的伙伴</li>
+<li>有些时候可以跳过加密算法黑盒解决问题</li>
+</ol>
+</li>
+</ol>
+<hr>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/资源/Android安全学习资源汇总/2015-02-10.html" itemprop="url">
                   android安全学习资源
                 </a>
               
@@ -359,7 +491,7 @@
             
               
                 
-                <a class="post-title-link" href="/移动安全/2015-01-24-NDK开发初体验/2015-01-24.html" itemprop="url">
+                <a class="post-title-link" href="/移动安全/NDK开发初体验/2015-01-24.html" itemprop="url">
                   NDK开发初体验
                 </a>
               
@@ -473,147 +605,11 @@ Java_com_example_hellojni_HelloJni_stringFromJNI( JNIEnv* env,
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/编程/2015-01-01-多态代码除体验与瞎掰/2015-01-01.html" itemprop="url">
-                  多态代码除体验与瞎掰
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2015-01-01T00:00:00+08:00" content="2015-01-01">
-              2015-01-01
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/编程/" itemprop="url" rel="index">
-                    <span itemprop="name">编程</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>从一本经典的病毒书上找到了两个经典的（最早出现能有代表意义的）多态的代码的demo。可以看到在还是16位字长的机器上就出现了多态，并且一直到今天还有很多壳在使用。不得不说多态是对逆向分析有不小的影响，在看到膨胀了许多无效代码，会导致对一个代码块的分析过程中瞻前顾不得后（因为有无效的值一直在运算，有效的信息位置间距较远），导致分析的速度变慢。</p>
-<p>所以可以有下面2个学习方向：</p>
-<ul>
-<li>学习如何将多态代码能清除了，只留下 <code>有效</code>代码</li>
-<li>学习如何写生成多态的代码</li>
-</ul>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">; Group 1 &#8211; Prolog(&#24320;&#22330;&#30333;;&#38138;&#22443;) Instructions &#10;inc     si    ; optional, variable junk&#10;mov     ax,0E9B    ; set key 1&#10;clc    ; optional, variable junk&#10;mov     di,012A    ; offset of Start&#10;nop    ; optional, variable junk&#10;mov     cx,0571    ; this many bytes - key 2&#10;&#10;; Group 2 &#8211; Decryption Instructions&#10;Decrypt:&#10;xor     [di],cx    ; decrypt first word with key 2&#10;sub     bx,dx    ; optional, variable junk&#10;xor     bx,cx    ; optional, variable junk&#10;sub     bx,ax    ; optional, variable junk&#10;sub     bx,cx    ; optional, variable junk&#10;nop    ; non-optional junk&#10;xor     dx,cx    ; optional, variable junk&#10;xor     [di],ax    ; decrypt first word with key 1&#10;; Group 3 &#8211; Decryption Instructions&#10;inc     di    ; next byte&#10;nop    ; non-optional junk&#10;clc    ; optional, variable junk&#10;inc     ax    ; slide key 1&#10;; loop&#10;loop    Decrypt    ; until all bytes are decrypted &#8211; slide key 2&#10;; random padding up to 39 bytes</span><br></pre></td></tr></table></figure>
-<p>第二段多态代码：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Start:&#10;;     Encrypted/decrypted virus body&#10;    ; to &#34;Start&#34;-delta&#65288;&#19977;&#35282;&#27954;&#65289;&#22312;&#36825;&#20799;&#26159;&#21152;&#23494;&#21518;&#30340;&#20195;&#30721;&#21306;&#22495;&#30340;&#24847;&#24605;&#10;mov     cl,03    ; (delta is 0x0D2B in this example)&#10;ror     bp,cl&#10;mov     cx,bp&#10;mov     bp,856E&#10;or      bp,740F&#10;mov     si,bp&#10;mov     bp,3B92&#10;add     bp,si&#10;xor     bp,cx&#10;sub     bp,B10C    ; Huh ... finally BP is set, but remains an&#10;     ; obfuscated pointer to encrypted body&#10;&#10;Decrypt:&#10;mov     bx,[bp+0D2B]    ; pick next word&#10;     ; (first time at &#34;Start&#34;)&#10;add     bx,9D64    ; decrypt it&#10;xchg    [bp+0D2B],bx    ; put decrypted value to place&#10;&#10;mov     bx,8F31    ; this block increments BP by 2&#10;sub     bx,bp&#10;mov     bp,8F33&#10;sub     bp,bx    ; and controls the length of decryption</span><br></pre></td></tr></table></figure>
-<p>利用数学膨胀代码，使得bx参与了和bp的运算，实际上又是无意义的，等价于</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mov     bx,8F31    ; this block increments BP by 2&#10;sub     bx,bp&#10;mov     bp,8F33&#10;sub     bp,bx    ; and controls the length of decryption</span><br></pre></td></tr></table></figure>
-<p>关于清除多态代码的一点点想法（瞎掰）：</p>
-<ol>
-<li>清除的思路是什么？<br>设计一个程序 clear，功能定位是给定一个程序，自动分析代码，若有junk code则自动清除，可以将junk code直接帮助我nop掉，这样分析起来看起来很轻松了。那么程序的输入就是指定一个exe程序，输出就是一个nop掉垃圾代码的程序。</li>
-<li>程序的模块分析：<ol>
-<li>反汇编模块，想要分析一个程序（二进制代码），必须借助反汇编模块将二进制代码分析出来类似OD中我们能看到的那样，让clear也能获得反汇编结构</li>
-<li>调试模块：模仿人的思维，单步调试程序，把所有寄存器的初始值记录下来，每走一步标记寄存器值改变了的寄存器（添加对于每个寄存器来说值改变时的地址，比如1  mov eax,1;2 mov eax,2 3 mov eax,3 则记录 1 2 3 ），发现在地址1到地址3之间寄存器eax并没有作为源操作数，那么在地址3之前的对eax赋值、运算的操作都可以视为“无效”。</li>
-</ol>
-</li>
-<li>静态分析模块：实际上是对2的改进，不一定要做一个调试器，做一个语意的规则也可以，把所有的汇编指令分门别类做成一张表，哪些指令是改变了源操作数，哪些改变了目的操作数，哪些是影响了标志位的改变…… 在实际静态分析的时候，都可以把这些汇编指令产生的影响直接记录下来就可以了。</li>
-<li>简略的算法描述：跟踪所有寄存器，以eax为例，在addr＝ xxxxxxxx 寄存器的值被改变（或给其他值赋值了）的时候记下addr，若跟踪到下一次eax的值在addr ＝ yyyyyyyy 被改变时，查看记录的addr ＝ xxxxxxxx到yyyyyyyy之间有无作为源操作数赋值的行为，若没有，则将两次之间的eax的被赋值的操作全部以90 nop掉。</li>
-<li>算法的依据：在把寄存器作为junk code时，实际上是以当前寄存器作临时变量作为代价的，若是后续还要用到这个寄存器，那么总有一个时刻，会对寄存器赋值一个有效值，并且参与真正的运算。</li>
-</ol>
-<p>关于生成多态代码的一点点想法（瞎掰）：</p>
-<ol>
-<li>确定一个范围：要生成多态代码，必须在一定范围内，分析一些暂时用不到的寄存器（最好是不用保存再还原值的那种），将这些寄存器可以好好利用：赋值操作，移位操作，还有各种运算。  </li>
-<li>要做到混乱无章的效果，要有一个生成多态的多态模板：每次从模板随机中抽取几个代码做为成生成的代码，然后根据实际有哪些寄存器不用，跟换寄存器的名称即可。</li>
-<li>获取模板的方法：多分析别人的壳，获取到多态的模板函数，应用到自己的模板规则中来。</li>
-</ol>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/5/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/7/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/5/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/7/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -654,7 +650,7 @@ Java_com_example_hellojni_HelloJni_stringFromJNI( JNIEnv* env,
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">21</span>
+              <span class="site-state-item-count">22</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -662,7 +658,7 @@ Java_com_example_hellojni_HelloJni_stringFromJNI( JNIEnv* env,
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">10</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -671,7 +667,7 @@ Java_com_example_hellojni_HelloJni_stringFromJNI( JNIEnv* env,
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-count">17</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

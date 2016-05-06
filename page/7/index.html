@@ -234,7 +234,143 @@
             
               
                 
-                <a class="post-title-link" href="/逆向分析/2014-12-31-反汇编库udis86的使用/2014-12-31.html" itemprop="url">
+                <a class="post-title-link" href="/编程/多态代码除体验与瞎掰/2015-01-01.html" itemprop="url">
+                  多态代码除体验与瞎掰
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-01-01T00:00:00+08:00" content="2015-01-01">
+              2015-01-01
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/编程/" itemprop="url" rel="index">
+                    <span itemprop="name">编程</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>从一本经典的病毒书上找到了两个经典的（最早出现能有代表意义的）多态的代码的demo。可以看到在还是16位字长的机器上就出现了多态，并且一直到今天还有很多壳在使用。不得不说多态是对逆向分析有不小的影响，在看到膨胀了许多无效代码，会导致对一个代码块的分析过程中瞻前顾不得后（因为有无效的值一直在运算，有效的信息位置间距较远），导致分析的速度变慢。</p>
+<p>所以可以有下面2个学习方向：</p>
+<ul>
+<li>学习如何将多态代码能清除了，只留下 <code>有效</code>代码</li>
+<li>学习如何写生成多态的代码</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">; Group 1 &#8211; Prolog(&#24320;&#22330;&#30333;;&#38138;&#22443;) Instructions &#10;inc     si    ; optional, variable junk&#10;mov     ax,0E9B    ; set key 1&#10;clc    ; optional, variable junk&#10;mov     di,012A    ; offset of Start&#10;nop    ; optional, variable junk&#10;mov     cx,0571    ; this many bytes - key 2&#10;&#10;; Group 2 &#8211; Decryption Instructions&#10;Decrypt:&#10;xor     [di],cx    ; decrypt first word with key 2&#10;sub     bx,dx    ; optional, variable junk&#10;xor     bx,cx    ; optional, variable junk&#10;sub     bx,ax    ; optional, variable junk&#10;sub     bx,cx    ; optional, variable junk&#10;nop    ; non-optional junk&#10;xor     dx,cx    ; optional, variable junk&#10;xor     [di],ax    ; decrypt first word with key 1&#10;; Group 3 &#8211; Decryption Instructions&#10;inc     di    ; next byte&#10;nop    ; non-optional junk&#10;clc    ; optional, variable junk&#10;inc     ax    ; slide key 1&#10;; loop&#10;loop    Decrypt    ; until all bytes are decrypted &#8211; slide key 2&#10;; random padding up to 39 bytes</span><br></pre></td></tr></table></figure>
+<p>第二段多态代码：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Start:&#10;;     Encrypted/decrypted virus body&#10;    ; to &#34;Start&#34;-delta&#65288;&#19977;&#35282;&#27954;&#65289;&#22312;&#36825;&#20799;&#26159;&#21152;&#23494;&#21518;&#30340;&#20195;&#30721;&#21306;&#22495;&#30340;&#24847;&#24605;&#10;mov     cl,03    ; (delta is 0x0D2B in this example)&#10;ror     bp,cl&#10;mov     cx,bp&#10;mov     bp,856E&#10;or      bp,740F&#10;mov     si,bp&#10;mov     bp,3B92&#10;add     bp,si&#10;xor     bp,cx&#10;sub     bp,B10C    ; Huh ... finally BP is set, but remains an&#10;     ; obfuscated pointer to encrypted body&#10;&#10;Decrypt:&#10;mov     bx,[bp+0D2B]    ; pick next word&#10;     ; (first time at &#34;Start&#34;)&#10;add     bx,9D64    ; decrypt it&#10;xchg    [bp+0D2B],bx    ; put decrypted value to place&#10;&#10;mov     bx,8F31    ; this block increments BP by 2&#10;sub     bx,bp&#10;mov     bp,8F33&#10;sub     bp,bx    ; and controls the length of decryption</span><br></pre></td></tr></table></figure>
+<p>利用数学膨胀代码，使得bx参与了和bp的运算，实际上又是无意义的，等价于</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mov     bx,8F31    ; this block increments BP by 2&#10;sub     bx,bp&#10;mov     bp,8F33&#10;sub     bp,bx    ; and controls the length of decryption</span><br></pre></td></tr></table></figure>
+<p>关于清除多态代码的一点点想法（瞎掰）：</p>
+<ol>
+<li>清除的思路是什么？<br>设计一个程序 clear，功能定位是给定一个程序，自动分析代码，若有junk code则自动清除，可以将junk code直接帮助我nop掉，这样分析起来看起来很轻松了。那么程序的输入就是指定一个exe程序，输出就是一个nop掉垃圾代码的程序。</li>
+<li>程序的模块分析：<ol>
+<li>反汇编模块，想要分析一个程序（二进制代码），必须借助反汇编模块将二进制代码分析出来类似OD中我们能看到的那样，让clear也能获得反汇编结构</li>
+<li>调试模块：模仿人的思维，单步调试程序，把所有寄存器的初始值记录下来，每走一步标记寄存器值改变了的寄存器（添加对于每个寄存器来说值改变时的地址，比如1  mov eax,1;2 mov eax,2 3 mov eax,3 则记录 1 2 3 ），发现在地址1到地址3之间寄存器eax并没有作为源操作数，那么在地址3之前的对eax赋值、运算的操作都可以视为“无效”。</li>
+</ol>
+</li>
+<li>静态分析模块：实际上是对2的改进，不一定要做一个调试器，做一个语意的规则也可以，把所有的汇编指令分门别类做成一张表，哪些指令是改变了源操作数，哪些改变了目的操作数，哪些是影响了标志位的改变…… 在实际静态分析的时候，都可以把这些汇编指令产生的影响直接记录下来就可以了。</li>
+<li>简略的算法描述：跟踪所有寄存器，以eax为例，在addr＝ xxxxxxxx 寄存器的值被改变（或给其他值赋值了）的时候记下addr，若跟踪到下一次eax的值在addr ＝ yyyyyyyy 被改变时，查看记录的addr ＝ xxxxxxxx到yyyyyyyy之间有无作为源操作数赋值的行为，若没有，则将两次之间的eax的被赋值的操作全部以90 nop掉。</li>
+<li>算法的依据：在把寄存器作为junk code时，实际上是以当前寄存器作临时变量作为代价的，若是后续还要用到这个寄存器，那么总有一个时刻，会对寄存器赋值一个有效值，并且参与真正的运算。</li>
+</ol>
+<p>关于生成多态代码的一点点想法（瞎掰）：</p>
+<ol>
+<li>确定一个范围：要生成多态代码，必须在一定范围内，分析一些暂时用不到的寄存器（最好是不用保存再还原值的那种），将这些寄存器可以好好利用：赋值操作，移位操作，还有各种运算。  </li>
+<li>要做到混乱无章的效果，要有一个生成多态的多态模板：每次从模板随机中抽取几个代码做为成生成的代码，然后根据实际有哪些寄存器不用，跟换寄存器的名称即可。</li>
+<li>获取模板的方法：多分析别人的壳，获取到多态的模板函数，应用到自己的模板规则中来。</li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/逆向分析/反汇编库udis86的使用/2014-12-31.html" itemprop="url">
                   反汇编库udis86的使用
                 </a>
               
@@ -380,7 +516,7 @@
             
               
                 
-                <a class="post-title-link" href="/逆向分析/2014-11-12-linux下逆向分析小结/2014-11-12.html" itemprop="url">
+                <a class="post-title-link" href="/逆向分析/linux下逆向分析小结/2014-11-12.html" itemprop="url">
                   linux下逆向分析小结
                 </a>
               
@@ -514,126 +650,11 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/CTF/2014-11-09-XCTF第一站-HUCTF/2014-11-09.html" itemprop="url">
-                  HUCTF
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2014-11-09T00:00:00+08:00" content="2014-11-09">
-              2014-11-09
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/CTF/" itemprop="url" rel="index">
-                    <span itemprop="name">CTF</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>##0x1 babyCrack</p>
-<p>不得不吐槽一下出题的哥们把题目写错了，只要第一个参数满足条件，就会提示正确，唯一能看到的明码字符串提交上去也不正确（具体记不清了）～一开始还以为有什么特殊的技巧，因为看着已经有人做出来了……还好没多久，主办方修改了key，终于提交成功～</p>
-<p>##0x2 babyCrack2</p>
-<p>这题是个.NET程序，用大名鼎鼎的.NET逆向工具打开，找到程序的反编译出来的源码即可得到明文字符串的key。最多考察一下相关工具的使用吧。</p>
-<p>##0x3 wow</p>
-<p>这题是这次比赛收获比较大的一道linux逆向题目，帮助我练习了一下linux下的逆向，然后还有一点点小trick的积累。首先是运行，发现直接跑是跑不起来的，发现so文件缺失，心里想着先用IDA直接反编译吧。反编译之后，发现可以根据残留的函数命名找到关键的函数位置。来到算法的地方，经过一番分析之后，抽象出来这实际上是一道数学问题– 解n元n次方程组的问题。我似乎想起了线代老师倩丽的身影，可是缺想不到怎么去解这个方程。学渣的心酸吖。正准备45度仰望星空感叹的时候，扫见了桌上的python书，记得借python书的时候旁边有本书写python用于科学计算的。于是搜了搜python有没有解N元N次方程的题目的库，没想到百度百科上居然都有，我是有多落伍……果断把numpy这个库下下来，只需一秒，结果马上出来了。又一次感慨搞算法的人的强大之处。</p>
-<p>##0x4 总结</p>
-<p>终于结束了，后半场都没有怎么输出（回去睡觉了）…… 逆向题目该能做的都做出来了，关于APK的题目目前还是两眼一抹瞎，移动端可是未来的主流，而android是未来的windows，所以移动安全真的很重要，所以该好好关注一下安卓逆向了（IOS也买不起吖）。然后就是感觉在一次比赛中能有所收获，有经验的积累自己就很满足了。尽管认识到和高手们的差距还是很大。不过古语云：不积跬步，无以致千里。一点一滴的扎实的积累才是真正的成长！</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/6/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span>
+    <a class="extend prev" rel="prev" href="/page/6/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/8/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -674,7 +695,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">21</span>
+              <span class="site-state-item-count">22</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -682,7 +703,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">10</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -691,7 +712,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-count">17</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

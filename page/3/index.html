@@ -234,6 +234,123 @@
             
               
                 
+                <a class="post-title-link" href="/移动安全/gen-mterp-py分析/2015-11-20.html" itemprop="url">
+                  gen-mterp.py分析
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-11-20T00:00:00+08:00" content="2015-11-20">
+              2015-11-20
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/移动安全/" itemprop="url" rel="index">
+                    <span itemprop="name">移动安全</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>读源码和做逆向一样，要从代码的入口点开始分析。</p>
+<h4 id="1-_检查参数">1. 检查参数</h4><figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> len(sys.argv) != <span class="number">3</span>:</span><br><span class="line">    <span class="keyword">print</span> <span class="string">"Usage: <span class="variable">%s</span> target-arch output-dir"</span> % sys.argv[<span class="number">0</span>]</span><br><span class="line">    sys.<span class="keyword">exit</span>(<span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+<h5 id="2-_获得opcode表">2. 获得opcode表</h5><figure class="highlight sml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">opcodes = getOpcodeList<span class="literal">()</span></span><br><span class="line">#for <span class="keyword">op</span> <span class="keyword">in</span> opcodes:</span><br><span class="line">#    print <span class="string">"  %s"</span> % <span class="keyword">op</span></span><br></pre></td></tr></table></figure>
+<p>在 getOpcodeList()函数中，打开<code>dalvik/libdex/DexOpcodes.h</code><br>使用正则表达式，读取类似<code>H(OP_NOP)</code>的一个表达式，生成一个<code>OP_NOP</code>加入到opcodes列表中，返回，一共有256个opcodes。</p>
+<h5 id="3-读配置文件">3.读配置文件</h5><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">config_fp = <span class="function"><span class="title">open</span><span class="params">(<span class="string">"config-%s"</span> % target_arch)</span></span></span><br><span class="line"><span class="comment">// 写C文件，汇编文件</span></span><br><span class="line">    c_fp = <span class="function"><span class="title">open</span><span class="params">(<span class="string">"%s/InterpC-%s.cpp"</span> % (output_dir, target_arch)</span></span>, <span class="string">"w"</span>)</span><br><span class="line">   asm_fp = <span class="function"><span class="title">open</span><span class="params">(<span class="string">"%s/InterpAsm-%s.S"</span> % (output_dir, target_arch)</span></span>, <span class="string">"w"</span>)</span><br></pre></td></tr></table></figure>
+<p>参考链接：</p>
+<ul>
+<li><a href="http://code.metager.de/source/xref/android/4.4/dalvik/vm/mterp/gen-mterp.py" target="_blank" rel="external">http://code.metager.de/source/xref/android/4.4/dalvik/vm/mterp/gen-mterp.py</a></li>
+<li><a href="http://blog.csdn.net/zylc369/article/details/44660601" target="_blank" rel="external">http://blog.csdn.net/zylc369/article/details/44660601</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/编程/Stack-Trace/2015-11-18.html" itemprop="url">
                   调试器栈回溯如何实现
                 </a>
@@ -510,131 +627,11 @@ fwrite(addr,<span class="number">1</span>,<span class="built_in">length</span>,f
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/移动安全/2015-03-16-轻松+愉快调试Android/2015-03-16.html" itemprop="url">
-                  轻松+愉快调试Android
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2015-03-16T00:00:00+08:00" content="2015-03-16">
-              2015-03-16
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/移动安全/" itemprop="url" rel="index">
-                    <span itemprop="name">移动安全</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>经常会遇到安卓调试的时候，DDMS看不到所有的进程列表，在百般无助的时候，学长向我伸出援手，给了我这个链接，果然好用，记录备用。</p>
-<p><a href="http://www.kanxue.com/bbs/showthread.php?p=1291716" target="_blank" rel="external">引用：看雪论坛</a></p>
-<blockquote>
-<p>根据android的官方文档，如果要调试一个apk里面的dex代码，必须满足以下两个条件中的任何一个：</p>
-<ol>
-<li>apk中的AndroidManifest.xml文件中的Application标签包含属性android:debuggable=”true”</li>
-<li>/default.prop中ro.debuggable的值为1<br>由于正常的软件发布时都不会把android:debuggable设置为false（当然也不排除某些很2的应用偏偏就是true），所以要达成条件1需要对app进行重新打包，这不仅每次分析一个apk都重复操作，而且很多软件会对自身进行校验，重打包后执行会被检测到，所以想办法满足第2个条件是个一劳永逸的办法。<br>由于default.prop是保存在boot.img的ramdisk中，这部分每次重新启动都会重新从rom中加载，所以要到目的必须修改boot.img中的ramdisk并重新刷到设备中。修改步骤如下（我没试过，有兴趣的倒腾下）：</li>
-</ol>
-</blockquote>
-<p>像我这样的新手看到这么多的步骤就吓哭了……这游戏还能不能玩儿……有没有简单的方法呢？答案是肯定的！那就是使用Xposed的HOOK插件xinstaller开启系统中所有应用的调试功能：</p>
-<h3 id="第一步，非常简单，在已经ROOT好的手机或虚拟机里安装好xpose框架和xinstaller插件">第一步，非常简单，在已经ROOT好的手机或虚拟机里安装好xpose框架和xinstaller插件</h3><p><a href="http://repo.xposed.info/module/de.robv.android.xposed.installer" target="_blank" rel="external">xposed</a></p>
-<p><a href="http://repo.xposed.info/module/com.pyler.xinstaller" target="_blank" rel="external">xinstaller</a></p>
-<h3 id="第二步，开启模块，点击【xinstall插件】设置_【专家模式】，进入【其他设置】开启【调试应用】，最后【重启】">第二步，开启模块，点击【xinstall插件】设置 【专家模式】，进入【其他设置】开启【调试应用】，最后【重启】</h3><p><a href="http://appscan.360.cn/blog/?p=73" target="_blank" rel="external">原文链接</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -675,7 +672,7 @@ fwrite(addr,<span class="number">1</span>,<span class="built_in">length</span>,f
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">21</span>
+              <span class="site-state-item-count">22</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -683,7 +680,7 @@ fwrite(addr,<span class="number">1</span>,<span class="built_in">length</span>,f
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">10</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -692,7 +689,7 @@ fwrite(addr,<span class="number">1</span>,<span class="built_in">length</span>,f
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-count">17</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

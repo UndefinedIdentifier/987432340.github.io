@@ -234,6 +234,130 @@
             
               
                 
+                <a class="post-title-link" href="/读书笔记/异常分发过程/2016-05-06.html" itemprop="url">
+                  异常分发过程
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-05-06T21:06:10+08:00" content="2016-05-06">
+              2016-05-06
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/读书笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">读书笔记</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>当异常发生时，CPU会通过IDT表找到相应的<strong>KiTrapxxx</strong>异常处理函数执行。但是，KiTrapxxx只是对异常做简单的封装描述，并不帮我们直接解决了异常。因为异常也可以用来改变程序的执行流，这取决于程序员怎么去处理(利用)这个异常。</p>
+<p>所以，一方面为了支持调试，另一方面为了支持软件自定义的异常处理函数，OS需要将异常分发出来，分发给调试器以及程序本身的SEH。</p>
+<p>异常分为CPU异常、软件异常，但是windows采用统一的方式来分发异常。</p>
+<h2 id="KiDispatchException">KiDispatchException</h2><p>原型</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">VOID</span><br><span class="line"> <span class="title">KiDispatchException</span> <span class="params">(</span><br><span class="line">     IN PEXCEPTION_RECORD ExceptionRecord,		<span class="comment">//异常结构，描述要分发的异常</span></span><br><span class="line">     IN PKEXCEPTION_FRAME ExceptionFrame,		<span class="comment">//对于x86系统为NULL</span></span><br><span class="line">     IN PKTRAP_FRAME TrapFrame,				<span class="comment">//指向KTRAP_FRAME结构，描述异常发生时处理器状态</span></span><br><span class="line">     IN KPROCESSOR_MODE PreviousMode,			<span class="comment">//触发异常代码的执行模式，0内核模式，1用户模式</span></span><br><span class="line">     IN BOOLEAN FirstChance					<span class="comment">//第几次处理机会</span></span><br><span class="line">     )</span></span>;</span><br></pre></td></tr></table></figure>
+<p>KiDispatchException函数会先调用<strong>KeContextFromKframes</strong>函数，目的是根据TrapFrame参数指向的KTRAP_FRAME结构产生一个<strong>CONTEXT</strong>结构，用来向调试器和SEH报告异常。接下来就会根据PreviousMode参数选择内核态异常分发还是用户态异常分发。</p>
+<h2 id="内核态">内核态</h2><p>因为每个处理流程返回T都直接返回，所以画图默认每个流程都是返回false。</p>
+<p><img src="http://7xn4yz.com1.z0.glb.clouddn.com/Sample%20Flowchart%20Template.png" alt=""></p>
+<h2 id="用户态">用户态</h2><h5 id="步骤0:_满足2个条件发送给内核调试器">步骤0: 满足2个条件发送给内核调试器</h5><p>一般不用考虑这步。异常是否是内核调试器触发  <strong>and</strong> 内核调试器是否接受用户态异常（windbg 的/noumex选项为不接受用户态异常）</p>
+<h5 id="步骤1:_第一轮处理机会">步骤1: 第一轮处理机会</h5><p>调用用户态调试子系统内核函数<strong>DbgkForwardException(异常结构，TRUE，FALSE)</strong>，目的是将异常发送给用户态调试器。参数2是执行发送给调试端口还是异常端口；参数3是指定是否是第二轮处理机会。</p>
+<p>DbgkForwardException检查DebugPort不为空，则继续调用<strong>DbgkSendApiMessage</strong>将异常发送给调试子系统，子系统通知调试器，如果DbgkSendApiMessage返回成功，说明处理了该异常，异常分发结束，失败则继续。</p>
+<p>调试器处理不了则寻找执行SEH，SEH位于用户态，所以得先返回用户态。内核变量KiUserExceptionDispatcher记录了用户态中的异常分发函数，指向了NTDLL!KiUserExceptionDispatcher函数。虽然对于用户态异常、CPU异常对应有不同的调整执行流程的方式，总之都跳到了用户态的<strong>KiUserExceptionDispatcher</strong>函数开始执行。</p>
+<p>KiUserExceptionDispatcher会调用<strong>RtlDispatchException</strong>遍历执行SEH，如果执行完所有已注册SEH还没处理这个异常，系统最后有个默认的SEH。这个SEH会执行UnhandledExceptionFilter函数，这个函数返回false。</p>
+<p>KiUserExceptionDispatcher会发起对这个异常的第二轮分发。具体是调用<strong>ZwRaiseException</strong>，并将FirstChange参数设为FALSE。</p>
+<h5 id="步骤2:_第二轮处理机会">步骤2:  第二轮处理机会</h5><p>调用用户态调试子系统内核函数<strong>DbgkForwardException</strong>，标明第二次处理机会。返回false继续。</p>
+<p>调用用户态调试子系统内核函数<strong>DbgkForwardException</strong>，标明异常端口。目的是将异常发送给进程的ExcepitionPort，并且这里的DbgkSendApiMessage不会挂起当前进程。</p>
+<p>如果最后这次还是返回false，KidispatchException会终止当前线程。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/编译原理/zzbcyy-note-ch2/2016-03-31.html" itemprop="url">
                   《自制编程语言》阅读笔记 - 第二章计算器
                 </a>
@@ -618,107 +742,11 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/uncategorized/tuisongxiaoxi3-31-3-11/2016-03-31.html" itemprop="url">
-                  3月11日到3月31推送消息精选
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-03-31T00:47:51+08:00" content="2016-03-31">
-              2016-03-31
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><a href="http://resources.infosecinstitute.com/complete-tour-of-pe-and-elf-part-1/#article" target="_blank" rel="external">PE文件格式和ELF文件格式之旅</a> 分析ELF文件格式和ELF文件格式</p>
-<p><a href="https://github.com/swwwolf/wdbgark" target="_blank" rel="external">WinDBG Anti-RootKit Extension</a> windbg扩展插件，源码，wiki很好地学习写机会</p>
-<p><a href="https://rotlogix.com/2016/03/20/objective-c-instrumentation-with-frida/" target="_blank" rel="external">基于 Frida 框架的 Objective-C 插桩方法</a> 上手简单</p>
-<p><a href="http://www.openrce.org/reference_library/files/reference/PE%20Format.pdf" target="_blank" rel="external">PE文件结构高清大图</a></p>
-<p><a href="http://7xn4yz.com1.z0.glb.clouddn.com/yWfCliF.png" target="_blank" rel="external">一张图展示 Linux 文件系统的目录结构</a></p>
-<p><a href="https://eden.dei.uc.pt/~sneves/pubs/2012-snfa2.pdf" target="_blank" rel="external"></a></p>
-<p><a href="http://www.keithschwarz.com/cs143/WWW/sum2011/" target="_blank" rel="external">斯坦福大学 Keith Schwarz 讲师的编译器课程(CS143)</a></p>
-<p><a href="https://eden.dei.uc.pt/~sneves/pubs/2012-snfa2.pdf" target="_blank" rel="external">基于 C++ 模板元编程的二进制代码混淆技术</a> 模板类不太懂</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -759,7 +787,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">21</span>
+              <span class="site-state-item-count">22</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -767,7 +795,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">10</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -776,7 +804,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-count">17</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

@@ -234,7 +234,117 @@
             
               
                 
-                <a class="post-title-link" href="/mac/2015-02-12-android-studio-折腾/2015-02-12.html" itemprop="url">
+                <a class="post-title-link" href="/github/github删除远程库文件/2015-02-12.html" itemprop="url">
+                  删除远程库的文件
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-02-12T00:00:00+08:00" content="2015-02-12">
+              2015-02-12
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/github/" itemprop="url" rel="index">
+                    <span itemprop="name">github</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>$ git rm -r –cached  some-file     //删除远程库的some-file文件<br>$ git commit -m “xxx”<br>$ git push origin master</p>
+</blockquote>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/mac/android-studio-折腾/2015-02-12.html" itemprop="url">
                   mac上搭建android-studio
                 </a>
               
@@ -347,7 +457,7 @@
             
               
                 
-                <a class="post-title-link" href="/移动安全/2015-02-11-更新SDK/2015-02-11.html" itemprop="url">
+                <a class="post-title-link" href="/移动安全/更新SDK/2015-02-11.html" itemprop="url">
                   2015-02-11-国内SDK慢的解决方法
                 </a>
               
@@ -438,143 +548,11 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/移动安全/2015-02-11-2015阿里移动安全后记/2015-02-11.html" itemprop="url">
-                  2015阿里移动安全笔记(未完待续)
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2015-02-11T00:00:00+08:00" content="2015-02-11">
-              2015-02-11
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/移动安全/" itemprop="url" rel="index">
-                    <span itemprop="name">移动安全</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><a href="https://github.com/987432340/987432340.github.io/releases/download/2015Ali%E7%A7%BB%E5%8A%A8%E5%AE%89%E5%85%A81-5/2015.1-5.zip" target="_blank" rel="external">阿里2015安卓逆向1-5题下载</a></p>
-<h3 id="第一题分析">第一题分析</h3><ol>
-<li><p>直接把APK文件拖放到模拟器之中，模拟器会自动安装并运行程序（我这里用到的是<a href="http://www.genymotion.net/" target="_blank" rel="external">genymotion模拟器</a>），可以看到就是一个简单的输入框，点击确定，看输入密码是否正确的程序。</p>
-</li>
-<li><p>将apk拖放进ApkIDE中，反编译程序。发现一系列的异常  <br></p>
-<blockquote>
-<p>正在反编译Apk…  - 失败：W: Could not decode attr value, using undecoded value instead: ns=android, name=versionCode, value=0x00000002<br>Cleaning up unclosed ZipFile for archive C:\Users\Administrator\apktool\framework\1.apk<br>W: Could not decode attr value, using undecoded value instead: ns=android, name=versionName, value=0x00000010<br>Exception in thread “main” java.lang.NullPointerException</p>
-<pre><code>at brut<span class="class">.androlib</span><span class="class">.res</span><span class="class">.decoder</span><span class="class">.XmlPullStreamDecoder</span>$<span class="number">1</span>.<span class="function"><span class="title">parseManifest</span><span class="params">(XmlPullStreamDecoder.java:<span class="number">101</span>)</span></span> 
-</code></pre></blockquote>
-</li>
-</ol>
-<p><br></p>
-<ol>
-<li>使用刚刚了解到的一款工具 <code>AndroidKiller</code>尝试反编译APK，发现反编译出来了 <code>smali</code>文件，根据上面的判断，我们应该找到工程的 <code>MainActivity</code>中的 <code>onClick</code>方法，查看按钮事件。可以使用集成工具的搜索功能快速定位   </li>
-<li>关键代码如下：  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View paramAnonymousView)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">  String str1 = localEditText.getText().toString();</span><br><span class="line">  String str2 = MainActivity.<span class="keyword">this</span>.getTableFromPic();</span><br><span class="line">  String str3 = MainActivity.<span class="keyword">this</span>.getPwdFromPic();</span><br><span class="line">  Log.i(<span class="string">"lil"</span>, <span class="string">"table:"</span> + str2);</span><br><span class="line">  Log.i(<span class="string">"lil"</span>, <span class="string">"pw:"</span> + str3);</span><br><span class="line">  String str4 = <span class="string">""</span>;</span><br><span class="line">  <span class="keyword">try</span></span><br><span class="line">  &#123;</span><br><span class="line">    str4 = MainActivity.bytesToAliSmsCode(str2, str1.getBytes(<span class="string">"utf-8"</span>));</span><br><span class="line">    Log.i(<span class="string">"lil"</span>, <span class="string">"enPassword:"</span> + str4);</span><br><span class="line">    <span class="keyword">if</span> ((str3 != <span class="keyword">null</span>) &amp;&amp; (!str3.equals(<span class="string">""</span>)) &amp;&amp; (str3.equals(str4)))</span><br><span class="line">    &#123;</span><br><span class="line">      MainActivity.<span class="keyword">this</span>.showDialog();</span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></li>
-<li>分析上面的代码可以知道str1是我们输入的内容，str2,str3是通过2个自定义的方法的返回值，而这两个方法偏偏无法被正常反编译出来，但是再往下看，眼前一亮，底下有log直接把str2和str3输出出来了。那么在 <code>bytesToAliSmsCode</code>的函数中2个输入的参数都是已知的，<code>str2</code>和 <code>str1</code>经过运算得到的 <code>str4</code>要和 <code>str3</code>相等，则密码正确，整个逻辑已经通顺了。</li>
-<li>解决问题：使用<code>AndroidKiller</code>的logcat进行查看str2 str3.发现输入进去的位数和经过运算后的str4是相等的，又试验，1234，2134，3214，4321几个数字，发现经过运算和位置是没有关系的，好像是什么古典密码学的简单查表，于是直接输入1234567890，一下子密码就都出来了。<img src="https://github.com/987432340/987432340.github.io/releases/download/123/123.jpg" alt="">  <img src="https://github.com/987432340/987432340.github.io/releases/download/123/1234567890.jpg" alt=""></li>
-<li>密码是：581026 <img src="https://github.com/987432340/987432340.github.io/releases/download/123/QQ.20150211221043.jpg" alt=""></li>
-<li>总结<ol>
-<li>要知道log是我们的忠实的伙伴</li>
-<li>有些时候可以跳过加密算法黑盒解决问题</li>
-</ol>
-</li>
-</ol>
-<hr>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -615,7 +593,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">21</span>
+              <span class="site-state-item-count">22</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -623,7 +601,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">10</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -632,7 +610,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-count">17</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

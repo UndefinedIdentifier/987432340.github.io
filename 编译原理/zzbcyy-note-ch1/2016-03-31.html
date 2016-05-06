@@ -1,0 +1,617 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="读书笔记," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.2" />
+
+
+
+
+
+
+<meta name="description" content="这一部分阅读内容包括此书的第一章以及前言部分，主要目的是弄清楚这本书的脉络，有的放矢的去阅读整本书。
+译者序鼓励我们创造一门语言并不是想象中那么困难，只要一些C语言基础，正则表达式，不断思索的大脑，就能完成这项工作。译者翻译完之后想到创造一门以文言文为基础的编程语言，把什么易经八卦之类也做成一门语言。译者能有这一想法，说明他在进行翻译此书时，的确是从书中领悟到了什么，我希望自己也能获得超出书本以外">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《自制编程语言》阅读笔记 - 开篇">
+<meta property="og:url" content="http://www.plaype.cc/编译原理/zzbcyy-note-ch1/2016-03-31.html">
+<meta property="og:site_name" content="Lnju's notepad">
+<meta property="og:description" content="这一部分阅读内容包括此书的第一章以及前言部分，主要目的是弄清楚这本书的脉络，有的放矢的去阅读整本书。
+译者序鼓励我们创造一门语言并不是想象中那么困难，只要一些C语言基础，正则表达式，不断思索的大脑，就能完成这项工作。译者翻译完之后想到创造一门以文言文为基础的编程语言，把什么易经八卦之类也做成一门语言。译者能有这一想法，说明他在进行翻译此书时，的确是从书中领悟到了什么，我希望自己也能获得超出书本以外">
+<meta property="og:image" content="http://7xn4yz.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-03-31%20%E4%B8%8A%E5%8D%882.28.53.png">
+<meta property="og:updated_time" content="2016-03-30T18:58:38.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="《自制编程语言》阅读笔记 - 开篇">
+<meta name="twitter:description" content="这一部分阅读内容包括此书的第一章以及前言部分，主要目的是弄清楚这本书的脉络，有的放矢的去阅读整本书。
+译者序鼓励我们创造一门语言并不是想象中那么困难，只要一些C语言基础，正则表达式，不断思索的大脑，就能完成这项工作。译者翻译完之后想到创造一门以文言文为基础的编程语言，把什么易经八卦之类也做成一门语言。译者能有这一想法，说明他在进行翻译此书时，的确是从书中领悟到了什么，我希望自己也能获得超出书本以外">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: "always",
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 《自制编程语言》阅读笔记 - 开篇 | Lnju's notepad </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  <div class="container one-collumn  page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Lnju's notepad</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-wiki">
+          <a href="/wiki" rel="section">
+            
+              <i class="menu-item-icon fa fa-question-circle fa-fw"></i> <br />
+            
+            Mywiki
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                《自制编程语言》阅读笔记 - 开篇
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-03-31T02:53:07+08:00" content="2016-03-31">
+              2016-03-31
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/编译原理/" itemprop="url" rel="index">
+                    <span itemprop="name">编译原理</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>这一部分阅读内容包括此书的第一章以及前言部分，主要目的是弄清楚这本书的脉络，有的放矢的去阅读整本书。</p>
+<h1 id="译者序">译者序</h1><p>鼓励我们创造一门语言并不是想象中那么困难，只要一些C语言基础，正则表达式，不断思索的大脑，就能完成这项工作。译者翻译完之后想到创造一门以文言文为基础的编程语言，把什么易经八卦之类也做成一门语言。译者能有这一想法，说明他在进行翻译此书时，的确是从书中领悟到了什么，我希望自己也能获得超出书本以外的感受、体会。</p>
+<h1 id="前言">前言</h1><p>作者说</p>
+<blockquote>
+<p>教科书中的理论知识很多，像有限状态机，NFA，LR(1)，等专业词汇非常难读懂（我觉得主要是枯燥无味），这本书注重实践避免枯燥的理论。在我看来，学习完实践之后再来看看理论还是相当不错的。</p>
+</blockquote>
+<p>此书有源代码，在网上可以下载的到。</p>
+<p>这本书制作2门语言：<code>crowbar</code> 和 <code>diksam</code>。这2种语言都具备四则运算、变量、条件分支、循环、函数、垃圾回收等功能；最终版可以支持面向对象、异常处理等高级机制。(没有多线程)唯一不同点在于</p>
+<blockquote>
+<p>crowbar是运行分析树的无类型语言</p>
+<p>dikasmhi运行字节码的静态类型语言。</p>
+</blockquote>
+<p>这两种语言的包括现代的编程语言所必备的高级功能。作者说包教包会，我拭目以待。并且作者说在制作编程语言的过程中他体会到了快乐。</p>
+<h1 id="第一章">第一章</h1><h2 id="为什么要制作编译语言？">为什么要制作编译语言？</h2><p>作者提出了这个问题，给出了很多理由，但是在这儿我有我个人的一些看法。</p>
+<p>可能读这本书之前我认为是要做编译器呢，仔细一体会制作编译语言不等于写编译器，有很多不需要编译的解释性语言。但是既然开始了一件事情，我们就应该好好的把他完成好，尤其是在对一个领域很陌生的时候，你要做的只是多读书。</p>
+<p>再往前问问自己，为什么想要写编译器呢？原因很简单，我想做一个在二进制方面的底层hacker，显然写出一个编译器对写反编译器的理解就会更加深刻，并且这是一件很酷的事情。</p>
+<p>应该说还没读这本书，但是作者乐观积极的心态应该是绝大多数“程序员”的楷模。另外，我所理解的程序员是一种更加古老的程序员形象，知其然知其所以然的那种类型黑客的感觉；而不是现在在培训班学一个学期出来就能找到一份工作就能自称程序员的那种程序员。</p>
+<h2 id="赋值语句在自制编程语言中会有哪些需要处理的问题">赋值语句在自制编程语言中会有哪些需要处理的问题</h2><p>在书中的1.2节并不叫这个小标题，我改了，认为这个标题更贴切一点。</p>
+<p>赋值语句</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a1 = b1 + b2 * <span class="number">0.5</span>;</span><br></pre></td></tr></table></figure>
+<p>在自制编程语言时要考虑的几个问题：</p>
+<ol>
+<li>解析a1,b1,b2作为变量名.怎么解析变脸名？按照语法规则中<code>变量由xxx开头，由xxx组成</code>去扫描这句话，将符合条件的部分提取出来。</li>
+<li>0.5这样的常量怎样解析？00.2肯定是不行的，把这个过滤掉；2没有小数点也要解析出来。解析常量的难度在于不多不少刚刚好解析出来正确语法的常量。</li>
+<li>乘法比加法有更高的优先级，要保证解析出来是b1 + (b2 <em> 0.5)，而不是(b1 + b2) </em> 0.5.对于运算符要考虑到优先级。</li>
+</ol>
+<p>作者给出了问题的解决方案，也是常规的解决方案。问题1，2用lex解决，问题3用yacc解决。</p>
+<h2 id="整书脉络">整书脉络</h2><ul>
+<li>第2章：制作计算器。介绍yacc/lex</li>
+<li>3-4章：制作<code>crowbar</code>无类型解释型语言</li>
+<li>6-8章：制作<code>diksam</code>支持静态类型的编译型语言</li>
+<li>第5章：对编程语言中的中文支持和unicode编码问题做出说明</li>
+<li>第9章：阐述闭包，异常处理机制等进阶功能</li>
+</ul>
+<h2 id="要制作怎样的语言">要制作怎样的语言</h2><h3 id="语法风格">语法风格</h3><p>语法风格大部分和C语言相同，小部分有所改变，相信再遇到实际问题时作者会给出说明，不然就回头来看好了。编写一门新的语言使用的也是C语言，太符合我的心意了。</p>
+<p>将if语句的花括号设置为不可省略</p>
+<p>改进switch…case语句忘了break就会进入下一case分支</p>
+<h3 id="要设计怎样的运行方式">要设计怎样的运行方式</h3><blockquote>
+<p>语言分为解释型语言，编译型语言</p>
+</blockquote>
+<p>作者使用<strong>解释型语言</strong>作为书中的例子。然而解释性语言的实现还可以更加细分。其中一类是将<code>代码文字</code>转换成分析树或者语法分析树。</p>
+<p>对于这样的代码</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(a==<span class="number">10</span>)&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"hoge\n"</span>);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"piyo\n"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>有趣的是，英语国家喜欢用foo，bar；而日本喜欢用hoge，piyo来输出无意义的语句。我把这理解为属于程序员的地域习俗。</p>
+</blockquote>
+<p>或者更直白地说对代码这样的字符文本，都会把代码转换成分析树</p>
+<p><img src="http://7xn4yz.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-03-31%20%E4%B8%8A%E5%8D%882.28.53.png" alt=""></p>
+<p>从源码到分析树的过程，还得称为“编译”，虽然不是真正的编译。这个过程不生成文件，分析树仅仅在内存里，所以用户意识不到有编译器在执行。这类语言会在刚开始运行就报错。而如果是纯粹性的解释型语言，则会到出错的地方才会报错。</p>
+<p>第一种<code>crowbar</code>语言的实现是代码转换到语法分析树后直接运行。</p>
+<p>java语言是通过解释器运行字节码，而不是运行树，感觉像是运行树经过压缩便成了字节码。第二种<code>diksam</code>语言是运行字节码，不是生成树。而我们的语言在程序启动时编译出字节码在内存中，然后直接执行，不像java能产生class文件。</p>
+<h1 id="环境搭建">环境搭建</h1><p>编译器：我这里使用ubuntu系统，自带GCC。yacc使用GNU项目下地bison代替。</p>
+<p>lex使用加强版的flex代替。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/读书笔记/" rel="tag">#读书笔记</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/uncategorized/tuisongxiaoxi3-31-3-11/2016-03-31.html" rel="next" title="3月11日到3月31推送消息精选">
+                <i class="fa fa-chevron-left"></i> 3月11日到3月31推送消息精选
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/编译原理/zzbcyy-note-ch2/2016-03-31.html" rel="prev" title="《自制编程语言》阅读笔记 - 第二章计算器">
+                《自制编程语言》阅读笔记 - 第二章计算器 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://bbs.pediy.com/image.php?u=661065&dateline=1419083289&type=thumb"
+               alt="Lnju" />
+          <p class="site-author-name" itemprop="name">Lnju</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">21</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        <div class="links-of-blogroll motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#译者序"><span class="nav-number">1.</span> <span class="nav-text">译者序</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">2.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第一章"><span class="nav-number">3.</span> <span class="nav-text">第一章</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么要制作编译语言？"><span class="nav-number">3.1.</span> <span class="nav-text">为什么要制作编译语言？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#赋值语句在自制编程语言中会有哪些需要处理的问题"><span class="nav-number">3.2.</span> <span class="nav-text">赋值语句在自制编程语言中会有哪些需要处理的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#整书脉络"><span class="nav-number">3.3.</span> <span class="nav-text">整书脉络</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#要制作怎样的语言"><span class="nav-number">3.4.</span> <span class="nav-text">要制作怎样的语言</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#语法风格"><span class="nav-number">3.4.1.</span> <span class="nav-text">语法风格</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#要设计怎样的运行方式"><span class="nav-number">3.4.2.</span> <span class="nav-text">要设计怎样的运行方式</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#环境搭建"><span class="nav-number">4.</span> <span class="nav-text">环境搭建</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lnju</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+
+  
+
+
+
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=0.4.5.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=0.4.5.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=0.4.5.2"></script>
+<script type="text/javascript" src="/vendors/jquery-scrollintoview/jquery.scrollintoview.min.js?v=0.4.5.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=0.4.5.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=0.4.5.2"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>

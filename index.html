@@ -234,8 +234,8 @@
             
               
                 
-                <a class="post-title-link" href="/漏洞利用/translate-hacksys-extreme-vulnerable-driver/2016-03-30.html" itemprop="url">
-                  一个windows内核漏洞练习驱动
+                <a class="post-title-link" href="/编译原理/zzbcyy-note-ch2/2016-03-31.html" itemprop="url">
+                  《自制编程语言》阅读笔记 - 第二章计算器
                 </a>
               
             
@@ -248,8 +248,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-03-30T00:00:00+08:00" content="2016-03-30">
-              2016-03-30
+            <time itemprop="dateCreated" datetime="2016-03-31T23:27:12+08:00" content="2016-03-31">
+              2016-03-31
             </time>
           </span>
 
@@ -262,8 +262,8 @@
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/漏洞利用/" itemprop="url" rel="index">
-                    <span itemprop="name">漏洞利用</span>
+                  <a href="/categories/编译原理/" itemprop="url" rel="index">
+                    <span itemprop="name">编译原理</span>
                   </a>
                 </span>
 
@@ -296,47 +296,144 @@
       
         
           
-            <p>这篇<a href="http://www.payatu.com/hacksys-extreme-vulnerable-driver/" target="_blank" rel="external">博客</a>给了一个驱动练习内核溢出的程序。</p>
-<h1 id="介绍">介绍</h1><p><strong>HackSys Extreme Vulnerable Driver</strong>是为了安全爱好者学习、增强内核溢出技术而故意开发的有漏洞的windows驱动程序。</p>
-<p><strong>HackSys Extreme Vulnerable Driver</strong>提供从简单地缓冲区溢出到复杂的UAF以及 Pool Overflows等广阔漏洞范围，这允许安全研究者从所有实现的漏洞去探索溢出技术。</p>
-<h2 id="什么是HACKSYS_EXTREME_VULNERABLE_DRIVER？">什么是HACKSYS EXTREME VULNERABLE DRIVER？</h2><p>我已经在 <a href="http://null.co.in/profile/411-ashfaq-ansari" target="_blank" rel="external">null Security Community’s Pune Chapter</a>谈论过很多关于windows内核溢出技术。所以我认为，最好能写一个包含所有主要漏洞的驱动程序。这个写驱动的想法提供参与者更好地视角去看到在漏洞代码的背后发生了什么，同时在我讨论、练习时会有很大的帮助。</p>
-<h2 id="实现的漏洞列表">实现的漏洞列表</h2><ul>
-<li><strong>Pool Overflow</strong></li>
-<li><strong>Use After Free</strong></li>
-<li><strong>Type Confusion</strong></li>
-<li><strong>Stack Overflow</strong></li>
-<li><strong>Integer Overflow</strong></li>
-<li><strong>Stack Overflow GS</strong></li>
-<li><strong>Arbitrary Overwrite</strong></li>
-<li><strong>Null Pointer Dereference</strong></li>
-</ul>
-<h2 id="屏幕截图">屏幕截图</h2><ul>
-<li><p>帮助界面</p>
-<p><img src="http://www.payatu.com/wp-content/uploads/2015/05/2015-06-03_22h27_24.png" alt="http://www.payatu.com/wp-content/uploads/2015/05/2015-06-03_22h27_24.png"></p>
-<p>​</p>
-</li>
-<li><p>溢出</p>
-<p>​</p>
-<p><img src="http://www.payatu.com/wp-content/uploads/2015/05/2015-05-27_20h22_35.png" alt="http://www.payatu.com/wp-content/uploads/2015/05/2015-05-27_20h22_35.png"></p>
-<p>​</p>
-</li>
-<li><p>驱动调试输出</p>
-</li>
-</ul>
-<p><img src="http://www.payatu.com/wp-content/uploads/2015/05/2015-05-27_20h28_07.png" alt="http://www.payatu.com/wp-content/uploads/2015/05/2015-05-27_20h28_07.png"></p>
-<ul>
-<li>源代码</li>
-</ul>
-<p>源代码在<a href="https://github.com/hacksysteam/HackSysExtremeVulnerableDriver" target="_blank" rel="external">github</a>上可以下载</p>
-<h2 id="支持的windows版本">支持的windows版本</h2><p>驱动在 <strong>Windows XP SP3 (x86)</strong>, <strong>Windows 2003 SP3 (x86)</strong> 和<strong>Windows 7 SP1 (x86)</strong>测试成功, 同样支持<strong>Windows 8/8.1 (x86)</strong> . <strong>Windows 8/8.1</strong>尚未测试。</p>
-<h2 id="WHAT_ABOUT_EXPLOITS?">WHAT ABOUT EXPLOITS?</h2><p>溢出和这个工程一起提供。溢出在<strong>Windows 7 SP1 (x86)</strong> 被测试通过，同时稍作调整可以支持其他windows系统。</p>
-<h2 id="编译驱动">编译驱动</h2><ol>
-<li>安装<a href="https://www.microsoft.com/en-in/download/details.aspx?id=11800" target="_blank" rel="external">WDK</a></li>
-<li>改变在Build_HEVD_Secure.bat or Build_HEVD_Vulnerable.bat中的 %localSymbolServerPath%</li>
-<li>运行对应的驱动编译脚本 Build_HEVD_Secure.bat或Build_HEVD_Vulnerable.bat</li>
+            <h1 id="一般语言语法处理过程">一般语言语法处理过程</h1><table>
+<thead>
+<tr>
+<th style="text-align:center">步骤</th>
+<th style="text-align:center">处理过程</th>
+<th style="text-align:left">功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">词法分析</td>
+<td style="text-align:left">代码文本分割为token</td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">语法分析</td>
+<td style="text-align:left">token构建抽象语法树AST</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">语义分析</td>
+<td style="text-align:left">检查语义是否正确</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">代码生成</td>
+<td style="text-align:left">最终生成代码</td>
+</tr>
+</tbody>
+</table>
+<h1 id="做一个计算器练手">做一个计算器练手</h1><p>感觉计算器就是初学编程时的helloworld，所以要好好理解其中涉及的内部机理，而不是满足于做出来一个计算器，要说实用的话，系统自带的计算器漂亮的多得多。</p>
+<h2 id="lex">lex</h2><p>lex是<strong>生成词法分析器</strong>的工具，给lex输入<code>.l</code>文件，输出词法分析器的c代码，注意这里生成的时词法分析器的代码，不过代码经过编译就是词法分析器，从功能的角度来讲，lex生成的时词法分析器。我们使用lex的增强版flex。</p>
+<p>词法分析器的作用是读取代码，生成token。所以我们要告诉lex，token长什么样子，这样lex才能帮我们做一个词法分析器出来。</p>
+<p>在lex中使用<strong>正则表达式</strong>定义记号，这样做是有好处的：比如我们在程序中去描述</p>
+<blockquote>
+<p>C语言变量名是字母或下划线开头，后面可以是字母数字的组合</p>
+</blockquote>
+<p>这样的规定没有比正则表达式更好的方式了。</p>
+<blockquote>
+<p>开工啦~ 时间下午3:30</p>
+</blockquote>
+<p>先看代码mycalc.l，通过代码高效地学习lex</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">%&#123;</span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">"y.tab.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span></span><br><span class="line"><span class="title">yywrap</span><span class="params">(<span class="keyword">void</span>)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line">%&#125;</span><br><span class="line">%%</span><br><span class="line"><span class="string">"+"</span>             <span class="keyword">return</span> ADD;</span><br><span class="line"><span class="string">"-"</span>             <span class="keyword">return</span> SUB;</span><br><span class="line"><span class="string">"*"</span>             <span class="keyword">return</span> MUL;</span><br><span class="line"><span class="string">"/"</span>             <span class="keyword">return</span> DIV;</span><br><span class="line"><span class="string">"\n"</span>            <span class="keyword">return</span> CR;</span><br><span class="line">([<span class="number">1</span>-<span class="number">9</span>][<span class="number">0</span>-<span class="number">9</span>]*)|<span class="number">0</span>|([<span class="number">0</span>-<span class="number">9</span>]+\.[<span class="number">0</span>-<span class="number">9</span>]*) &#123;</span><br><span class="line">    <span class="keyword">double</span> temp;</span><br><span class="line">    <span class="built_in">sscanf</span>(yytext, <span class="string">"%lf"</span>, &amp;temp);</span><br><span class="line">    yylval.double_value = temp;</span><br><span class="line">    <span class="keyword">return</span> DOUBLE_LITERAL;</span><br><span class="line">&#125;</span><br><span class="line">[ \t] ;</span><br><span class="line">. &#123;</span><br><span class="line">    <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"lexical error.\n"</span>);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line">%%</span><br></pre></td></tr></table></figure>
+<h3 id="区块划分">区块划分</h3><p>像上面的lex代码可以分为2个部分，每个部分的功能不同。</p>
+<blockquote>
+<p>%{</p>
+<p>……</p>
+<p>}%</p>
+</blockquote>
+<p>像这样的代码块，是<strong>定义区块</strong>。被包裹起来的部分，lex会原样输出到词法分析器的代码中。先不去深究这些代码是做什么用的，我们知道这里包含了2个头文件，定义了一个<strong>yywrap</strong>函数。</p>
+<blockquote>
+<p>%%</p>
+<p>……</p>
+<p>%%</p>
+</blockquote>
+<p>像这样的代码块，是<strong>规则区块</strong>。用正则表达式去描述token长什么样子。那具体是怎么描述的呢？</p>
+<p>从规则区块再往下，就是用户代码区块，用户代码区块可以编写任何C代码，本例中没有用到。</p>
+<h3 id="规则区块代码分析">规则区块代码分析</h3><p>以这句代码为例</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"+"</span>             <span class="keyword">return</span> ADD;</span><br></pre></td></tr></table></figure>
+<p>正则表达式是个常量字符’+’，后面接空格作为分割，再后面是匹配到这个正则表达式要执行的动作(action)，这里简单地返回ADD标记。</p>
+<p>更复杂一点的例子是</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">([<span class="number">1</span>-<span class="number">9</span>][<span class="number">0</span>-<span class="number">9</span>]*)|<span class="number">0</span>|([<span class="number">0</span>-<span class="number">9</span>]+\.[<span class="number">0</span>-<span class="number">9</span>]*) &#123;</span><br><span class="line">    <span class="keyword">double</span> temp;</span><br><span class="line">    <span class="built_in">sscanf</span>(yytext, <span class="string">"%lf"</span>, &amp;temp);</span><br><span class="line">    yylval.double_value = temp;</span><br><span class="line">    <span class="keyword">return</span> DOUBLE_LITERAL;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里的正则表达式为</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">([<span class="link_label">1-9</span>][<span class="link_reference">0-9</span>]<span class="emphasis">*)|0|([0-9]+\.[0-9]*</span>)</span><br></pre></td></tr></table></figure>
+<p>用来匹配一个浮点型的数值。后面的动作是C代码块。定义双精度浮点型变量temp；sscanf是把yytext当做浮点数读入变量temp。那yytext是什么呢？假如这里匹配的浮点数是3.14，那么在action语句yytext代表了这个当前被匹配到的字符串文本，这里的例子中就是“3.14”。yytext是一个全局的变量，所以这里看不到声明。再接着</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yylval.double_value = temp;</span><br><span class="line"><span class="keyword">return</span> DOUBLE_LITERAL;</span><br></pre></td></tr></table></figure>
+<p>temp被存放于yylval.double_value中。实际上，yylval也是全局变量，同时是一个联合体，意味着可以存放各种类型的token的值。注意这里所说的<strong>token的值</strong>，这句话耐人寻味。然后返回一个DOUBLE_LITERAL的类型。</p>
+<h4 id="token要素">token要素</h4><p>完全描述一个token的几个要素，或者说一个token有哪些属性组成，只要规定好了这几个属性就能确定一个token。类似于给定x,y就能在坐标轴上确定一个点的意思。token有3部分组成，还是以 “3.14”的例子来进行说明，假定我们的词法分析器已经做好了，正在读取文本中得代码进行词法分析，此时匹配到了字符串”3.14”：</p>
+<ol>
+<li>记号的原始字符串。这里是字符串”3.14”的字符串形式</li>
+<li>记号的值。这里的值是指3.14的双精度浮点数</li>
+<li>记号的种类。3.14的种类就是一个实数。在lex中用宏/枚举DOUBLE_LITERAL表示。</li>
 </ol>
-<h2 id="安装驱动">安装驱动</h2><p>使用<a href="https://www.osronline.com/article.cfm?article=157" target="_blank" rel="external">OSR Driver Loader</a>安装<strong>HackSys Extreme Vulnerable Driver</strong></p>
-<p>文章后面给了课程链接，我先注册社区，进去发现课程是现实中的沙龙会议那种，感觉写了也没用就省略了。</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">[ \t]</span> <span class="comment">;</span></span><br></pre></td></tr></table></figure>
+<p>这句是匹配空格、制表符，然后什么都不做，这样子就过滤掉了每一行的空白字符。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">. &#123;</span><br><span class="line">    <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"lexical error.\n"</span>);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>点号可以匹配任意字符。放在这里的意思是上面我所规定的token都没有匹配到却还有其他字符，说明不符合语法规范，所以报错。这句体现了程序的健壮性。</p>
+<h2 id="yacc">yacc</h2><p>yacc是生成语法分析器的工具。输入.y的文件，输出语法分析器的C语言代码。假定lex可以很好的分割出一个个token给我们了，yacc做的工作是把这一连串token放进语法规范中进行处理，看是否符合此种语言语法规范。为此，我们必须提供这一语法规范给yacc。对比我们使用正则表达式描述token给lex，这里使用BNF描述语法给yacc。</p>
+<p>mycalc.y的代码</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line">%&#123;</span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">define</span> YYDEBUG <span class="number">1</span></span></span><br><span class="line">%&#125;</span><br><span class="line">%<span class="keyword">union</span> &#123;</span><br><span class="line">    <span class="keyword">int</span>          int_value;</span><br><span class="line">    <span class="keyword">double</span>       double_value;</span><br><span class="line">&#125;</span><br><span class="line">%token &lt;double_value&gt;      DOUBLE_LITERAL</span><br><span class="line">%token ADD SUB MUL DIV CR</span><br><span class="line">%type &lt;double_value&gt; expression term primary_expression</span><br><span class="line">%%</span><br><span class="line">line_list</span><br><span class="line">    : line</span><br><span class="line">    | line_list line</span><br><span class="line">    ;</span><br><span class="line">line</span><br><span class="line">    : expression CR</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"&gt;&gt;%lf\n"</span>, $<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">expression</span><br><span class="line">    : term</span><br><span class="line">    | expression ADD term</span><br><span class="line">    &#123;</span><br><span class="line">        $$ = $<span class="number">1</span> + $<span class="number">3</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    | expression SUB term</span><br><span class="line">    &#123;</span><br><span class="line">        $$ = $<span class="number">1</span> - $<span class="number">3</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    ;</span><br><span class="line">term</span><br><span class="line">    : primary_expression</span><br><span class="line">    | term MUL primary_expression </span><br><span class="line">    &#123;</span><br><span class="line">        $$ = $<span class="number">1</span> * $<span class="number">3</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    | term DIV primary_expression</span><br><span class="line">    &#123;</span><br><span class="line">        $$ = $<span class="number">1</span> / $<span class="number">3</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    ;</span><br><span class="line">primary_expression</span><br><span class="line">    : DOUBLE_LITERAL</span><br><span class="line">    ;                 </span><br><span class="line">%%</span><br><span class="line"><span class="function"><span class="keyword">int</span></span><br><span class="line"><span class="title">yyerror</span><span class="params">(<span class="keyword">char</span> <span class="keyword">const</span> *str)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    <span class="keyword">extern</span> <span class="keyword">char</span> *yytext;</span><br><span class="line">    <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"parser error near %s\n"</span>, yytext);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">extern</span> <span class="keyword">int</span> <span class="title">yyparse</span><span class="params">(<span class="keyword">void</span>)</span></span>;</span><br><span class="line">    <span class="keyword">extern</span> FILE *yyin;</span><br><span class="line"></span><br><span class="line">    yyin = <span class="built_in">stdin</span>;</span><br><span class="line">    <span class="keyword">if</span> (yyparse()) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"Error ! Error ! Error !\n"</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>1~5行，和lex的定义区块一样，也是代码原样输出。</p>
+<p>6~9行，声明lex中用到的保存token值的联合体。从编译出来的y.tab.h文件中有以下定义可以看出这点来。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">union</span> YYSTYPE</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">int</span>          int_value;</span><br><span class="line">    <span class="keyword">double</span>       double_value;</span><br><span class="line">&#125; YYSTYPE;</span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> YYSTYPE yylval;</span><br></pre></td></tr></table></figure>
+<p>第11行，声明不需要保存值，只需要知道token本身的种类的token。例如加号。</p>
+<p>第10行，声明token类型为DOUBLE_LITERAL。DOUBLE_LITERAL类型的token是有值的，这个值可以存在union结构的double_value字段中。这一点书上的意思我不是很明白，可能我地理解力不好，也可能书上没有讲太清楚。</p>
+<p>第12行，声明了非终结符的类型。这里留有一个疑问：为什么<code>&lt;double_value&gt;</code>也算非终结符。后面的那些是非终结符很好理解，因为他们可以根据下面的规则继续推导，而<code>&lt;double_value&gt;</code>也算进去了，我现在是不好理解的。</p>
+<p>第13行到第48行，是一些推导规则。语法规则简化为下面格式</p>
+<figure class="highlight dns"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">A</span></span><br><span class="line">    : B C</span><br><span class="line">    | D</span><br><span class="line">    <span class="comment">;</span></span><br></pre></td></tr></table></figure>
+<p>意味着A可以由BC或D组成。这有点像树状图，A是树的顶端，下来分2个分支，一个分支是D，另一个分支是BC.D是什么可以接着推导，最终到不可推导的非终结符。</p>
+<h3 id="实例分析">实例分析</h3><p>假定输入表达式，看看yacc怎么根据BNF规则去完成语法分析</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span> + <span class="number">2</span> * <span class="number">3</span></span><br></pre></td></tr></table></figure>
+<p>语法分析类似于小时候玩儿的俄罗斯方块，下面通过正统的说法，来重温俄罗斯方块的乐趣。解析器内部有个栈，每次读取一个token到栈中，可以想象一个一个不同的token就是不同形状的方块。还可以看到下一个即将进入栈的token是什么。</p>
+<h4 id="第一步">第一步</h4><p>一开始是1，lex会把1替换成token也就是DOUBLE_LITERAL。DOUBLE_LITERAL进入栈中，此时同时能看到下一个即将进入栈的token是加号。如下图</p>
+<p><img src="http://7xn4yz.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-03-31%20%E4%B8%8B%E5%8D%887.00.02.png" alt=""></p>
+<p>那么此时进入栈中的DOUBLE_LITERAL会触发规则</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">primary_expression</span><br><span class="line">    </span>: DOUBLE_LITERAL</span><br><span class="line">    ;</span><br></pre></td></tr></table></figure>
+<p>那么DOUBLE_LITERAL被<strong>归约</strong>（归约是往消除方向的化简过程）为primary_expression。注意primary_expression译作一元表达式。</p>
+<p>现在堆栈的状态是</p>
+<p><img src="http://7xn4yz.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-03-31%20%E4%B8%8B%E5%8D%887.07.38.png" alt=""></p>
+<p>再根据规则</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">term</span><br><span class="line">    </span>: primary_expression</span><br></pre></td></tr></table></figure>
+<p>变为term，再根据规则</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">expression</span><br><span class="line">    </span>: term</span><br></pre></td></tr></table></figure>
+<p>变为expression</p>
+<h4 id="第二步">第二步</h4><p>token ADD进来，找不到归约的条件，所以此时的状态是这样的。</p>
+<p><img src="http://7xn4yz.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-03-31%20%E4%B8%8B%E5%8D%887.14.59.png" alt=""></p>
+<h4 id="第三步">第三步</h4><p>字符2的token—DOUBLE_LITERAL进来，和之前的1一样，会经过primary_expression被归约到term。</p>
+<p>为什么是term而不是expression呢？1是被归约到了expression，因为在1进入堆栈时，堆栈里没有值，所以可以随便归约，而此时堆栈里有</p>
+<figure class="highlight mel"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">expression</span> +</span><br></pre></td></tr></table></figure>
+<p>那么在对2进行每一步归约时，应该考虑到2归约出来的新的值是否能和堆栈里有得表达式进行归约。</p>
+<p>也就是说，字符2的token—DOUBLE_LITERAL进来，我们首先要去考虑堆栈里</p>
+ <figure class="highlight mel"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">expression</span> + DOUBLE_LITERAL</span><br></pre></td></tr></table></figure>
+<p>这种表达式是否有归约的规则。若没有，再继续归约新表达式DOUBLE_LITERAL。</p>
+<p>好，照这样的思路，来到这里</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">expression + <span class="function"><span class="title">term</span><span class="params">(<span class="number">2</span>的token)</span></span></span><br></pre></td></tr></table></figure>
+<p>在这里找到一条规则</p>
+<pre><code><span class="keyword">expression</span>
+    : <span class="keyword">expression</span> ADD term
+</code></pre><p>按规则说这里可以直接归约成expression。由于yacc可以提前读到下一个即将进来的token，所以这里会考虑到下面的规则</p>
+<pre><code><span class="label">term</span>
+    : term <span class="keyword">MUL </span>primary_expression
+</code></pre><p>万一再下一个是primary_expression，那么就可以归约到term了。（这条规则的位置比上一条规则要靠下面，所以优先？）</p>
+<h4 id="第4步">第4步</h4><p>接下来进来3，被归约为primary_expression之后，按照上面的提示直接归约为term，那么现在的堆栈如图所示</p>
+<p><img src="http://7xn4yz.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-03-31%20%E4%B8%8B%E5%8D%8810.22.43.png" alt=""></p>
+<p>再接着匹配规则</p>
+<figure class="highlight mel"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">expression</span></span><br><span class="line">    <span class="keyword">expression</span> ADD term</span><br></pre></td></tr></table></figure>
+<p>整个堆栈上只剩expression了。那么语法分析就已经完成了。</p>
+<p>和lex一样，yacc在匹配到规则时，也有一个action被触发。</p>
+<figure class="highlight xquery"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">term</span><br><span class="line">    : primary_expression</span><br><span class="line">    | term MUL primary_expression </span><br><span class="line">    &#123;</span><br><span class="line">        $$ = <span class="variable">$1</span> * <span class="variable">$3</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>类似于C语言的语句。这里$1,$3之类的表达式分别保存了term、primary_expression的值，有图会比较明显</p>
+<p><img src="http://7xn4yz.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-03-31%20%E4%B8%8B%E5%8D%8810.30.23.png" alt=""></p>
+<p>在进行这句递归的时候，代表的意义。</p>
+<p>假如进行下面的递归时，并不是什么都不做，而是自动补全一句</p>
+<figure class="highlight xquery"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">term</span><br><span class="line">    : primary_expression</span><br><span class="line">    &#123;</span><br><span class="line">  		$$ = <span class="variable">$1</span>;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<p>这样，进行归约时，primary_expression包含的数值也会被term继承。$$、$1的包含数值的类型分别与其对应的token或者非终结符的类型一致。</p>
+<figure class="highlight haml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">%<span class="title">token</span></span> &lt;double_value&gt;      DOUBLE_LITERAL</span><br><span class="line"><span class="tag">%<span class="title">type</span></span> &lt;double_value&gt; expression term primary_expression</span><br></pre></td></tr></table></figure>
+<p>token的数值的类型借union中double_value字段定义。</p>
 
           
         
@@ -382,8 +479,8 @@
             
               
                 
-                <a class="post-title-link" href="/逆向分析/RC4/2015-11-20.html" itemprop="url">
-                  RC4算法总结
+                <a class="post-title-link" href="/编译原理/zzbcyy-note-ch1/2016-03-31.html" itemprop="url">
+                  《自制编程语言》阅读笔记 - 开篇
                 </a>
               
             
@@ -396,8 +493,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2015-11-20T15:13:11+08:00" content="2015-11-20">
-              2015-11-20
+            <time itemprop="dateCreated" datetime="2016-03-31T02:53:07+08:00" content="2016-03-31">
+              2016-03-31
             </time>
           </span>
 
@@ -410,8 +507,8 @@
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/逆向分析/" itemprop="url" rel="index">
-                    <span itemprop="name">逆向分析</span>
+                  <a href="/categories/编译原理/" itemprop="url" rel="index">
+                    <span itemprop="name">编译原理</span>
                   </a>
                 </span>
 
@@ -444,26 +541,59 @@
       
         
           
-            <h3 id="特征：">特征：</h3><ol>
-<li>算法简单-&gt; 运行速度快-&gt; 被采用的多 </li>
-<li>只有一个密钥（对称加密算法），密钥长度可变，1-256字节，常见密钥长度128bit，16字节</li>
+            <p>这一部分阅读内容包括此书的第一章以及前言部分，主要目的是弄清楚这本书的脉络，有的放矢的去阅读整本书。</p>
+<h1 id="译者序">译者序</h1><p>鼓励我们创造一门语言并不是想象中那么困难，只要一些C语言基础，正则表达式，不断思索的大脑，就能完成这项工作。译者翻译完之后想到创造一门以文言文为基础的编程语言，把什么易经八卦之类也做成一门语言。译者能有这一想法，说明他在进行翻译此书时，的确是从书中领悟到了什么，我希望自己也能获得超出书本以外的感受、体会。</p>
+<h1 id="前言">前言</h1><p>作者说</p>
+<blockquote>
+<p>教科书中的理论知识很多，像有限状态机，NFA，LR(1)，等专业词汇非常难读懂（我觉得主要是枯燥无味），这本书注重实践避免枯燥的理论。在我看来，学习完实践之后再来看看理论还是相当不错的。</p>
+</blockquote>
+<p>此书有源代码，在网上可以下载的到。</p>
+<p>这本书制作2门语言：<code>crowbar</code> 和 <code>diksam</code>。这2种语言都具备四则运算、变量、条件分支、循环、函数、垃圾回收等功能；最终版可以支持面向对象、异常处理等高级机制。(没有多线程)唯一不同点在于</p>
+<blockquote>
+<p>crowbar是运行分析树的无类型语言</p>
+<p>dikasmhi运行字节码的静态类型语言。</p>
+</blockquote>
+<p>这两种语言的包括现代的编程语言所必备的高级功能。作者说包教包会，我拭目以待。并且作者说在制作编程语言的过程中他体会到了快乐。</p>
+<h1 id="第一章">第一章</h1><h2 id="为什么要制作编译语言？">为什么要制作编译语言？</h2><p>作者提出了这个问题，给出了很多理由，但是在这儿我有我个人的一些看法。</p>
+<p>可能读这本书之前我认为是要做编译器呢，仔细一体会制作编译语言不等于写编译器，有很多不需要编译的解释性语言。但是既然开始了一件事情，我们就应该好好的把他完成好，尤其是在对一个领域很陌生的时候，你要做的只是多读书。</p>
+<p>再往前问问自己，为什么想要写编译器呢？原因很简单，我想做一个在二进制方面的底层hacker，显然写出一个编译器对写反编译器的理解就会更加深刻，并且这是一件很酷的事情。</p>
+<p>应该说还没读这本书，但是作者乐观积极的心态应该是绝大多数“程序员”的楷模。另外，我所理解的程序员是一种更加古老的程序员形象，知其然知其所以然的那种类型黑客的感觉；而不是现在在培训班学一个学期出来就能找到一份工作就能自称程序员的那种程序员。</p>
+<h2 id="赋值语句在自制编程语言中会有哪些需要处理的问题">赋值语句在自制编程语言中会有哪些需要处理的问题</h2><p>在书中的1.2节并不叫这个小标题，我改了，认为这个标题更贴切一点。</p>
+<p>赋值语句</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a1 = b1 + b2 * <span class="number">0.5</span>;</span><br></pre></td></tr></table></figure>
+<p>在自制编程语言时要考虑的几个问题：</p>
+<ol>
+<li>解析a1,b1,b2作为变量名.怎么解析变脸名？按照语法规则中<code>变量由xxx开头，由xxx组成</code>去扫描这句话，将符合条件的部分提取出来。</li>
+<li>0.5这样的常量怎样解析？00.2肯定是不行的，把这个过滤掉；2没有小数点也要解析出来。解析常量的难度在于不多不少刚刚好解析出来正确语法的常量。</li>
+<li>乘法比加法有更高的优先级，要保证解析出来是b1 + (b2 <em> 0.5)，而不是(b1 + b2) </em> 0.5.对于运算符要考虑到优先级。</li>
 </ol>
-<h3 id="几个关键因素">几个关键因素</h3><ol>
-<li><strong>密钥流</strong>：明文 + 密钥 -&gt; 密钥流 因为在加密时，密文第i字节=明文第i字节^密钥流第i字节.密钥流是在逐个字节xor加密过程中一直不断生成的，明文有多长，密钥流就有多长</li>
-<li><strong>状态向量S</strong>：256字节长度的数组。256个字节是0～255的不同排列组合</li>
-<li><strong>临时向量T</strong>：256字节长度的数组。如果密钥的长度是256字节，就直接把密钥的值赋给T，否则（一般情况下16字节），轮转地将密钥的每个字节赋给T，这个T向量可有可无，因为可以用轮转的i简化掉T</li>
-<li><strong>密钥K</strong>：通常密钥的长度趣味16字节(128bit).不过密钥长度在1-256字节范围内可变</li>
-</ol>
-<h3 id="步骤">步骤</h3><h5 id="1-初始化长度为256的S盒。">1.初始化长度为256的S盒。</h5><p> 第一个for循环将0到255的互不重复的元素装入S盒。</p>
-<p> 第二个for循环根据密钥打乱S盒。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 初始化第一个for，给256长度逐个字节赋值 </span></span><br><span class="line"><span class="keyword">for</span> i from <span class="number">0</span> to <span class="number">255</span></span><br><span class="line">     S[i] := i</span><br><span class="line"> endfor</span><br><span class="line"></span><br><span class="line"> <span class="comment">// 初始化第二个for，打乱S盒。</span></span><br><span class="line"> <span class="comment">// 具体打乱的细节：初始化一个指针j=0，用j =j+ S[i]+K[i]</span></span><br><span class="line"> <span class="comment">// S[i] + k[i(对key长度取余保证你能循环)] </span></span><br><span class="line"> j := <span class="number">0</span></span><br><span class="line"> <span class="keyword">for</span>( i=<span class="number">0</span> ; i&lt;<span class="number">256</span> ; i++)</span><br><span class="line">     j := (j + S[i] + key[i mod keylength]) % <span class="number">256</span></span><br><span class="line">     swap values of S[i] and S[j]</span><br><span class="line"> endfor</span><br></pre></td></tr></table></figure>
-<p>有些书上可能为了教学方便，会对第二个for进行变化。在第二个for前，生成T[256].</p>
-<figure class="highlight prolog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="name">T</span>[<span class="atom">i</span>] =  <span class="atom">key</span>[<span class="atom">i</span> <span class="atom">mod</span> <span class="atom">keylength</span>]</span><br><span class="line"><span class="atom">j</span> = (<span class="atom">j</span> + <span class="name">S</span>[<span class="atom">i</span>] + <span class="name">T</span>[<span class="atom">i</span>]) <span class="comment">% 256</span></span><br></pre></td></tr></table></figure>
-<h5 id="2-_i,j是两个指针,每次循环中交换S[i]_S[j],且_明文xor_(S[i]+S[j])">2. i,j是两个指针,每次循环中交换S[i] S[j],且 明文xor (S[i]+S[j])</h5><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 两个指针</span></span><br><span class="line"> i := <span class="number">0</span></span><br><span class="line"> j := <span class="number">0</span></span><br><span class="line"> <span class="keyword">while</span> True:</span><br><span class="line">     i := (i + <span class="number">1</span>) mod <span class="number">256</span>   <span class="comment">//第一个指针 ＝ 当前循环变量i+1</span></span><br><span class="line">     j := (j + S[i]) mod <span class="number">256</span> <span class="comment">//第二个指针 +＝ S[i]</span></span><br><span class="line">     swap values of S[i] and S[j]  <span class="comment">// 打乱S盒 </span></span><br><span class="line">     k := inputByte ^ S[(S[i] + S[j]) % <span class="number">256</span>] </span><br><span class="line">     output K</span><br><span class="line"> endwhile</span><br></pre></td></tr></table></figure>
-<h3 id="算法特征提取">算法特征提取</h3><h5 id="1-_从循环的角度看">1. 从循环的角度看</h5><p>前2次循环都是256次，一般是for循环；后一次循环次数＝明文的长度。</p>
-<h5 id="2-_从S盒参与运算的输入输出情况看">2. 从S盒参与运算的输入输出情况看</h5><p>第一次，S盒作为输出<br>第二次，S盒，密钥key作为输入，输出j指针；j指针输入，输出S盒。<br>第三次，S盒输入，输出j指针；i，j指针输入，输出S盒；明文，S盒，i,j输入，输出密文</p>
-<p>以后可以参考这些判断RC4算法。</p>
-<p><strong>参考链接 </strong> <a href="https://zh.wikipedia.org/wiki/RC4" target="_blank" rel="external">https://zh.wikipedia.org/wiki/RC4</a></p>
+<p>作者给出了问题的解决方案，也是常规的解决方案。问题1，2用lex解决，问题3用yacc解决。</p>
+<h2 id="整书脉络">整书脉络</h2><ul>
+<li>第2章：制作计算器。介绍yacc/lex</li>
+<li>3-4章：制作<code>crowbar</code>无类型解释型语言</li>
+<li>6-8章：制作<code>diksam</code>支持静态类型的编译型语言</li>
+<li>第5章：对编程语言中的中文支持和unicode编码问题做出说明</li>
+<li>第9章：阐述闭包，异常处理机制等进阶功能</li>
+</ul>
+<h2 id="要制作怎样的语言">要制作怎样的语言</h2><h3 id="语法风格">语法风格</h3><p>语法风格大部分和C语言相同，小部分有所改变，相信再遇到实际问题时作者会给出说明，不然就回头来看好了。编写一门新的语言使用的也是C语言，太符合我的心意了。</p>
+<p>将if语句的花括号设置为不可省略</p>
+<p>改进switch…case语句忘了break就会进入下一case分支</p>
+<h3 id="要设计怎样的运行方式">要设计怎样的运行方式</h3><blockquote>
+<p>语言分为解释型语言，编译型语言</p>
+</blockquote>
+<p>作者使用<strong>解释型语言</strong>作为书中的例子。然而解释性语言的实现还可以更加细分。其中一类是将<code>代码文字</code>转换成分析树或者语法分析树。</p>
+<p>对于这样的代码</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(a==<span class="number">10</span>)&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"hoge\n"</span>);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"piyo\n"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>有趣的是，英语国家喜欢用foo，bar；而日本喜欢用hoge，piyo来输出无意义的语句。我把这理解为属于程序员的地域习俗。</p>
+</blockquote>
+<p>或者更直白地说对代码这样的字符文本，都会把代码转换成分析树</p>
+<p><img src="http://7xn4yz.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-03-31%20%E4%B8%8A%E5%8D%882.28.53.png" alt=""></p>
+<p>从源码到分析树的过程，还得称为“编译”，虽然不是真正的编译。这个过程不生成文件，分析树仅仅在内存里，所以用户意识不到有编译器在执行。这类语言会在刚开始运行就报错。而如果是纯粹性的解释型语言，则会到出错的地方才会报错。</p>
+<p>第一种<code>crowbar</code>语言的实现是代码转换到语法分析树后直接运行。</p>
+<p>java语言是通过解释器运行字节码，而不是运行树，感觉像是运行树经过压缩便成了字节码。第二种<code>diksam</code>语言是运行字节码，不是生成树。而我们的语言在程序启动时编译出字节码在内存中，然后直接执行，不像java能产生class文件。</p>
+<h1 id="环境搭建">环境搭建</h1><p>编译器：我这里使用ubuntu系统，自带GCC。yacc使用GNU项目下地bison代替。</p>
+<p>lex使用加强版的flex代替。</p>
 
           
         
@@ -509,8 +639,8 @@
             
               
                 
-                <a class="post-title-link" href="/移动安全/gen-mterp.py分析/2015-11-20.html" itemprop="url">
-                  gen-mterp.py分析
+                <a class="post-title-link" href="/uncategorized/tuisongxiaoxi3-31-3-11/2016-03-31.html" itemprop="url">
+                  3月11日到3月31推送消息精选
                 </a>
               
             
@@ -523,30 +653,11 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2015-11-20T00:00:00+08:00" content="2015-11-20">
-              2015-11-20
+            <time itemprop="dateCreated" datetime="2016-03-31T00:47:51+08:00" content="2016-03-31">
+              2016-03-31
             </time>
           </span>
 
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/移动安全/" itemprop="url" rel="index">
-                    <span itemprop="name">移动安全</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
           
 
           
@@ -571,16 +682,14 @@
       
         
           
-            <p>读源码和做逆向一样，要从代码的入口点开始分析。</p>
-<h4 id="1-_检查参数">1. 检查参数</h4><figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> len(sys.argv) != <span class="number">3</span>:</span><br><span class="line">    <span class="keyword">print</span> <span class="string">"Usage: <span class="variable">%s</span> target-arch output-dir"</span> % sys.argv[<span class="number">0</span>]</span><br><span class="line">    sys.<span class="keyword">exit</span>(<span class="number">2</span>)</span><br></pre></td></tr></table></figure>
-<h5 id="2-_获得opcode表">2. 获得opcode表</h5><figure class="highlight sml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">opcodes = getOpcodeList<span class="literal">()</span></span><br><span class="line">#for <span class="keyword">op</span> <span class="keyword">in</span> opcodes:</span><br><span class="line">#    print <span class="string">"  %s"</span> % <span class="keyword">op</span></span><br></pre></td></tr></table></figure>
-<p>在 getOpcodeList()函数中，打开<code>dalvik/libdex/DexOpcodes.h</code><br>使用正则表达式，读取类似<code>H(OP_NOP)</code>的一个表达式，生成一个<code>OP_NOP</code>加入到opcodes列表中，返回，一共有256个opcodes。</p>
-<h5 id="3-读配置文件">3.读配置文件</h5><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">config_fp = <span class="function"><span class="title">open</span><span class="params">(<span class="string">"config-%s"</span> % target_arch)</span></span></span><br><span class="line"><span class="comment">// 写C文件，汇编文件</span></span><br><span class="line">    c_fp = <span class="function"><span class="title">open</span><span class="params">(<span class="string">"%s/InterpC-%s.cpp"</span> % (output_dir, target_arch)</span></span>, <span class="string">"w"</span>)</span><br><span class="line">   asm_fp = <span class="function"><span class="title">open</span><span class="params">(<span class="string">"%s/InterpAsm-%s.S"</span> % (output_dir, target_arch)</span></span>, <span class="string">"w"</span>)</span><br></pre></td></tr></table></figure>
-<p>参考链接：</p>
-<ul>
-<li><a href="http://code.metager.de/source/xref/android/4.4/dalvik/vm/mterp/gen-mterp.py" target="_blank" rel="external">http://code.metager.de/source/xref/android/4.4/dalvik/vm/mterp/gen-mterp.py</a></li>
-<li><a href="http://blog.csdn.net/zylc369/article/details/44660601" target="_blank" rel="external">http://blog.csdn.net/zylc369/article/details/44660601</a></li>
-</ul>
+            <p><a href="http://resources.infosecinstitute.com/complete-tour-of-pe-and-elf-part-1/#article" target="_blank" rel="external">PE文件格式和ELF文件格式之旅</a> 分析ELF文件格式和ELF文件格式</p>
+<p><a href="https://github.com/swwwolf/wdbgark" target="_blank" rel="external">WinDBG Anti-RootKit Extension</a> windbg扩展插件，源码，wiki很好地学习写机会</p>
+<p><a href="https://rotlogix.com/2016/03/20/objective-c-instrumentation-with-frida/" target="_blank" rel="external">基于 Frida 框架的 Objective-C 插桩方法</a> 上手简单</p>
+<p><a href="http://www.openrce.org/reference_library/files/reference/PE%20Format.pdf" target="_blank" rel="external">PE文件结构高清大图</a></p>
+<p><a href="http://7xn4yz.com1.z0.glb.clouddn.com/yWfCliF.png" target="_blank" rel="external">一张图展示 Linux 文件系统的目录结构</a></p>
+<p><a href="https://eden.dei.uc.pt/~sneves/pubs/2012-snfa2.pdf" target="_blank" rel="external"></a></p>
+<p><a href="http://www.keithschwarz.com/cs143/WWW/sum2011/" target="_blank" rel="external">斯坦福大学 Keith Schwarz 讲师的编译器课程(CS143)</a></p>
+<p><a href="https://eden.dei.uc.pt/~sneves/pubs/2012-snfa2.pdf" target="_blank" rel="external">基于 C++ 模板元编程的二进制代码混淆技术</a> 模板类不太懂</p>
 
           
         
@@ -609,7 +718,7 @@
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -650,7 +759,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">18</span>
+              <span class="site-state-item-count">21</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -658,7 +767,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-count">9</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>

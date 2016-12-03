@@ -41,7 +41,7 @@
 <link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="驱动," />
+  <meta name="keywords" content="Hexo,next" />
 
 
 
@@ -57,16 +57,37 @@
 
 
 
-<meta name="description" content="自旋锁是一种同步机制，保证资源只能被一个线程所拥有。这种保护形象地称作上锁。">
+<meta name="description" content="每个人都有拥有欲望，ipone、宝马、深圳的房子……但是因为社会中的资源是有限的，包括原材料、工人、时间等等，所以我们面临着各种选择买不起ipone买个小米行不行？买不起深圳的房子买个南京的房子行不行？
+整个经济体系面临下面3个问题：
+
+我们要生产什么?
+我们怎样生产？
+谁得到了它？
+
+2种不同的经济体系：市场经济、计划经济。两者的区别在于：谁拥有和控制生产要素？生产要素是生产的投入，包括土地、劳">
 <meta property="og:type" content="article">
-<meta property="og:title" content="自旋锁">
-<meta property="og:url" content="http://www.plaype.me/读书笔记/自旋锁/2016-05-12.html">
+<meta property="og:title" content="两种经济体系">
+<meta property="og:url" content="http://www.plaype.me/经济学/两种经济体系/2016-12-04.html">
 <meta property="og:site_name" content="Lnju's notepad">
-<meta property="og:description" content="自旋锁是一种同步机制，保证资源只能被一个线程所拥有。这种保护形象地称作上锁。">
-<meta property="og:updated_time" content="2016-05-12T03:58:53.000Z">
+<meta property="og:description" content="每个人都有拥有欲望，ipone、宝马、深圳的房子……但是因为社会中的资源是有限的，包括原材料、工人、时间等等，所以我们面临着各种选择买不起ipone买个小米行不行？买不起深圳的房子买个南京的房子行不行？
+整个经济体系面临下面3个问题：
+
+我们要生产什么?
+我们怎样生产？
+谁得到了它？
+
+2种不同的经济体系：市场经济、计划经济。两者的区别在于：谁拥有和控制生产要素？生产要素是生产的投入，包括土地、劳">
+<meta property="og:updated_time" content="2016-12-03T16:04:58.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="自旋锁">
-<meta name="twitter:description" content="自旋锁是一种同步机制，保证资源只能被一个线程所拥有。这种保护形象地称作上锁。">
+<meta name="twitter:title" content="两种经济体系">
+<meta name="twitter:description" content="每个人都有拥有欲望，ipone、宝马、深圳的房子……但是因为社会中的资源是有限的，包括原材料、工人、时间等等，所以我们面临着各种选择买不起ipone买个小米行不行？买不起深圳的房子买个南京的房子行不行？
+整个经济体系面临下面3个问题：
+
+我们要生产什么?
+我们怎样生产？
+谁得到了它？
+
+2种不同的经济体系：市场经济、计划经济。两者的区别在于：谁拥有和控制生产要素？生产要素是生产的投入，包括土地、劳">
 
 
 
@@ -84,7 +105,7 @@
   };
 </script>
 
-  <title> 自旋锁 | Lnju's notepad </title>
+  <title> 两种经济体系 | Lnju's notepad </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -232,7 +253,7 @@
             
             
               
-                自旋锁
+                两种经济体系
               
             
           </h1>
@@ -244,8 +265,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-05-12T11:37:11+08:00" content="2016-05-12">
-              2016-05-12
+            <time itemprop="dateCreated" datetime="2016-12-04T00:03:02+08:00" content="2016-12-04">
+              2016-12-04
             </time>
           </span>
 
@@ -258,8 +279,8 @@
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/读书笔记/" itemprop="url" rel="index">
-                    <span itemprop="name">读书笔记</span>
+                  <a href="/categories/经济学/" itemprop="url" rel="index">
+                    <span itemprop="name">经济学</span>
                   </a>
                 </span>
 
@@ -290,18 +311,19 @@
       
 
       
-        <p>自旋锁是一种同步机制，保证资源只能被一个线程所拥有。这种保护形象地称作上锁。</p>
-<a id="more"></a>
-<h2 id="1-_原理">1. 原理</h2><p>Spin Lock(自旋锁)可以用于驱动的同步处理。初始化自旋锁时，处于解锁状态；这时它可以被程序获取，获取后的自旋锁处于锁定状态，不能被再次获取。</p>
-<p>如果自旋锁已被锁住，这时有程序申请“获取”这个锁，程序则处于“自旋”状态。所谓自旋状态，就是不停地询问是否可以“获取”自旋锁，我理解为一直在原地打转。</p>
-<p>自旋锁不同于线程中的等待事件，在线程中如果等待某个事件（Event），操作系统会使这个线程<strong>进入休眠状态</strong>，CPU会运行其他线程；而自旋锁原理则不同，它不会切换到别的线程，而是<strong>一直让这个线程“自旋”</strong>。因此<strong>对自旋锁占用时间不宜过长</strong>，否则会导致申请自旋锁的其他线程处于自旋，会浪费CPU时间。</p>
-<p>驱动程序必须在<strong>低于或者等于DISPATCH_LEVEL</strong>的IRQL级别中使用自旋锁。</p>
-<h2 id="2-_使用方法">2. 使用方法</h2><p>自旋锁一般为了使各派遣函数之间同步，尽量把自旋锁放在设备扩展里，而不要放在全局变量中。自旋锁使用KSPIN_LOCK数据结构表示，定义自旋锁：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> _DEVICE_EXTENSION</span><br><span class="line">&#123;</span><br><span class="line">	.....</span><br><span class="line">	KSPIN_LOCK My_SpinLock; <span class="comment">// 在设备扩展中定义自旋锁</span></span><br><span class="line">&#125;DEVICE_EXTENSION, *PDEVICE_EXTENSION;</span><br></pre></td></tr></table></figure>
-<p>使用自旋锁首先需要对其进行<strong>初始化</strong>，可以使用KeInitializeSpinLock内核函数。一般是在驱动程序的DriverEntry或AddDevice函数中初始化自旋锁。</p>
-<p>申请自旋锁可以使用内核函数<strong>KeAcquireSpinLock</strong>，它有两个参数，一个为<strong>自旋锁指针</strong>，第二个参数保存获得自旋锁以前的IRQL级别。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">PDEVICE_EXTENSION pdx = (PDEVICE_EXTENSION)pDevObj-&gt;DeviceExtension;</span><br><span class="line">KIRQL oldirql;</span><br><span class="line">KeACquireSpinLock(&amp;pdx-&gt;My_SpinLock, &amp;oldirql);</span><br></pre></td></tr></table></figure>
-<p>如果在DISPATCH_LEVEL级别申请自旋锁，不会改变IRQL级别。这时，简单使用<strong>KeAcquireSpinLockAtDpcLevel函数</strong>，而释放自旋锁使用<strong>KeReleaseSpinLockAtDpcLevel函数</strong>.</p>
+        <p>每个人都有拥有欲望，ipone、宝马、深圳的房子……但是因为社会中的资源是有限的，包括原材料、工人、时间等等，所以我们面临着各种选择买不起ipone买个小米行不行？买不起深圳的房子买个南京的房子行不行？</p>
+<p>整个经济体系面临下面3个问题：</p>
+<ul>
+<li>我们要生产什么?</li>
+<li>我们怎样生产？</li>
+<li>谁得到了它？</li>
+</ul>
+<p>2种不同的经济体系：市场经济、计划经济。两者的区别在于：谁拥有和控制生产要素？生产要素是生产的投入，包括土地、劳动力、资本。</p>
+<p>计划经济中政府控制生产要素，通过一些社会机构，来说明应该生产什么？如何生产？谁获得产品。政府控制到具体一年该生产多少鞋子，这就是计划经济。</p>
+<p>相对于计划经济，有市场经济，个人拥有生产要素，政府不会虎视眈眈这些东西。在自由经济中，企业单纯是为了赚更多的钱。一个公司生产了质量好、价格便宜的车自然买的人就越来越多，企业有更多的利润，用于生产更多、更好的车。然而公司制造出的车子没有人买，即浪费了资源，因为没有人愿意再出钱去交换这个资源了。</p>
+<p>一般来讲，市场经济更加的符合人们的诉求，让产品优胜劣汰。但是，事实上，政府还是会干预我们制造什么样的车子。比如，生产的车子的排放标准，以及工人的工资标准。</p>
+<p>在现代经济社会中，都是市场经济和计划经济共存。</p>
+<p>如果政府不规定车子的排放标准，生产出的车子也许会更便宜，更多，但是从长远角度来看，这可能会危害人体健康。所以经济学家一个取舍的过程。所以，这又回到最开始的机会成本的问题了。</p>
 
       
     </div>
@@ -314,28 +336,18 @@
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/驱动/" rel="tag">#驱动</a>
-          
-        </div>
-      
 
       
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/读书笔记/中断请求级IRQL/2016-05-12.html" rel="next" title="中断请求级IRQL">
-                <i class="fa fa-chevron-left"></i> 中断请求级IRQL
+              <a href="/读书笔记/用户模式下同步对象/2016-05-12.html" rel="next" title="用户模式下同步对象">
+                <i class="fa fa-chevron-left"></i> 用户模式下同步对象
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/读书笔记/用户模式下同步对象/2016-05-12.html" rel="prev" title="用户模式下同步对象">
-                用户模式下同步对象 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -451,7 +463,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-_原理"><span class="nav-number">1.</span> <span class="nav-text">1. 原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-_使用方法"><span class="nav-number">2.</span> <span class="nav-text">2. 使用方法</span></a></li></ol></div>
+              <p class="post-toc-empty">此文章未包含目录</p>
             
           </div>
         </section>

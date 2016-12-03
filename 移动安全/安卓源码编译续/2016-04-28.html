@@ -1,0 +1,601 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="源码,编译," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.2" />
+
+
+
+
+
+
+<meta name="description" content="一些源码编译常用的小技巧">
+<meta property="og:type" content="article">
+<meta property="og:title" content="安卓源码编译(续)">
+<meta property="og:url" content="http://www.plaype.me/移动安全/安卓源码编译续/2016-04-28.html">
+<meta property="og:site_name" content="Lnju's notepad">
+<meta property="og:description" content="一些源码编译常用的小技巧">
+<meta property="og:updated_time" content="2016-05-07T17:48:35.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="安卓源码编译(续)">
+<meta name="twitter:description" content="一些源码编译常用的小技巧">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: "always",
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 安卓源码编译(续) | Lnju's notepad </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  <div class="container one-collumn  page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Lnju's notepad</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-wiki">
+          <a href="/wiki" rel="section">
+            
+              <i class="menu-item-icon fa fa-question-circle fa-fw"></i> <br />
+            
+            Mywiki
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                安卓源码编译(续)
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-04-28T01:23:30+08:00" content="2016-04-28">
+              2016-04-28
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/移动安全/" itemprop="url" rel="index">
+                    <span itemprop="name">移动安全</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>一些源码编译常用的小技巧<br><a id="more"></a></p>
+<h1 id="安卓源码编译">安卓源码编译</h1><p>make生成的编译结果输出目录为out/target/product/$(TARGET_PRODUCT)，$(TARGET_PRODUCT)是一个环境变量，默认值是generic。</p>
+<p>编译成功之后，可以执行</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">make</span> sdk</span><br></pre></td></tr></table></figure>
+<p>打包成SDK，输出为SDK，有了这个SDK，可以在IDE下进行android开发</p>
+<h2 id="运行安卓模拟机">运行安卓模拟机</h2><p>在启动模拟器之前，需要先为模拟器系统设置环境变量</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> ANDROID_PRODUCT_OUT=安卓源码下/out/target/product/generic <span class="comment"># 镜像文件目录</span></span><br><span class="line"><span class="built_in">export</span> ANDROID_PRODUCT_OUT_BIN=安卓源码下/out/host/linux-x86/bin <span class="comment">#模拟器目录</span></span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$&#123;PATH&#125;</span>:<span class="variable">$&#123;ANDROID_PRODUCT_OUT_BIN&#125;</span>:<span class="variable">$&#123;ANDROID_PRODUCT_OUT&#125;</span>;<span class="comment">#将上面2个路径加入path</span></span><br></pre></td></tr></table></figure>
+<p>执行</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">source build/envsetup<span class="class">.sh</span></span><br><span class="line">lunch </span><br><span class="line">emulator</span><br></pre></td></tr></table></figure>
+<p>启动模拟器。启动模拟器会用到4个文件</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">zImage</span><br><span class="line">system<span class="class">.img</span></span><br><span class="line">userdata<span class="class">.img</span></span><br><span class="line">ramdisk.img</span><br></pre></td></tr></table></figure>
+<p>第一个是linux内核镜像，后3个是android系统镜像。</p>
+<p>默认参数运行模拟器，使用的是zImage文件是安卓源码下的/out/host/linux-x86/bin中的kernel-qemu文件。而默认的镜像文件位于ANDROID_PRODUCT_OUT目录下。</p>
+<h1 id="编译内核源码">编译内核源码</h1><p>安卓源码不包括内核源码，下载下来之后先改内核代码目录下的makefile文件，再添加编译工具链的路径到环境变量，再make。</p>
+<p>生成的新的内核，我们可以用来启动模拟器</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">emulator -kernel .<span class="regexp">/kernel/g</span>oldfish<span class="regexp">/arch/</span>arm<span class="regexp">/boot/</span>zImage &amp;</span><br></pre></td></tr></table></figure>
+<p>&amp;符号是制定模拟器在后台运行，命令行不会被占用。通过adb shell连上模拟器。</p>
+<figure class="highlight nimrod"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd <span class="keyword">proc</span></span><br><span class="line">cat version</span><br></pre></td></tr></table></figure>
+<p>得到的回显会有内核的编译时间，版本等信息用来判断这个内核是否是我们新编译出来的。</p>
+<h1 id="验证程序编写">验证程序编写</h1><p>通常把实验性质的android应用放在packages/experimental目录下。在安卓源码环境下开发安卓应用程序不要用make命令编译整个android源码工程，单独编译新增的安卓应用模块就可以了。新增的安卓应用经过编译、重打包到system.img后，我们就可以使用新的system.img文件来启动android模拟器。启动后可以便可以点开试用。</p>
+<p>总体上讲，单独打包android应用程序模块用到2个命令。</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">mmm</span> 			<span class="comment">#单独编译某一模块</span></span><br><span class="line">make snod 		<span class="comment">#单独执行打包android系统镜像文件system.img</span></span><br></pre></td></tr></table></figure>
+<p>使用mmm之前先执行脚本，帮我们设置好环境变量</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">source</span> .<span class="regexp">/build/</span>envsetup.sh</span><br></pre></td></tr></table></figure>
+<p>现在就可以用mmm命令了，例如</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mmm .<span class="regexp">/packages/</span>experimental<span class="regexp">/HelloWorld/</span></span><br></pre></td></tr></table></figure>
+<p>编译完成后在</p>
+<blockquote>
+<p>/out/target/product/generic/system/app</p>
+</blockquote>
+<p>目录下。</p>
+<p>如果要编译c可以执行文件或者动态链接库文件，输出在</p>
+<blockquote>
+<p>out/target/product/generic/system/lib/hw</p>
+</blockquote>
+<p>目录下</p>
+<p>接着，再重打包system.img</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">make</span> snod</span><br></pre></td></tr></table></figure>
+<p>新的系统镜像文件在out/target/product/generic目录下。有了新的系统镜像，再执行模拟器，就会加载这个新的系统镜像。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/源码/" rel="tag">#源码</a>
+          
+            <a href="/tags/编译/" rel="tag">#编译</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/读书笔记/《自制编程语言》阅读笔记2/2016-03-31.html" rel="next" title="《自制编程语言》阅读笔记 - 第二章计算器">
+                <i class="fa fa-chevron-left"></i> 《自制编程语言》阅读笔记 - 第二章计算器
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/移动安全/2016安卓源码编译/2016-04-28.html" rel="prev" title="2016安卓源码编译笔记">
+                2016安卓源码编译笔记 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://bbs.pediy.com/image.php?u=661065&dateline=1419083289&type=thumb"
+               alt="Lnju" />
+          <p class="site-author-name" itemprop="name">Lnju</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">18</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        <div class="links-of-blogroll motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#安卓源码编译"><span class="nav-number">1.</span> <span class="nav-text">安卓源码编译</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#运行安卓模拟机"><span class="nav-number">1.1.</span> <span class="nav-text">运行安卓模拟机</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#编译内核源码"><span class="nav-number">2.</span> <span class="nav-text">编译内核源码</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#验证程序编写"><span class="nav-number">3.</span> <span class="nav-text">验证程序编写</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lnju</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+
+  
+
+
+
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=0.4.5.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=0.4.5.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=0.4.5.2"></script>
+<script type="text/javascript" src="/vendors/jquery-scrollintoview/jquery.scrollintoview.min.js?v=0.4.5.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=0.4.5.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=0.4.5.2"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -60,7 +60,7 @@
 <meta name="description">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Lnju's notepad">
-<meta property="og:url" content="http://www.plaype.cc/page/3/index.html">
+<meta property="og:url" content="http://www.plaype.me/page/3/index.html">
 <meta property="og:site_name" content="Lnju's notepad">
 <meta property="og:description">
 <meta name="twitter:card" content="summary">
@@ -234,8 +234,8 @@
             
               
                 
-                <a class="post-title-link" href="/移动安全/gen-mterp-py分析/2015-11-20.html" itemprop="url">
-                  gen-mterp.py分析
+                <a class="post-title-link" href="/读书笔记/内核调试引擎（上）/2016-05-06.html" itemprop="url">
+                  2016-05-06-内核调试引擎（上）
                 </a>
               
             
@@ -248,8 +248,120 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2015-11-20T00:00:00+08:00" content="2015-11-20">
-              2015-11-20
+            <time itemprop="dateCreated" datetime="2016-05-06T21:06:10+08:00" content="2016-05-06">
+              2016-05-06
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/读书笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">读书笔记</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>什么是<strong>kernel debug engine</strong>? 我们要调试系统内核，就需要做到让系统听我们的话，想随时中断下来就要中断下来让我们调试。假如我们让整个系统都中断了，那么被调试系统中谁来接受我们接下来的调试命令呢？windows的做法是独立出一个和正常操作系统运作没有任何关系，专门用来接受我们（调试器）的调试命令的部分，这部分就是内核调试引擎。</p>
+<p>windows操作系统的每个系统部件（每个功能类别）有一个简短的名字，<strong>MM</strong>代表内存管理器，<strong>OB</strong>代表对象管理器，<strong>PS</strong>代表进程线程管理，类似地内核调试引擎也有这样一个双字母名字叫做<strong>KD</strong>。</p>
+<p><strong>角色</strong>：内核调试引擎是<strong>调试器</strong>和<strong>被调试内核</strong>的桥梁，类似于<strong>调试子系统</strong>在<strong>调试器和被调试程序</strong>中的扮演的角色。支持内核调试的函数、变量都是<strong>KD开头</strong>。内核调试引擎和调试器之前想要通信，必须有一套约定好的协议。调试器通过协议请求调试引擎帮助他控制目标系统内核，调试引擎通过协议报告系统内核状态给调试器。内核调试引擎为调试器（更具体的说是内核调试器）提供了一套特殊的API — <strong>kdAPI</strong>，调试器使用kdAPI可以以远程调用的方式访问到内核，这种方式类似于应用程序通过win32API访问内核服务。<em>在这里做一个关于反外挂的思考，因为驱动程序是对于操作系统内核的一个补充，那是不是用于反外挂的驱动程序，可以做到破坏内核调试引擎不能正常的与调试器进行通讯，就可以达到反外挂的目的。</em></p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/读书笔记/内核调试引擎（上）/2016-05-06.html#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/移动安全/通用脱壳思路学习/2016-04-28.html" itemprop="url">
+                  通用脱壳思路学习
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-04-28T01:50:47+08:00" content="2016-04-28">
+              2016-04-28
             </time>
           </span>
 
@@ -295,19 +407,13 @@
 
       
         
-          
-            <p>读源码和做逆向一样，要从代码的入口点开始分析。</p>
-<h4 id="1-_检查参数">1. 检查参数</h4><figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> len(sys.argv) != <span class="number">3</span>:</span><br><span class="line">    <span class="keyword">print</span> <span class="string">"Usage: <span class="variable">%s</span> target-arch output-dir"</span> % sys.argv[<span class="number">0</span>]</span><br><span class="line">    sys.<span class="keyword">exit</span>(<span class="number">2</span>)</span><br></pre></td></tr></table></figure>
-<h5 id="2-_获得opcode表">2. 获得opcode表</h5><figure class="highlight sml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">opcodes = getOpcodeList<span class="literal">()</span></span><br><span class="line">#for <span class="keyword">op</span> <span class="keyword">in</span> opcodes:</span><br><span class="line">#    print <span class="string">"  %s"</span> % <span class="keyword">op</span></span><br></pre></td></tr></table></figure>
-<p>在 getOpcodeList()函数中，打开<code>dalvik/libdex/DexOpcodes.h</code><br>使用正则表达式，读取类似<code>H(OP_NOP)</code>的一个表达式，生成一个<code>OP_NOP</code>加入到opcodes列表中，返回，一共有256个opcodes。</p>
-<h5 id="3-读配置文件">3.读配置文件</h5><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">config_fp = <span class="function"><span class="title">open</span><span class="params">(<span class="string">"config-%s"</span> % target_arch)</span></span></span><br><span class="line"><span class="comment">// 写C文件，汇编文件</span></span><br><span class="line">    c_fp = <span class="function"><span class="title">open</span><span class="params">(<span class="string">"%s/InterpC-%s.cpp"</span> % (output_dir, target_arch)</span></span>, <span class="string">"w"</span>)</span><br><span class="line">   asm_fp = <span class="function"><span class="title">open</span><span class="params">(<span class="string">"%s/InterpAsm-%s.S"</span> % (output_dir, target_arch)</span></span>, <span class="string">"w"</span>)</span><br></pre></td></tr></table></figure>
-<p>参考链接：</p>
-<ul>
-<li><a href="http://code.metager.de/source/xref/android/4.4/dalvik/vm/mterp/gen-mterp.py" target="_blank" rel="external">http://code.metager.de/source/xref/android/4.4/dalvik/vm/mterp/gen-mterp.py</a></li>
-<li><a href="http://blog.csdn.net/zylc369/article/details/44660601" target="_blank" rel="external">http://blog.csdn.net/zylc369/article/details/44660601</a></li>
-</ul>
-
-          
+          <p>通用脱壳思路学习乌云上的一篇文章</p>
+<h1 id="未完待续">未完待续</h1>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/移动安全/通用脱壳思路学习/2016-04-28.html#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
         
       
     </div>
@@ -351,8 +457,8 @@
             
               
                 
-                <a class="post-title-link" href="/编程/Stack-Trace/2015-11-18.html" itemprop="url">
-                  调试器栈回溯如何实现
+                <a class="post-title-link" href="/移动安全/DexHunter学习笔记2/2016-04-28.html" itemprop="url">
+                  DexHunter学习笔记2
                 </a>
               
             
@@ -365,130 +471,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2015-11-18T23:53:33+08:00" content="2015-11-18">
-              2015-11-18
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/编程/" itemprop="url" rel="index">
-                    <span itemprop="name">编程</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>去面试被问到一个问题，</p>
-<blockquote>
-<p>调试器是怎么实现栈桢回溯的?</p>
-</blockquote>
-<p>这个问题应该是属于<strong>基础</strong>的问题，可是当时答的不好，可能是好久都没有看代码了，已经脑子僵化了，今天回来有兴致google了一下具体的方法.</p>
-<p>总结来讲：分2类情况谈论，具体情况是，编译器在编译的过程中，是否有做过优化，再具体而言，就是ebp是否是指向 <em>栈桢</em> 。</p>
-<p>通常一个函数的开头是</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">push ebp</span><br><span class="line">mov ebp,esp</span><br></pre></td></tr></table></figure>
-<p>当这两句执行完之后，栈上的情况如下：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">局部变量 <span class="number">1</span></span><br><span class="line">局部变量 <span class="number">2</span></span><br><span class="line">…… ……</span><br><span class="line">局部变量 n</span><br><span class="line">push进来的ebp</span><br><span class="line">函数的返回地址</span><br><span class="line">参数 <span class="number">1</span></span><br><span class="line">参数 <span class="number">2</span></span><br><span class="line">参数 <span class="number">3</span></span><br><span class="line">… …</span><br><span class="line">参数 n</span><br></pre></td></tr></table></figure>
-<p>在编译器没有优化的时候，是这种情况，这个时候，返回地址实际上就是 <code>[ebp+4]</code></p>
-<p>找到一段代码</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> Debug::TraceStackTrace(<span class="keyword">unsigned</span> <span class="keyword">int</span> MaxFrames)</span><br><span class="line">&#123;</span><br><span class="line">	 <span class="comment">// Stack contains:</span></span><br><span class="line">    <span class="comment">//  Second function argument 类方法，this指针</span></span><br><span class="line">    <span class="comment">//  First function argument (MaxFrames) 第一个函数参数</span></span><br><span class="line">    <span class="comment">//  Return address in calling function  返回地址</span></span><br><span class="line">    <span class="comment">//  ebp of calling function (pointed to by current ebp) ebp指针</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> * ebp = &amp;MaxFrames - <span class="number">2</span>; </span><br><span class="line">    <span class="comment">//MaxFrames 取地址是指针，-2 就是 -8</span></span><br><span class="line">    <span class="comment">//通过这个函数的参数，找到当前函数的栈桢ebp</span></span><br><span class="line">    <span class="comment">//同时，这个参数的值也能表示要找几层栈桢</span></span><br><span class="line">    Trace(<span class="string">"Stack trace:\n"</span>);</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">unsigned</span> <span class="keyword">int</span> frame = <span class="number">0</span>; frame &lt; MaxFrames; ++frame)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">unsigned</span> <span class="keyword">int</span> eip = ebp[<span class="number">1</span>]; <span class="comment">//找到函数返回地址</span></span><br><span class="line">        <span class="keyword">if</span>(eip == <span class="number">0</span>)</span><br><span class="line">            <span class="comment">// No caller on stack</span></span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="comment">// Unwind to previous stack frame</span></span><br><span class="line">        <span class="comment">// 找到上一层的栈桢ebp</span></span><br><span class="line">        ebp = <span class="keyword">reinterpret_cast</span>&lt;<span class="keyword">unsigned</span> <span class="keyword">int</span> *&gt;(ebp[<span class="number">0</span>]);</span><br><span class="line">        <span class="keyword">unsigned</span> <span class="keyword">int</span> * arguments = &amp;ebp[<span class="number">2</span>];</span><br><span class="line">        Trace(<span class="string">"  0x&#123;0:16&#125;     \n"</span>, eip);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>还有一种情况是编译器已经优化了代码，或者说写代码的人使用了非默认的编译选项，这种情况就应该使用调试信息，符号表什么的。这种情况在参考链接的讨论页面有所讨论到。</p>
-<p>参考链接: <a href="http://wiki.osdev.org/Stack_Trace" target="_blank" rel="external">http://wiki.osdev.org/Stack_Trace</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/移动安全/对DexHunter的学习笔记/2015-11-13.html" itemprop="url">
-                  对DexHunter的学习笔记
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2015-11-13T15:56:12+08:00" content="2015-11-13">
-              2015-11-13
+            <time itemprop="dateCreated" datetime="2016-04-28T01:39:11+08:00" content="2016-04-28">
+              2016-04-28
             </time>
           </span>
 
@@ -534,77 +518,13 @@
 
       
         
-          
-            <p><strong>原帖地址 </strong> <a href="http://bbs.pediy.com/showthread.php?t=203776" target="_blank" rel="external">Android dex文件通用自动脱壳器</a></p>
-<p><strong>源码</strong> <a href="https://github.com/zyq8709/DexHunter" target="_blank" rel="external">github地址</a></p>
-<p>基于修改android源码的自动脱壳机，可以自动脱了dex的壳，早就说过dex层藏不住东西。这样，所有的安全保护的重点就应该放在native层上。有源码跟着学习一下自动脱壳.android源码的版本基于4.3，和我的代码版本刚好一样（如果没有源码的童靴，android SDK更新的时候获取相应版本的源码,也可以选择国内的镜像源获取源码）。我进行学习的是dalvik相关所以主要关注雨dalvik目录，art以后再说吧。</p>
-<h5 id="学习思路">学习思路</h5><p>建立git仓库，把原始的源码传上去作为第一个版本。查看作者的更新历史，比较文件的不同处，一步一步注释第一个版本的源码进行学习。把这个过程搞清楚了，再去操作一下自动脱壳。</p>
-<hr>
-<p>DexHunter第一个有源码的版本<a href="https://github.com/zyq8709/DexHunter/tree/768fcdc64b89ce468b6f751b0eb124d24e3cde0a" target="_blank" rel="external">DexHunter1</a></p>
-<h3 id="ReadMe">ReadMe</h3><p>主要修改了 “dalvik/vm/native/dalvik_system_DexFile.cpp” (DVM).</p>
-<p>脱壳app的步骤：</p>
-<ol>
-<li>在启动app之前push dexname 文件到 <code>/data/</code>目录下</li>
-<li>这个文件的第一行是feature string (这个特征字符串怎么找去ppt里看 “slide.pptx”)</li>
-<li>文件的第二行是目标app的数据路径，例如 <code>/data/data/com.test.test/</code></li>
-</ol>
-<p><strong>注意</strong>:特征字符会根据加固服务的版本而不同.可以根据logcat查看是否脱壳完成，完成后会生成一个 <code>wholx.dex</code></p>
-<p>annotation_off、debug_info_off部分对于程序的执行没什么影响，只会干扰我们脱壳，这部分就忽略掉。作者建议可以写脚本设置这些无效的字段为0.</p>
-<p>一些加固会保护很多方法，当被执行前解密还原，在执行完成后擦出。所以要修改 <code>dvmMterp_invokeMethod</code>函数去取出当前被执行的指令。</p>
-<p><a href="https://github.com/zyq8709/DexHunter/blob/768fcdc64b89ce468b6f751b0eb124d24e3cde0a/slide.pptx" target="_blank" rel="external">演示ppt</a></p>
-<p><a href="https://github.com/zyq8709/DexHunter/blob/768fcdc64b89ce468b6f751b0eb124d24e3cde0a/demo.mp4" target="_blank" rel="external">脱阿里加固的演示视频</a></p>
-<h3 id="修改的位置：">修改的位置：</h3><p><a href="http://androidxref.com/4.3_r2.1/xref/dalvik/Android.mk" target="_blank" rel="external">dalvik/Android.mk</a> 这里减了20行 - dalvikvm</p>
-<p><a href="https://github.com/zyq8709/DexHunter/tree/768fcdc64b89ce468b6f751b0eb124d24e3cde0a/dalvik/vm/native" target="_blank" rel="external">dalvik_system_DexFile.cpp</a>的目录，可以看到vim编辑的痕迹</p>
-<p><a href="http://androidxref.com/4.3_r2.1/xref/dalvik/vm/native/dalvik_system_DexFile.cpp" target="_blank" rel="external">dalvik_system_DexFile.cpp line:335</a>开始添加代码的标记 后面还有一处修改。</p>
-<p>首先弄清楚3个问题添加的2段代码是位于哪个函数之中，这个函数什么时候被调用，添加的代码有什么作用？</p>
-<p>被添加的代码位 <code>Dalvik_dalvik_system_DexFile_defineClassNative</code>函数当中，在这个函数前被添加的代码，都是为了在这个函数中调用的一些函数的声明。</p>
-<p><em>明天可以百度一下这个函数</em></p>
-<p>函数注释</p>
-<blockquote>
-<p>/*</p>
-<ul>
-<li>private static Class defineClass(String name, ClassLoader loader,</li>
-<li>int cookie)<br>*</li>
-<li>Load a class from a DEX file.  This is roughly equivalent to defineClass()</li>
-<li>in a regular VM – it’s invoked by the class loader to cause the</li>
-<li>creation of a specific class.  The difference is that the search for and</li>
-<li>reading of the bytes is done within the VM.<br>*</li>
-<li>The class name is a “binary name”, e.g. “java.lang.String”.<br>*</li>
-<li>Returns a null pointer with no exception if the class was not found.</li>
-<li>Throws an exception on other failures.<br>*/</li>
-</ul>
-</blockquote>
-<p>翻译过来大概是</p>
-<blockquote>
-<p>从dex文件中加载类，大致上等同于VM上的defineClass函数，这个函数被ClassLoader调用去创建一个指定的类。不同点在于，查找和读取字节码的工作在VM中被完成。<br>类名是类似于”java.lang.String”的二进制名<br>如果类没有找到返回空指针，无异常；其他错误引发异常。</p>
-</blockquote>
-<p>推测出这个函数的大致作用是去寻找一个类，并把返回值给第二个参数pResult。</p>
-<p>读读这个函数的原版</p>
-<figure class="highlight zephir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">static</span> void Dalvik_dalvik_system_DexFile_defineClass(<span class="keyword">const</span> u4* args,</span><br><span class="line">    JValue* pResult)</span><br><span class="line">&#123;</span><br><span class="line">    StringObject* nameObj = (StringObject*) args[<span class="number">0</span>];</span><br><span class="line">    Object* loader = (Object*) args[<span class="number">1</span>];</span><br><span class="line">    <span class="keyword">int</span> cookie = args[<span class="number">2</span>];</span><br><span class="line">    ClassObject* clazz = <span class="keyword">NULL</span>;</span><br><span class="line">    DexOrJar* pDexOrJar = (DexOrJar*) cookie;</span><br><span class="line">    DvmDex* pDvmDex;</span><br><span class="line">    <span class="keyword">char</span>* name;</span><br><span class="line">    <span class="keyword">char</span>* descriptor;</span><br><span class="line"></span><br><span class="line">    name = dvmCreateCstrFromString(nameObj);</span><br><span class="line">    descriptor = dvmDotToDescriptor(name);</span><br><span class="line">    ALOGV(<span class="string">"--- Explicit class load '%s' l=%p c=0x%08x"</span>,</span><br><span class="line">        descriptor, loader, cookie);</span><br><span class="line">    free(name);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!validateCookie(cookie))</span><br><span class="line">        RETURN_VOID();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (pDexOrJar-&gt;isDex)</span><br><span class="line">        pDvmDex = dvmGetRawDexFileDex(pDexOrJar-&gt;pRawDexFile);</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        pDvmDex = dvmGetJarFileDex(pDexOrJar-&gt;pJarFile);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* once we load something, we can't unmap the storage */</span></span><br><span class="line">    pDexOrJar-&gt;okayToFree = <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line">    clazz = dvmDefineClass(pDvmDex, descriptor, loader);</span><br><span class="line">    Thread* <span class="keyword">self</span> = dvmThreadSelf();</span><br><span class="line">    <span class="keyword">if</span> (dvmCheckException(<span class="keyword">self</span>)) &#123;</span><br><span class="line">        <span class="comment">/*</span><br><span class="line">         * If we threw a "class not found" exception, stifle it, since the</span><br><span class="line">         * contract in the higher method says we simply return null if</span><br><span class="line">         * the class is not found.</span><br><span class="line">         */</span></span><br><span class="line">        Object* excep = dvmGetException(<span class="keyword">self</span>);</span><br><span class="line">        <span class="keyword">if</span> (strcmp(excep-&gt;clazz-&gt;descriptor,</span><br><span class="line">                   <span class="string">"Ljava/lang/ClassNotFoundException;"</span>) == <span class="number">0</span> ||</span><br><span class="line">            strcmp(excep-&gt;clazz-&gt;descriptor,</span><br><span class="line">                   <span class="string">"Ljava/lang/NoClassDefFoundError;"</span>) == <span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            dvmClearException(<span class="keyword">self</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        clazz = <span class="keyword">NULL</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    free(descriptor);</span><br><span class="line">    RETURN_PTR(clazz);</span><br><span class="line">&#125;</span><br><span class="line">``` </span><br><span class="line"></span><br><span class="line">最关键 `clazz = dvmDefineClass(pDvmDex, descriptor, loader);`通过这个函数找到一个类，返回类指针</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">添加的代码大致流程：</span><br></pre></td></tr></table></figure>
-<p>通过pDvmDex找到odex指针和地址<br>DexFile<em> pDexFile=pDvmDex-&gt;pDexFile;<br>MemMapping </em> mem=&amp;pDvmDex-&gt;memMap;</p>
-<p>读取前16字节，保存<br>   const u1 <em>addr=(const u1</em>)mem-&gt;addr;<br>                int length=16;<br>                for (int i=0;i&lt;16;i++) {<br>                    fwrite(addr+i,1,1,fp);<br>                    fflush(fp);<br>                }</p>
-<p>// 0. 读取<code>DexOptHeader</code>的前16字节到文件<br>/<em><br> u1  magic[8];           /</em> includes version number <em>/<br> u4  dexOffset;          /</em> file offset of DEX header <em>/<br> u4  dexLength;
-</em>/</p>
-<p>addr = (const u1*)mem-&gt;addr+16;<br>                length=int(pDexFile-&gt;baseAddr+pDexFile-&gt;pHeader-&gt;classDefsOff-addr)-16;<br>                fwrite(addr,1,length,fp);</p>
-<p>// 1. 写16字节后，类定义之前部分到文件</p>
-<pre><code>addr = (<span class="keyword">const</span> u1*)mem-&gt;addr+<span class="number">16</span>;
-length=<span class="keyword">int</span>(
-    pDexFile-&gt;baseAddr + 
-    pDexFile-&gt;pHeader -&gt; classDefsOff <span class="comment">//类定义 </span>
-    -addr)
--<span class="number">16</span>;
-fwrite(addr,<span class="number">1</span>,length,fp);
-</code></pre><p>// 2. 写类内容到文件<br>                addr = pDexFile-&gt;baseAddr +<br>                pDexFile-&gt;pHeader-&gt;classDefsOff+ 类定义<br>                sizeof(DexClassDef)*pDexFile-&gt;pHeader-&gt;classDefsSize;</p>
-<pre><code><span class="built_in">length</span>=<span class="keyword">int</span>((<span class="keyword">const</span> u1*)mem-&gt;addr+mem-&gt;<span class="built_in">length</span>-addr); 所有的类数据
-fwrite(addr,<span class="number">1</span>,<span class="built_in">length</span>,fp);
-</code></pre><p>// 创建线程</p>
-<p>param.loader=loader;<br>param.pDvmDex=pDvmDex;<br>dvmCreateInternalThread(&amp;dumpthread,”ClassDumper”,DumpClass,(void*)&amp;param);             </p>
-<p>// 线程参数<br>struct arg{<br>    DvmDex<em> pDvmDex;<br>    Object </em> loader;<br>}param;</p>
-<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">所有的有价值的代码都在线程函数 <span class="escape">`D</span>umpClass<span class="escape">`中</span>，接着分析</span><br><span class="line"></span><br><span class="line">查下 DvmDex的定义 看看注释</span><br></pre></td></tr></table></figure>
-<p>// 拿到3个参数<br>Object <em>loader=((struct arg</em>)parament)-&gt;loader;<br>DexFile<em> pDexFile=pDvmDex-&gt;pDexFile;<br>MemMapping </em> mem=&amp;pDvmDex-&gt;memMap;</p>
-<p>```</p>
-
-          
+          <p>DexHunter的文件重组方法现在应该是市面上通杀，趁着这两天状态不错的时候，赶紧来学习一发。主要参考<a href="http://drops.wooyun.org/tips/9335">乌云上的这篇文章</a>。</p>
+<h1 id="还没分析完~">还没分析完~</h1>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/移动安全/DexHunter学习笔记2/2016-04-28.html#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
         
       
     </div>
@@ -631,7 +551,7 @@ fwrite(addr,<span class="number">1</span>,<span class="built_in">length</span>,f
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -672,7 +592,7 @@ fwrite(addr,<span class="number">1</span>,<span class="built_in">length</span>,f
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">22</span>
+              <span class="site-state-item-count">18</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -680,7 +600,7 @@ fwrite(addr,<span class="number">1</span>,<span class="built_in">length</span>,f
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-count">4</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -689,7 +609,7 @@ fwrite(addr,<span class="number">1</span>,<span class="built_in">length</span>,f
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-count">15</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

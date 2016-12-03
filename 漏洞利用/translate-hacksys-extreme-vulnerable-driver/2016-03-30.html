@@ -57,28 +57,19 @@
 
 
 
-<meta name="description" content="这篇博客给了一个驱动练习内核溢出的程序。
-介绍HackSys Extreme Vulnerable Driver是为了安全爱好者学习、增强内核溢出技术而故意开发的有漏洞的windows驱动程序。
-HackSys Extreme Vulnerable Driver提供从简单地缓冲区溢出到复杂的UAF以及 Pool Overflows等广阔漏洞范围，这允许安全研究者从所有实现的漏洞去探索溢出技术。
-什">
+<meta name="description" content="这篇博客给了一个驱动练习内核溢出的程序。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="一个windows内核漏洞练习驱动">
-<meta property="og:url" content="http://www.plaype.cc/漏洞利用/translate-hacksys-extreme-vulnerable-driver/2016-03-30.html">
+<meta property="og:url" content="http://www.plaype.me/漏洞利用/translate-hacksys-extreme-vulnerable-driver/2016-03-30.html">
 <meta property="og:site_name" content="Lnju's notepad">
-<meta property="og:description" content="这篇博客给了一个驱动练习内核溢出的程序。
-介绍HackSys Extreme Vulnerable Driver是为了安全爱好者学习、增强内核溢出技术而故意开发的有漏洞的windows驱动程序。
-HackSys Extreme Vulnerable Driver提供从简单地缓冲区溢出到复杂的UAF以及 Pool Overflows等广阔漏洞范围，这允许安全研究者从所有实现的漏洞去探索溢出技术。
-什">
+<meta property="og:description" content="这篇博客给了一个驱动练习内核溢出的程序。">
 <meta property="og:image" content="http://www.payatu.com/wp-content/uploads/2015/05/2015-06-03_22h27_24.png">
 <meta property="og:image" content="http://www.payatu.com/wp-content/uploads/2015/05/2015-05-27_20h22_35.png">
 <meta property="og:image" content="http://www.payatu.com/wp-content/uploads/2015/05/2015-05-27_20h28_07.png">
-<meta property="og:updated_time" content="2016-03-30T15:14:38.000Z">
+<meta property="og:updated_time" content="2016-05-07T02:44:20.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="一个windows内核漏洞练习驱动">
-<meta name="twitter:description" content="这篇博客给了一个驱动练习内核溢出的程序。
-介绍HackSys Extreme Vulnerable Driver是为了安全爱好者学习、增强内核溢出技术而故意开发的有漏洞的windows驱动程序。
-HackSys Extreme Vulnerable Driver提供从简单地缓冲区溢出到复杂的UAF以及 Pool Overflows等广阔漏洞范围，这允许安全研究者从所有实现的漏洞去探索溢出技术。
-什">
+<meta name="twitter:description" content="这篇博客给了一个驱动练习内核溢出的程序。">
 
 
 
@@ -302,7 +293,7 @@ HackSys Extreme Vulnerable Driver提供从简单地缓冲区溢出到复杂的UA
       
 
       
-        <p>这篇<a href="http://www.payatu.com/hacksys-extreme-vulnerable-driver/" target="_blank" rel="external">博客</a>给了一个驱动练习内核溢出的程序。</p>
+        <p>这篇<a href="http://www.payatu.com/hacksys-extreme-vulnerable-driver/" target="_blank" rel="external">博客</a>给了一个驱动练习内核溢出的程序。<br><a id="more"></a></p>
 <h1 id="介绍">介绍</h1><p><strong>HackSys Extreme Vulnerable Driver</strong>是为了安全爱好者学习、增强内核溢出技术而故意开发的有漏洞的windows驱动程序。</p>
 <p><strong>HackSys Extreme Vulnerable Driver</strong>提供从简单地缓冲区溢出到复杂的UAF以及 Pool Overflows等广阔漏洞范围，这允许安全研究者从所有实现的漏洞去探索溢出技术。</p>
 <h2 id="什么是HACKSYS_EXTREME_VULNERABLE_DRIVER？">什么是HACKSYS EXTREME VULNERABLE DRIVER？</h2><p>我已经在 <a href="http://null.co.in/profile/411-ashfaq-ansari" target="_blank" rel="external">null Security Community’s Pune Chapter</a>谈论过很多关于windows内核溢出技术。所以我认为，最好能写一个包含所有主要漏洞的驱动程序。这个写驱动的想法提供参与者更好地视角去看到在漏洞代码的背后发生了什么，同时在我讨论、练习时会有很大的帮助。</p>
@@ -368,15 +359,15 @@ HackSys Extreme Vulnerable Driver提供从简单地缓冲区溢出到复杂的UA
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/逆向分析/RC4/2015-11-20.html" rel="next" title="RC4算法总结">
-                <i class="fa fa-chevron-left"></i> RC4算法总结
+              <a href="/杂七杂八/调试器栈回溯如何实现/2015-11-18.html" rel="next" title="调试器栈回溯如何实现">
+                <i class="fa fa-chevron-left"></i> 调试器栈回溯如何实现
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/uncategorized/tuisongxiaoxi3-31-3-11/2016-03-31.html" rel="prev" title="3月11日到3月31推送消息精选">
+              <a href="/uncategorized/3月推送消息/2016-03-31.html" rel="prev" title="3月11日到3月31推送消息精选">
                 3月11日到3月31推送消息精选 <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -446,7 +437,7 @@ HackSys Extreme Vulnerable Driver提供从简单地缓冲区溢出到复杂的UA
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">22</span>
+              <span class="site-state-item-count">18</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -454,7 +445,7 @@ HackSys Extreme Vulnerable Driver提供从简单地缓冲区溢出到复杂的UA
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-count">4</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -463,7 +454,7 @@ HackSys Extreme Vulnerable Driver提供从简单地缓冲区溢出到复杂的UA
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-count">15</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

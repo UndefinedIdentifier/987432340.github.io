@@ -60,7 +60,7 @@
 <meta name="description">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Lnju's notepad">
-<meta property="og:url" content="http://www.plaype.cc/page/6/index.html">
+<meta property="og:url" content="http://www.plaype.me/page/6/index.html">
 <meta property="og:site_name" content="Lnju's notepad">
 <meta property="og:description">
 <meta name="twitter:card" content="summary">
@@ -234,8 +234,8 @@
             
               
                 
-                <a class="post-title-link" href="/移动安全/2015阿里移动安全后记/2015-02-11.html" itemprop="url">
-                  2015阿里移动安全笔记(未完待续)
+                <a class="post-title-link" href="/杂七杂八/调试器栈回溯如何实现/2015-11-18.html" itemprop="url">
+                  调试器栈回溯如何实现
                 </a>
               
             
@@ -248,8 +248,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2015-02-11T00:00:00+08:00" content="2015-02-11">
-              2015-02-11
+            <time itemprop="dateCreated" datetime="2015-11-18T23:53:33+08:00" content="2015-11-18">
+              2015-11-18
             </time>
           </span>
 
@@ -262,8 +262,8 @@
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/移动安全/" itemprop="url" rel="index">
-                    <span itemprop="name">移动安全</span>
+                  <a href="/categories/杂七杂八/" itemprop="url" rel="index">
+                    <span itemprop="name">杂七杂八</span>
                   </a>
                 </span>
 
@@ -295,294 +295,236 @@
 
       
         
-          
-            <p><a href="https://github.com/987432340/987432340.github.io/releases/download/2015Ali%E7%A7%BB%E5%8A%A8%E5%AE%89%E5%85%A81-5/2015.1-5.zip" target="_blank" rel="external">阿里2015安卓逆向1-5题下载</a></p>
-<h3 id="第一题分析">第一题分析</h3><ol>
-<li><p>直接把APK文件拖放到模拟器之中，模拟器会自动安装并运行程序（我这里用到的是<a href="http://www.genymotion.net/" target="_blank" rel="external">genymotion模拟器</a>），可以看到就是一个简单的输入框，点击确定，看输入密码是否正确的程序。</p>
-</li>
-<li><p>将apk拖放进ApkIDE中，反编译程序。发现一系列的异常  <br></p>
+          <p>去面试被问到一个问题，</p>
 <blockquote>
-<p>正在反编译Apk…  - 失败：W: Could not decode attr value, using undecoded value instead: ns=android, name=versionCode, value=0x00000002<br>Cleaning up unclosed ZipFile for archive C:\Users\Administrator\apktool\framework\1.apk<br>W: Could not decode attr value, using undecoded value instead: ns=android, name=versionName, value=0x00000010<br>Exception in thread “main” java.lang.NullPointerException</p>
-<pre><code>at brut<span class="class">.androlib</span><span class="class">.res</span><span class="class">.decoder</span><span class="class">.XmlPullStreamDecoder</span>$<span class="number">1</span>.<span class="function"><span class="title">parseManifest</span><span class="params">(XmlPullStreamDecoder.java:<span class="number">101</span>)</span></span> 
-</code></pre></blockquote>
-</li>
-</ol>
-<p><br></p>
-<ol>
-<li>使用刚刚了解到的一款工具 <code>AndroidKiller</code>尝试反编译APK，发现反编译出来了 <code>smali</code>文件，根据上面的判断，我们应该找到工程的 <code>MainActivity</code>中的 <code>onClick</code>方法，查看按钮事件。可以使用集成工具的搜索功能快速定位   </li>
-<li>关键代码如下：  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View paramAnonymousView)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">  String str1 = localEditText.getText().toString();</span><br><span class="line">  String str2 = MainActivity.<span class="keyword">this</span>.getTableFromPic();</span><br><span class="line">  String str3 = MainActivity.<span class="keyword">this</span>.getPwdFromPic();</span><br><span class="line">  Log.i(<span class="string">"lil"</span>, <span class="string">"table:"</span> + str2);</span><br><span class="line">  Log.i(<span class="string">"lil"</span>, <span class="string">"pw:"</span> + str3);</span><br><span class="line">  String str4 = <span class="string">""</span>;</span><br><span class="line">  <span class="keyword">try</span></span><br><span class="line">  &#123;</span><br><span class="line">    str4 = MainActivity.bytesToAliSmsCode(str2, str1.getBytes(<span class="string">"utf-8"</span>));</span><br><span class="line">    Log.i(<span class="string">"lil"</span>, <span class="string">"enPassword:"</span> + str4);</span><br><span class="line">    <span class="keyword">if</span> ((str3 != <span class="keyword">null</span>) &amp;&amp; (!str3.equals(<span class="string">""</span>)) &amp;&amp; (str3.equals(str4)))</span><br><span class="line">    &#123;</span><br><span class="line">      MainActivity.<span class="keyword">this</span>.showDialog();</span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></li>
-<li>分析上面的代码可以知道str1是我们输入的内容，str2,str3是通过2个自定义的方法的返回值，而这两个方法偏偏无法被正常反编译出来，但是再往下看，眼前一亮，底下有log直接把str2和str3输出出来了。那么在 <code>bytesToAliSmsCode</code>的函数中2个输入的参数都是已知的，<code>str2</code>和 <code>str1</code>经过运算得到的 <code>str4</code>要和 <code>str3</code>相等，则密码正确，整个逻辑已经通顺了。</li>
-<li>解决问题：使用<code>AndroidKiller</code>的logcat进行查看str2 str3.发现输入进去的位数和经过运算后的str4是相等的，又试验，1234，2134，3214，4321几个数字，发现经过运算和位置是没有关系的，好像是什么古典密码学的简单查表，于是直接输入1234567890，一下子密码就都出来了。<img src="https://github.com/987432340/987432340.github.io/releases/download/123/123.jpg" alt="">  <img src="https://github.com/987432340/987432340.github.io/releases/download/123/1234567890.jpg" alt=""></li>
-<li>密码是：581026 <img src="https://github.com/987432340/987432340.github.io/releases/download/123/QQ.20150211221043.jpg" alt=""></li>
-<li>总结<ol>
-<li>要知道log是我们的忠实的伙伴</li>
-<li>有些时候可以跳过加密算法黑盒解决问题</li>
-</ol>
-</li>
-</ol>
-<hr>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/资源/Android安全学习资源汇总/2015-02-10.html" itemprop="url">
-                  android安全学习资源
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2015-02-10T00:00:00+08:00" content="2015-02-10">
-              2015-02-10
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/资源/" itemprop="url" rel="index">
-                    <span itemprop="name">资源</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <ul>
-<li><p>跟随大牛的blog</p>
-<ul>
-<li><a href="http://0nly3nd.sinaapp.com/" target="_blank" rel="external">0nly3nd</a></li>
-<li><a href="http://secauo.com/" target="_blank" rel="external">secauo</a></li>
-<li><a href="http://blog.csdn.net/guiguzi1110" target="_blank" rel="external">鬼哥</a></li>
-<li><a href="http://www.9hao.info/" target="_blank" rel="external">91hao</a></li>
-<li><a href="http://blog.csdn.net/androidsecurity" target="_blank" rel="external">CSDN安卓安全</a></li>
-<li><a href="wiki.secmobi.com">secmobi</a> 大牛推荐的资源</li>
-<li><a href="http://www.droidsec.org/wiki/" target="_blank" rel="external">droidsec</a> 有关于安卓安全的论文、工具、exp、CrackMe（居然有各个CTF的题）、其他网站、相关书籍</li>
-<li><a href="http://ashishb.net/security/android-security-related-tools/" target="_blank" rel="external">ashishb</a> <code>分享</code> 安卓在线分析网站、各种分析工具、逆向工程工具、源代码、一些paper</li>
-<li><a href="https://androidsecuritywiki.com/" target="_blank" rel="external">androidsecuritywiki</a> 分类超级全面：有上面那些有的，也有混淆，加壳的一些分享 棒棒哒</li>
-</ul>
-</li>
-<li><p><a href="http://androidxref.com/" target="_blank" rel="external">android源码在线浏览</a></p>
-</li>
-<li><a href="http://segmentfault.com/blog/stormzhang/1190000002401964" target="_blank" rel="external">史上最详细的Android Studio系列教程</a><br>​</li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/移动安全/NDK开发初体验/2015-01-24.html" itemprop="url">
-                  NDK开发初体验
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2015-01-24T00:00:00+08:00" content="2015-01-24">
-              2015-01-24
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/移动安全/" itemprop="url" rel="index">
-                    <span itemprop="name">移动安全</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>1.下载NDK开发工具包(android-ndk-r9-windows-x86.zip)，解压至某一文件夹（我这里是 <strong>D:\Coding\Java</strong>），将NDK的路径（我这里是 <strong>D:\Coding\Java\android-ndk-r9</strong>）放入系统环境变量的path路径中。检验是否成功的方法：打开CMD窗口，输入命令 <strong>ndk-build</strong> 看是否有一下的回显，若有，则是配置正确。</p>
-<blockquote>
-<p>Android NDK: Could not find application project directory !<br>Android NDK: Please define the NDK_PROJECT_PATH variable to point to it.<br>D:\Coding\Java\android-ndk-r9\build/core/build-local.mk:130: <em>*</em> Android NDK: Ab<br>orting    .  Stop.  </p>
+<p>调试器是怎么实现栈桢回溯的?</p>
 </blockquote>
-<p>2.在NDK的开发包中有实例代码可以供我们学习，打开Eclipse，文件 - 导入 -展开Android - Existing Android Code…… - Next， Brose 选择路径(我这里是 D:\Coding\Java\android-ndk-r9\samples\hello-jni),然后会出现两个项目，暂时只选择第一个项目（如图），点确定。<br><img src="http://i.imgur.com/GDZWzrn.png" alt=""></p>
-<p>3.编译并运行这个项目。编译过程参考<a href="http://www.cnblogs.com/skyseraph/p/3979238.html" target="_blank" rel="external">链接</a> 的第二种方法即可成功编译</p>
-<p>4.可以把编译好的程序安装运行。</p>
-<p>5.也可以编译一个c/c++的程序（无界面）到手机中进行运行</p>
-<p>6.JAVA代码的分析</p>
-<pre><code><span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span>
-</span>{
-    TextView  tv = <span class="keyword">new</span> TextView(<span class="keyword">this</span>);
-    tv.setText( stringFromJNI() ); <span class="comment">//返回so中函数执行的后返回值</span>
-    setContentView(tv);
-}
-<span class="keyword">public</span> <span class="keyword">native</span> <span class="function">String  <span class="title">stringFromJNI</span><span class="params">()</span></span>; <span class="comment">//申明这是一个JNI的函数</span>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/杂七杂八/调试器栈回溯如何实现/2015-11-18.html#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
 
-<span class="keyword">public</span> <span class="keyword">native</span> <span class="function">String  <span class="title">unimplementedStringFromJNI</span><span class="params">()</span></span>;
-<span class="keyword">static</span> {
-    System.loadLibrary(<span class="string">"hello-jni"</span>); <span class="comment">//访问到.C编译后的so库</span>
-}
-</code></pre><p>7.C代码的分析</p>
-<pre><code>jstring
-Java_com_example_hellojni_HelloJni_stringFromJNI( JNIEnv* env,
-                                                  jobject thiz )
-{
-    <span class="keyword">return</span> <span class="function"><span class="params">(*env)</span>-&gt;</span>NewStringUTF(env, <span class="string">"Hello from JNI !"</span>);
-}
-</code></pre>
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/移动安全/DexHunter学习笔记1/2015-11-13.html" itemprop="url">
+                  DexHunter学习笔记1
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-11-13T15:56:12+08:00" content="2015-11-13">
+              2015-11-13
+            </time>
+          </span>
+
           
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/移动安全/" itemprop="url" rel="index">
+                    <span itemprop="name">移动安全</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>这个分析是比较早些时候写的，切入点比较浅。</p>
+<p>基于修改android源码的自动脱壳机，可以自动脱了dex的壳，早就说过dex层藏不住东西。这样，所有的安全保护的重点就应该放在native层上。有源码跟着学习一下自动脱壳.android源码的版本基于4.3，和我的代码版本刚好一样（如果没有源码的童靴，android SDK更新的时候获取相应版本的源码,也可以选择国内的镜像源获取源码）。我进行学习的是dalvik相关所以主要关注雨dalvik目录，art以后再说吧。</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/移动安全/DexHunter学习笔记1/2015-11-13.html#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/杂七杂八/mac快捷键/2015-02-13.html" itemprop="url">
+                  2015-02-13-mac常用快捷键
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-02-13T00:00:00+08:00" content="2015-02-13">
+              2015-02-13
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/杂七杂八/" itemprop="url" rel="index">
+                    <span itemprop="name">杂七杂八</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>mac的键盘布局以及常用快捷键</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/杂七杂八/mac快捷键/2015-02-13.html#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
         
       
     </div>
@@ -609,7 +551,7 @@ Java_com_example_hellojni_HelloJni_stringFromJNI( JNIEnv* env,
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/5/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/7/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/5/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span>
   </nav>
 
 
@@ -650,7 +592,7 @@ Java_com_example_hellojni_HelloJni_stringFromJNI( JNIEnv* env,
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">22</span>
+              <span class="site-state-item-count">18</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -658,7 +600,7 @@ Java_com_example_hellojni_HelloJni_stringFromJNI( JNIEnv* env,
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-count">4</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -667,7 +609,7 @@ Java_com_example_hellojni_HelloJni_stringFromJNI( JNIEnv* env,
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-count">15</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

@@ -1,0 +1,901 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="编译原理," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="一般语言语法处理过程
+
+
+步骤
+处理过程
+功能
+
+
+
+
+1
+词法分析
+代码文本分割为token
+
+
+2
+语法分析
+token构建抽象语法树AST
+
+
+3
+语义分析
+检查语义是否正确
+
+
+4
+代码生成
+最终生成代码">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《自制编程语言》阅读笔记 - 第二章计算器">
+<meta property="og:url" content="http://www.plaype.me/读书笔记/《自制编程语言》阅读笔记2/2016-03-31.html">
+<meta property="og:site_name" content="Lnju's blogs">
+<meta property="og:description" content="一般语言语法处理过程
+
+
+步骤
+处理过程
+功能
+
+
+
+
+1
+词法分析
+代码文本分割为token
+
+
+2
+语法分析
+token构建抽象语法树AST
+
+
+3
+语义分析
+检查语义是否正确
+
+
+4
+代码生成
+最终生成代码">
+<meta property="og:image" content="http://7xn4yz.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-03-31%20%E4%B8%8B%E5%8D%887.00.02.png">
+<meta property="og:image" content="http://7xn4yz.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-03-31%20%E4%B8%8B%E5%8D%887.07.38.png">
+<meta property="og:image" content="http://7xn4yz.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-03-31%20%E4%B8%8B%E5%8D%887.14.59.png">
+<meta property="og:image" content="http://7xn4yz.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-03-31%20%E4%B8%8B%E5%8D%8810.22.43.png">
+<meta property="og:image" content="http://7xn4yz.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-03-31%20%E4%B8%8B%E5%8D%8810.30.23.png">
+<meta property="og:updated_time" content="2016-05-07T02:42:10.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="《自制编程语言》阅读笔记 - 第二章计算器">
+<meta name="twitter:description" content="一般语言语法处理过程
+
+
+步骤
+处理过程
+功能
+
+
+
+
+1
+词法分析
+代码文本分割为token
+
+
+2
+语法分析
+token构建抽象语法树AST
+
+
+3
+语义分析
+检查语义是否正确
+
+
+4
+代码生成
+最终生成代码">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"right","display":"hide"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.plaype.me/读书笔记/《自制编程语言》阅读笔记2/2016-03-31.html"/>
+
+
+
+
+
+  <title> 《自制编程语言》阅读笔记 - 第二章计算器 | Lnju's blogs </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Lnju's blogs</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">一个怀揣着黑客梦想的少年</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-wiki">
+          <a href="/wiki" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-arrow-right"></i> <br />
+            
+            wiki
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://www.plaype.me/读书笔记/《自制编程语言》阅读笔记2/2016-03-31.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Lnju">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/uploads/avatar.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Lnju's blogs">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Lnju's blogs" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                《自制编程语言》阅读笔记 - 第二章计算器
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Дата создания записи" itemprop="dateCreated datePublished" datetime="2016-03-31T23:27:12+08:00">
+                2016-03-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/读书笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">读书笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="一般语言语法处理过程">一般语言语法处理过程</h1><table>
+<thead>
+<tr>
+<th style="text-align:center">步骤</th>
+<th style="text-align:center">处理过程</th>
+<th style="text-align:left">功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">词法分析</td>
+<td style="text-align:left">代码文本分割为token</td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">语法分析</td>
+<td style="text-align:left">token构建抽象语法树AST</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">语义分析</td>
+<td style="text-align:left">检查语义是否正确</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">代码生成</td>
+<td style="text-align:left">最终生成代码</td>
+</tr>
+</tbody>
+</table>
+<a id="more"></a>
+<h1 id="做一个计算器练手">做一个计算器练手</h1><p>感觉计算器就是初学编程时的helloworld，所以要好好理解其中涉及的内部机理，而不是满足于做出来一个计算器，要说实用的话，系统自带的计算器漂亮的多得多。</p>
+<h2 id="lex">lex</h2><p>lex是<strong>生成词法分析器</strong>的工具，给lex输入<code>.l</code>文件，输出词法分析器的c代码，注意这里生成的时词法分析器的代码，不过代码经过编译就是词法分析器，从功能的角度来讲，lex生成的时词法分析器。我们使用lex的增强版flex。</p>
+<p>词法分析器的作用是读取代码，生成token。所以我们要告诉lex，token长什么样子，这样lex才能帮我们做一个词法分析器出来。</p>
+<p>在lex中使用<strong>正则表达式</strong>定义记号，这样做是有好处的：比如我们在程序中去描述</p>
+<blockquote>
+<p>C语言变量名是字母或下划线开头，后面可以是字母数字的组合</p>
+</blockquote>
+<p>这样的规定没有比正则表达式更好的方式了。</p>
+<blockquote>
+<p>开工啦~ 时间下午3:30</p>
+</blockquote>
+<p>先看代码mycalc.l，通过代码高效地学习lex</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">%&#123;</span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">"y.tab.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span></span><br><span class="line"><span class="title">yywrap</span><span class="params">(<span class="keyword">void</span>)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line">%&#125;</span><br><span class="line">%%</span><br><span class="line"><span class="string">"+"</span>             <span class="keyword">return</span> ADD;</span><br><span class="line"><span class="string">"-"</span>             <span class="keyword">return</span> SUB;</span><br><span class="line"><span class="string">"*"</span>             <span class="keyword">return</span> MUL;</span><br><span class="line"><span class="string">"/"</span>             <span class="keyword">return</span> DIV;</span><br><span class="line"><span class="string">"\n"</span>            <span class="keyword">return</span> CR;</span><br><span class="line">([<span class="number">1</span>-<span class="number">9</span>][<span class="number">0</span>-<span class="number">9</span>]*)|<span class="number">0</span>|([<span class="number">0</span>-<span class="number">9</span>]+\.[<span class="number">0</span>-<span class="number">9</span>]*) &#123;</span><br><span class="line">    <span class="keyword">double</span> temp;</span><br><span class="line">    <span class="built_in">sscanf</span>(yytext, <span class="string">"%lf"</span>, &amp;temp);</span><br><span class="line">    yylval.double_value = temp;</span><br><span class="line">    <span class="keyword">return</span> DOUBLE_LITERAL;</span><br><span class="line">&#125;</span><br><span class="line">[ \t] ;</span><br><span class="line">. &#123;</span><br><span class="line">    <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"lexical error.\n"</span>);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line">%%</span><br></pre></td></tr></table></figure>
+<h3 id="区块划分">区块划分</h3><p>像上面的lex代码可以分为2个部分，每个部分的功能不同。</p>
+<blockquote>
+<p>%{</p>
+<p>……</p>
+<p>}%</p>
+</blockquote>
+<p>像这样的代码块，是<strong>定义区块</strong>。被包裹起来的部分，lex会原样输出到词法分析器的代码中。先不去深究这些代码是做什么用的，我们知道这里包含了2个头文件，定义了一个<strong>yywrap</strong>函数。</p>
+<blockquote>
+<p>%%</p>
+<p>……</p>
+<p>%%</p>
+</blockquote>
+<p>像这样的代码块，是<strong>规则区块</strong>。用正则表达式去描述token长什么样子。那具体是怎么描述的呢？</p>
+<p>从规则区块再往下，就是用户代码区块，用户代码区块可以编写任何C代码，本例中没有用到。</p>
+<h3 id="规则区块代码分析">规则区块代码分析</h3><p>以这句代码为例</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"+"</span>             <span class="keyword">return</span> ADD;</span><br></pre></td></tr></table></figure>
+<p>正则表达式是个常量字符’+’，后面接空格作为分割，再后面是匹配到这个正则表达式要执行的动作(action)，这里简单地返回ADD标记。</p>
+<p>更复杂一点的例子是</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">([<span class="number">1</span>-<span class="number">9</span>][<span class="number">0</span>-<span class="number">9</span>]*)|<span class="number">0</span>|([<span class="number">0</span>-<span class="number">9</span>]+\.[<span class="number">0</span>-<span class="number">9</span>]*) &#123;</span><br><span class="line">    <span class="keyword">double</span> temp;</span><br><span class="line">    <span class="built_in">sscanf</span>(yytext, <span class="string">"%lf"</span>, &amp;temp);</span><br><span class="line">    yylval.double_value = temp;</span><br><span class="line">    <span class="keyword">return</span> DOUBLE_LITERAL;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里的正则表达式为</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">([<span class="link_label">1-9</span>][<span class="link_reference">0-9</span>]<span class="emphasis">*)|0|([0-9]+\.[0-9]*</span>)</span><br></pre></td></tr></table></figure>
+<p>用来匹配一个浮点型的数值。后面的动作是C代码块。定义双精度浮点型变量temp；sscanf是把yytext当做浮点数读入变量temp。那yytext是什么呢？假如这里匹配的浮点数是3.14，那么在action语句yytext代表了这个当前被匹配到的字符串文本，这里的例子中就是“3.14”。yytext是一个全局的变量，所以这里看不到声明。再接着</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yylval.double_value = temp;</span><br><span class="line"><span class="keyword">return</span> DOUBLE_LITERAL;</span><br></pre></td></tr></table></figure>
+<p>temp被存放于yylval.double_value中。实际上，yylval也是全局变量，同时是一个联合体，意味着可以存放各种类型的token的值。注意这里所说的<strong>token的值</strong>，这句话耐人寻味。然后返回一个DOUBLE_LITERAL的类型。</p>
+<h4 id="token要素">token要素</h4><p>完全描述一个token的几个要素，或者说一个token有哪些属性组成，只要规定好了这几个属性就能确定一个token。类似于给定x,y就能在坐标轴上确定一个点的意思。token有3部分组成，还是以 “3.14”的例子来进行说明，假定我们的词法分析器已经做好了，正在读取文本中得代码进行词法分析，此时匹配到了字符串”3.14”：</p>
+<ol>
+<li>记号的原始字符串。这里是字符串”3.14”的字符串形式</li>
+<li>记号的值。这里的值是指3.14的双精度浮点数</li>
+<li>记号的种类。3.14的种类就是一个实数。在lex中用宏/枚举DOUBLE_LITERAL表示。</li>
+</ol>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">[ \t]</span> <span class="comment">;</span></span><br></pre></td></tr></table></figure>
+<p>这句是匹配空格、制表符，然后什么都不做，这样子就过滤掉了每一行的空白字符。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">. &#123;</span><br><span class="line">    <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"lexical error.\n"</span>);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>点号可以匹配任意字符。放在这里的意思是上面我所规定的token都没有匹配到却还有其他字符，说明不符合语法规范，所以报错。这句体现了程序的健壮性。</p>
+<h2 id="yacc">yacc</h2><p>yacc是生成语法分析器的工具。输入.y的文件，输出语法分析器的C语言代码。假定lex可以很好的分割出一个个token给我们了，yacc做的工作是把这一连串token放进语法规范中进行处理，看是否符合此种语言语法规范。为此，我们必须提供这一语法规范给yacc。对比我们使用正则表达式描述token给lex，这里使用BNF描述语法给yacc。</p>
+<p>mycalc.y的代码</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line">%&#123;</span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="preprocessor">#<span class="keyword">define</span> YYDEBUG <span class="number">1</span></span></span><br><span class="line">%&#125;</span><br><span class="line">%<span class="keyword">union</span> &#123;</span><br><span class="line">    <span class="keyword">int</span>          int_value;</span><br><span class="line">    <span class="keyword">double</span>       double_value;</span><br><span class="line">&#125;</span><br><span class="line">%token &lt;double_value&gt;      DOUBLE_LITERAL</span><br><span class="line">%token ADD SUB MUL DIV CR</span><br><span class="line">%type &lt;double_value&gt; expression term primary_expression</span><br><span class="line">%%</span><br><span class="line">line_list</span><br><span class="line">    : line</span><br><span class="line">    | line_list line</span><br><span class="line">    ;</span><br><span class="line">line</span><br><span class="line">    : expression CR</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"&gt;&gt;%lf\n"</span>, $<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">expression</span><br><span class="line">    : term</span><br><span class="line">    | expression ADD term</span><br><span class="line">    &#123;</span><br><span class="line">        $$ = $<span class="number">1</span> + $<span class="number">3</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    | expression SUB term</span><br><span class="line">    &#123;</span><br><span class="line">        $$ = $<span class="number">1</span> - $<span class="number">3</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    ;</span><br><span class="line">term</span><br><span class="line">    : primary_expression</span><br><span class="line">    | term MUL primary_expression </span><br><span class="line">    &#123;</span><br><span class="line">        $$ = $<span class="number">1</span> * $<span class="number">3</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    | term DIV primary_expression</span><br><span class="line">    &#123;</span><br><span class="line">        $$ = $<span class="number">1</span> / $<span class="number">3</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    ;</span><br><span class="line">primary_expression</span><br><span class="line">    : DOUBLE_LITERAL</span><br><span class="line">    ;                 </span><br><span class="line">%%</span><br><span class="line"><span class="function"><span class="keyword">int</span></span><br><span class="line"><span class="title">yyerror</span><span class="params">(<span class="keyword">char</span> <span class="keyword">const</span> *str)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    <span class="keyword">extern</span> <span class="keyword">char</span> *yytext;</span><br><span class="line">    <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"parser error near %s\n"</span>, yytext);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">extern</span> <span class="keyword">int</span> <span class="title">yyparse</span><span class="params">(<span class="keyword">void</span>)</span></span>;</span><br><span class="line">    <span class="keyword">extern</span> FILE *yyin;</span><br><span class="line"></span><br><span class="line">    yyin = <span class="built_in">stdin</span>;</span><br><span class="line">    <span class="keyword">if</span> (yyparse()) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"Error ! Error ! Error !\n"</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>1~5行，和lex的定义区块一样，也是代码原样输出。</p>
+<p>6~9行，声明lex中用到的保存token值的联合体。从编译出来的y.tab.h文件中有以下定义可以看出这点来。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">union</span> YYSTYPE</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">int</span>          int_value;</span><br><span class="line">    <span class="keyword">double</span>       double_value;</span><br><span class="line">&#125; YYSTYPE;</span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> YYSTYPE yylval;</span><br></pre></td></tr></table></figure>
+<p>第11行，声明不需要保存值，只需要知道token本身的种类的token。例如加号。</p>
+<p>第10行，声明token类型为DOUBLE_LITERAL。DOUBLE_LITERAL类型的token是有值的，这个值可以存在union结构的double_value字段中。这一点书上的意思我不是很明白，可能我地理解力不好，也可能书上没有讲太清楚。</p>
+<p>第12行，声明了非终结符的类型。这里留有一个疑问：为什么<code>&lt;double_value&gt;</code>也算非终结符。后面的那些是非终结符很好理解，因为他们可以根据下面的规则继续推导，而<code>&lt;double_value&gt;</code>也算进去了，我现在是不好理解的。</p>
+<p>第13行到第48行，是一些推导规则。语法规则简化为下面格式</p>
+<figure class="highlight dns"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">A</span></span><br><span class="line">    : B C</span><br><span class="line">    | D</span><br><span class="line">    <span class="comment">;</span></span><br></pre></td></tr></table></figure>
+<p>意味着A可以由BC或D组成。这有点像树状图，A是树的顶端，下来分2个分支，一个分支是D，另一个分支是BC.D是什么可以接着推导，最终到不可推导的非终结符。</p>
+<h3 id="实例分析">实例分析</h3><p>假定输入表达式，看看yacc怎么根据BNF规则去完成语法分析</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span> + <span class="number">2</span> * <span class="number">3</span></span><br></pre></td></tr></table></figure>
+<p>语法分析类似于小时候玩儿的俄罗斯方块，下面通过正统的说法，来重温俄罗斯方块的乐趣。解析器内部有个栈，每次读取一个token到栈中，可以想象一个一个不同的token就是不同形状的方块。还可以看到下一个即将进入栈的token是什么。</p>
+<h4 id="第一步">第一步</h4><p>一开始是1，lex会把1替换成token也就是DOUBLE_LITERAL。DOUBLE_LITERAL进入栈中，此时同时能看到下一个即将进入栈的token是加号。如下图</p>
+<p><img src="http://7xn4yz.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-03-31%20%E4%B8%8B%E5%8D%887.00.02.png" alt=""></p>
+<p>那么此时进入栈中的DOUBLE_LITERAL会触发规则</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">primary_expression</span><br><span class="line">    </span>: DOUBLE_LITERAL</span><br><span class="line">    ;</span><br></pre></td></tr></table></figure>
+<p>那么DOUBLE_LITERAL被<strong>归约</strong>（归约是往消除方向的化简过程）为primary_expression。注意primary_expression译作一元表达式。</p>
+<p>现在堆栈的状态是</p>
+<p><img src="http://7xn4yz.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-03-31%20%E4%B8%8B%E5%8D%887.07.38.png" alt=""></p>
+<p>再根据规则</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">term</span><br><span class="line">    </span>: primary_expression</span><br></pre></td></tr></table></figure>
+<p>变为term，再根据规则</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">expression</span><br><span class="line">    </span>: term</span><br></pre></td></tr></table></figure>
+<p>变为expression</p>
+<h4 id="第二步">第二步</h4><p>token ADD进来，找不到归约的条件，所以此时的状态是这样的。</p>
+<p><img src="http://7xn4yz.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-03-31%20%E4%B8%8B%E5%8D%887.14.59.png" alt=""></p>
+<h4 id="第三步">第三步</h4><p>字符2的token—DOUBLE_LITERAL进来，和之前的1一样，会经过primary_expression被归约到term。</p>
+<p>为什么是term而不是expression呢？1是被归约到了expression，因为在1进入堆栈时，堆栈里没有值，所以可以随便归约，而此时堆栈里有</p>
+<figure class="highlight mel"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">expression</span> +</span><br></pre></td></tr></table></figure>
+<p>那么在对2进行每一步归约时，应该考虑到2归约出来的新的值是否能和堆栈里有得表达式进行归约。</p>
+<p>也就是说，字符2的token—DOUBLE_LITERAL进来，我们首先要去考虑堆栈里</p>
+ <figure class="highlight mel"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">expression</span> + DOUBLE_LITERAL</span><br></pre></td></tr></table></figure>
+<p>这种表达式是否有归约的规则。若没有，再继续归约新表达式DOUBLE_LITERAL。</p>
+<p>好，照这样的思路，来到这里</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">expression + <span class="function"><span class="title">term</span><span class="params">(<span class="number">2</span>的token)</span></span></span><br></pre></td></tr></table></figure>
+<p>在这里找到一条规则</p>
+<pre><code><span class="keyword">expression</span>
+    : <span class="keyword">expression</span> ADD term
+</code></pre><p>按规则说这里可以直接归约成expression。由于yacc可以提前读到下一个即将进来的token，所以这里会考虑到下面的规则</p>
+<pre><code><span class="label">term</span>
+    : term <span class="keyword">MUL </span>primary_expression
+</code></pre><p>万一再下一个是primary_expression，那么就可以归约到term了。（这条规则的位置比上一条规则要靠下面，所以优先？）</p>
+<h4 id="第4步">第4步</h4><p>接下来进来3，被归约为primary_expression之后，按照上面的提示直接归约为term，那么现在的堆栈如图所示</p>
+<p><img src="http://7xn4yz.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-03-31%20%E4%B8%8B%E5%8D%8810.22.43.png" alt=""></p>
+<p>再接着匹配规则</p>
+<figure class="highlight mel"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">expression</span></span><br><span class="line">    <span class="keyword">expression</span> ADD term</span><br></pre></td></tr></table></figure>
+<p>整个堆栈上只剩expression了。那么语法分析就已经完成了。</p>
+<p>和lex一样，yacc在匹配到规则时，也有一个action被触发。</p>
+<figure class="highlight xquery"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">term</span><br><span class="line">    : primary_expression</span><br><span class="line">    | term MUL primary_expression </span><br><span class="line">    &#123;</span><br><span class="line">        $$ = <span class="variable">$1</span> * <span class="variable">$3</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>类似于C语言的语句。这里$1,$3之类的表达式分别保存了term、primary_expression的值，有图会比较明显</p>
+<p><img src="http://7xn4yz.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-03-31%20%E4%B8%8B%E5%8D%8810.30.23.png" alt=""></p>
+<p>在进行这句递归的时候，代表的意义。</p>
+<p>假如进行下面的递归时，并不是什么都不做，而是自动补全一句</p>
+<figure class="highlight xquery"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">term</span><br><span class="line">    : primary_expression</span><br><span class="line">    &#123;</span><br><span class="line">  		$$ = <span class="variable">$1</span>;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<p>这样，进行归约时，primary_expression包含的数值也会被term继承。$$、$1的包含数值的类型分别与其对应的token或者非终结符的类型一致。</p>
+<figure class="highlight haml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">%<span class="title">token</span></span> &lt;double_value&gt;      DOUBLE_LITERAL</span><br><span class="line"><span class="tag">%<span class="title">type</span></span> &lt;double_value&gt; expression term primary_expression</span><br></pre></td></tr></table></figure>
+<p>token的数值的类型借union中double_value字段定义。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/编译原理/" rel="tag"># 编译原理</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/读书笔记/《自制编程语言》阅读笔记1/2016-03-31.html" rel="next" title="《自制编程语言》阅读笔记 - 开篇">
+                <i class="fa fa-chevron-left"></i> 《自制编程语言》阅读笔记 - 开篇
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/移动安全/2016安卓源码编译/2016-04-28.html" rel="prev" title="2016安卓源码编译笔记">
+                2016安卓源码编译笔记 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar.jpg"
+               alt="Lnju" />
+          <p class="site-author-name" itemprop="name">Lnju</p>
+          <p class="site-description motion-element" itemprop="description">Reverse Engineer</br>C++ Develeper</br>CTFer</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">20</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一般语言语法处理过程"><span class="nav-number">1.</span> <span class="nav-text">一般语言语法处理过程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#做一个计算器练手"><span class="nav-number">2.</span> <span class="nav-text">做一个计算器练手</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#lex"><span class="nav-number">2.1.</span> <span class="nav-text">lex</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#区块划分"><span class="nav-number">2.1.1.</span> <span class="nav-text">区块划分</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#规则区块代码分析"><span class="nav-number">2.1.2.</span> <span class="nav-text">规则区块代码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#token要素"><span class="nav-number">2.1.2.1.</span> <span class="nav-text">token要素</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#yacc"><span class="nav-number">2.2.</span> <span class="nav-text">yacc</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#实例分析"><span class="nav-number">2.2.1.</span> <span class="nav-text">实例分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#第一步"><span class="nav-number">2.2.1.1.</span> <span class="nav-text">第一步</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第二步"><span class="nav-number">2.2.1.2.</span> <span class="nav-text">第二步</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第三步"><span class="nav-number">2.2.1.3.</span> <span class="nav-text">第三步</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第4步"><span class="nav-number">2.2.1.4.</span> <span class="nav-text">第4步</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lnju</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

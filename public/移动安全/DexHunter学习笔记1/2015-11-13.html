@@ -1,0 +1,751 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="dalvik,脱壳," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="这个分析是比较早些时候写的，切入点比较浅。
+基于修改android源码的自动脱壳机，可以自动脱了dex的壳，早就说过dex层藏不住东西。这样，所有的安全保护的重点就应该放在native层上。有源码跟着学习一下自动脱壳.android源码的版本基于4.3，和我的代码版本刚好一样（如果没有源码的童靴，android SDK更新的时候获取相应版本的源码,也可以选择国内的镜像源获取源码）。我进行学习的是d">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DexHunter学习笔记1">
+<meta property="og:url" content="http://www.plaype.me/移动安全/DexHunter学习笔记1/2015-11-13.html">
+<meta property="og:site_name" content="Lnju's blogs">
+<meta property="og:description" content="这个分析是比较早些时候写的，切入点比较浅。
+基于修改android源码的自动脱壳机，可以自动脱了dex的壳，早就说过dex层藏不住东西。这样，所有的安全保护的重点就应该放在native层上。有源码跟着学习一下自动脱壳.android源码的版本基于4.3，和我的代码版本刚好一样（如果没有源码的童靴，android SDK更新的时候获取相应版本的源码,也可以选择国内的镜像源获取源码）。我进行学习的是d">
+<meta property="og:updated_time" content="2016-05-07T17:38:17.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="DexHunter学习笔记1">
+<meta name="twitter:description" content="这个分析是比较早些时候写的，切入点比较浅。
+基于修改android源码的自动脱壳机，可以自动脱了dex的壳，早就说过dex层藏不住东西。这样，所有的安全保护的重点就应该放在native层上。有源码跟着学习一下自动脱壳.android源码的版本基于4.3，和我的代码版本刚好一样（如果没有源码的童靴，android SDK更新的时候获取相应版本的源码,也可以选择国内的镜像源获取源码）。我进行学习的是d">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"right","display":"hide"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.plaype.me/移动安全/DexHunter学习笔记1/2015-11-13.html"/>
+
+
+
+
+
+  <title> DexHunter学习笔记1 | Lnju's blogs </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Lnju's blogs</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">一个怀揣着黑客梦想的少年</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-wiki">
+          <a href="/wiki" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-arrow-right"></i> <br />
+            
+            wiki
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://www.plaype.me/移动安全/DexHunter学习笔记1/2015-11-13.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Lnju">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/uploads/avatar.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Lnju's blogs">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Lnju's blogs" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                DexHunter学习笔记1
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Дата создания записи" itemprop="dateCreated datePublished" datetime="2015-11-13T15:56:12+08:00">
+                2015-11-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/移动安全/" itemprop="url" rel="index">
+                    <span itemprop="name">移动安全</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>这个分析是比较早些时候写的，切入点比较浅。</p>
+<p>基于修改android源码的自动脱壳机，可以自动脱了dex的壳，早就说过dex层藏不住东西。这样，所有的安全保护的重点就应该放在native层上。有源码跟着学习一下自动脱壳.android源码的版本基于4.3，和我的代码版本刚好一样（如果没有源码的童靴，android SDK更新的时候获取相应版本的源码,也可以选择国内的镜像源获取源码）。我进行学习的是dalvik相关所以主要关注雨dalvik目录，art以后再说吧。</p>
+<a id="more"></a>
+<p><strong>原帖地址 </strong> <a href="http://bbs.pediy.com/showthread.php?t=203776" target="_blank" rel="external">Android dex文件通用自动脱壳器</a></p>
+<p><strong>源码</strong> <a href="https://github.com/zyq8709/DexHunter" target="_blank" rel="external">github地址</a></p>
+<h5 id="学习思路">学习思路</h5><p>建立git仓库，把原始的源码传上去作为第一个版本。查看作者的更新历史，比较文件的不同处，一步一步注释第一个版本的源码进行学习。把这个过程搞清楚了，再去操作一下自动脱壳。</p>
+<hr>
+<p>DexHunter第一个有源码的版本<a href="https://github.com/zyq8709/DexHunter/tree/768fcdc64b89ce468b6f751b0eb124d24e3cde0a" target="_blank" rel="external">DexHunter1</a></p>
+<h3 id="ReadMe">ReadMe</h3><p>主要修改了 “dalvik/vm/native/dalvik_system_DexFile.cpp” (DVM).</p>
+<p>脱壳app的步骤：</p>
+<ol>
+<li>在启动app之前push dexname 文件到 <code>/data/</code>目录下</li>
+<li>这个文件的第一行是feature string (这个特征字符串怎么找去ppt里看 “slide.pptx”)</li>
+<li>文件的第二行是目标app的数据路径，例如 <code>/data/data/com.test.test/</code></li>
+</ol>
+<p><strong>注意</strong>:特征字符会根据加固服务的版本而不同.可以根据logcat查看是否脱壳完成，完成后会生成一个 <code>wholx.dex</code></p>
+<p>annotation_off、debug_info_off部分对于程序的执行没什么影响，只会干扰我们脱壳，这部分就忽略掉。作者建议可以写脚本设置这些无效的字段为0.</p>
+<p>一些加固会保护很多方法，当被执行前解密还原，在执行完成后擦出。所以要修改 <code>dvmMterp_invokeMethod</code>函数去取出当前被执行的指令。</p>
+<p><a href="https://github.com/zyq8709/DexHunter/blob/768fcdc64b89ce468b6f751b0eb124d24e3cde0a/slide.pptx" target="_blank" rel="external">演示ppt</a></p>
+<p><a href="https://github.com/zyq8709/DexHunter/blob/768fcdc64b89ce468b6f751b0eb124d24e3cde0a/demo.mp4" target="_blank" rel="external">脱阿里加固的演示视频</a></p>
+<h3 id="修改的位置：">修改的位置：</h3><p><a href="http://androidxref.com/4.3_r2.1/xref/dalvik/Android.mk" target="_blank" rel="external">dalvik/Android.mk</a> 这里减了20行 - dalvikvm</p>
+<p><a href="https://github.com/zyq8709/DexHunter/tree/768fcdc64b89ce468b6f751b0eb124d24e3cde0a/dalvik/vm/native" target="_blank" rel="external">dalvik_system_DexFile.cpp</a>的目录，可以看到vim编辑的痕迹</p>
+<p><a href="http://androidxref.com/4.3_r2.1/xref/dalvik/vm/native/dalvik_system_DexFile.cpp" target="_blank" rel="external">dalvik_system_DexFile.cpp line:335</a>开始添加代码的标记 后面还有一处修改。</p>
+<p>首先弄清楚3个问题添加的2段代码是位于哪个函数之中，这个函数什么时候被调用，添加的代码有什么作用？</p>
+<p>被添加的代码位 <code>Dalvik_dalvik_system_DexFile_defineClassNative</code>函数当中，在这个函数前被添加的代码，都是为了在这个函数中调用的一些函数的声明。</p>
+<p><em>明天可以百度一下这个函数</em></p>
+<p>函数注释</p>
+<blockquote>
+<p>/*</p>
+<ul>
+<li>private static Class defineClass(String name, ClassLoader loader,</li>
+<li>int cookie)<br>*</li>
+<li>Load a class from a DEX file.  This is roughly equivalent to defineClass()</li>
+<li>in a regular VM – it’s invoked by the class loader to cause the</li>
+<li>creation of a specific class.  The difference is that the search for and</li>
+<li>reading of the bytes is done within the VM.<br>*</li>
+<li>The class name is a “binary name”, e.g. “java.lang.String”.<br>*</li>
+<li>Returns a null pointer with no exception if the class was not found.</li>
+<li>Throws an exception on other failures.<br>*/</li>
+</ul>
+</blockquote>
+<p>翻译过来大概是</p>
+<blockquote>
+<p>从dex文件中加载类，大致上等同于VM上的defineClass函数，这个函数被ClassLoader调用去创建一个指定的类。不同点在于，查找和读取字节码的工作在VM中被完成。<br>类名是类似于”java.lang.String”的二进制名<br>如果类没有找到返回空指针，无异常；其他错误引发异常。</p>
+</blockquote>
+<p>推测出这个函数的大致作用是去寻找一个类，并把返回值给第二个参数pResult。</p>
+<p>读读这个函数的原版</p>
+<figure class="highlight zephir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">static</span> void Dalvik_dalvik_system_DexFile_defineClass(<span class="keyword">const</span> u4* args,</span><br><span class="line">    JValue* pResult)</span><br><span class="line">&#123;</span><br><span class="line">    StringObject* nameObj = (StringObject*) args[<span class="number">0</span>];</span><br><span class="line">    Object* loader = (Object*) args[<span class="number">1</span>];</span><br><span class="line">    <span class="keyword">int</span> cookie = args[<span class="number">2</span>];</span><br><span class="line">    ClassObject* clazz = <span class="keyword">NULL</span>;</span><br><span class="line">    DexOrJar* pDexOrJar = (DexOrJar*) cookie;</span><br><span class="line">    DvmDex* pDvmDex;</span><br><span class="line">    <span class="keyword">char</span>* name;</span><br><span class="line">    <span class="keyword">char</span>* descriptor;</span><br><span class="line"></span><br><span class="line">    name = dvmCreateCstrFromString(nameObj);</span><br><span class="line">    descriptor = dvmDotToDescriptor(name);</span><br><span class="line">    ALOGV(<span class="string">"--- Explicit class load '%s' l=%p c=0x%08x"</span>,</span><br><span class="line">        descriptor, loader, cookie);</span><br><span class="line">    free(name);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!validateCookie(cookie))</span><br><span class="line">        RETURN_VOID();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (pDexOrJar-&gt;isDex)</span><br><span class="line">        pDvmDex = dvmGetRawDexFileDex(pDexOrJar-&gt;pRawDexFile);</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        pDvmDex = dvmGetJarFileDex(pDexOrJar-&gt;pJarFile);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* once we load something, we can't unmap the storage */</span></span><br><span class="line">    pDexOrJar-&gt;okayToFree = <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line">    clazz = dvmDefineClass(pDvmDex, descriptor, loader);</span><br><span class="line">    Thread* <span class="keyword">self</span> = dvmThreadSelf();</span><br><span class="line">    <span class="keyword">if</span> (dvmCheckException(<span class="keyword">self</span>)) &#123;</span><br><span class="line">        <span class="comment">/*</span><br><span class="line">         * If we threw a "class not found" exception, stifle it, since the</span><br><span class="line">         * contract in the higher method says we simply return null if</span><br><span class="line">         * the class is not found.</span><br><span class="line">         */</span></span><br><span class="line">        Object* excep = dvmGetException(<span class="keyword">self</span>);</span><br><span class="line">        <span class="keyword">if</span> (strcmp(excep-&gt;clazz-&gt;descriptor,</span><br><span class="line">                   <span class="string">"Ljava/lang/ClassNotFoundException;"</span>) == <span class="number">0</span> ||</span><br><span class="line">            strcmp(excep-&gt;clazz-&gt;descriptor,</span><br><span class="line">                   <span class="string">"Ljava/lang/NoClassDefFoundError;"</span>) == <span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            dvmClearException(<span class="keyword">self</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        clazz = <span class="keyword">NULL</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    free(descriptor);</span><br><span class="line">    RETURN_PTR(clazz);</span><br><span class="line">&#125;</span><br><span class="line">``` </span><br><span class="line"></span><br><span class="line">最关键 `clazz = dvmDefineClass(pDvmDex, descriptor, loader);`通过这个函数找到一个类，返回类指针</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">添加的代码大致流程：</span><br></pre></td></tr></table></figure>
+<p>通过pDvmDex找到odex指针和地址<br>DexFile<em> pDexFile=pDvmDex-&gt;pDexFile;<br>MemMapping </em> mem=&amp;pDvmDex-&gt;memMap;</p>
+<p>读取前16字节，保存<br>   const u1 <em>addr=(const u1</em>)mem-&gt;addr;<br>                int length=16;<br>                for (int i=0;i&lt;16;i++) {<br>                    fwrite(addr+i,1,1,fp);<br>                    fflush(fp);<br>                }</p>
+<p>// 0. 读取<code>DexOptHeader</code>的前16字节到文件<br>/<em><br> u1  magic[8];           /</em> includes version number <em>/<br> u4  dexOffset;          /</em> file offset of DEX header <em>/<br> u4  dexLength;
+</em>/</p>
+<p>addr = (const u1*)mem-&gt;addr+16;<br>                length=int(pDexFile-&gt;baseAddr+pDexFile-&gt;pHeader-&gt;classDefsOff-addr)-16;<br>                fwrite(addr,1,length,fp);</p>
+<p>// 1. 写16字节后，类定义之前部分到文件</p>
+<pre><code>addr = (<span class="keyword">const</span> u1*)mem-&gt;addr+<span class="number">16</span>;
+length=<span class="keyword">int</span>(
+    pDexFile-&gt;baseAddr + 
+    pDexFile-&gt;pHeader -&gt; classDefsOff <span class="comment">//类定义 </span>
+    -addr)
+-<span class="number">16</span>;
+fwrite(addr,<span class="number">1</span>,length,fp);
+</code></pre><p>// 2. 写类内容到文件<br>                addr = pDexFile-&gt;baseAddr +<br>                pDexFile-&gt;pHeader-&gt;classDefsOff+ 类定义<br>                sizeof(DexClassDef)*pDexFile-&gt;pHeader-&gt;classDefsSize;</p>
+<pre><code><span class="built_in">length</span>=<span class="keyword">int</span>((<span class="keyword">const</span> u1*)mem-&gt;addr+mem-&gt;<span class="built_in">length</span>-addr); 所有的类数据
+fwrite(addr,<span class="number">1</span>,<span class="built_in">length</span>,fp);
+</code></pre><p>// 创建线程</p>
+<p>param.loader=loader;<br>param.pDvmDex=pDvmDex;<br>dvmCreateInternalThread(&amp;dumpthread,”ClassDumper”,DumpClass,(void*)&amp;param);             </p>
+<p>// 线程参数<br>struct arg{<br>    DvmDex<em> pDvmDex;<br>    Object </em> loader;<br>}param;</p>
+<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">所有的有价值的代码都在线程函数 <span class="escape">`D</span>umpClass<span class="escape">`中</span>，接着分析</span><br><span class="line"></span><br><span class="line">查下 DvmDex的定义 看看注释</span><br></pre></td></tr></table></figure>
+<p>// 拿到3个参数<br>Object <em>loader=((struct arg</em>)parament)-&gt;loader;<br>DexFile<em> pDexFile=pDvmDex-&gt;pDexFile;<br>MemMapping </em> mem=&amp;pDvmDex-&gt;memMap;</p>
+<p>```</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/dalvik/" rel="tag"># dalvik</a>
+          
+            <a href="/tags/脱壳/" rel="tag"># 脱壳</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/杂七杂八/mac快捷键/2015-02-13.html" rel="next" title="2015-02-13-mac常用快捷键">
+                <i class="fa fa-chevron-left"></i> 2015-02-13-mac常用快捷键
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/杂七杂八/调试器栈回溯如何实现/2015-11-18.html" rel="prev" title="调试器栈回溯如何实现">
+                调试器栈回溯如何实现 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar.jpg"
+               alt="Lnju" />
+          <p class="site-author-name" itemprop="name">Lnju</p>
+          <p class="site-description motion-element" itemprop="description">Reverse Engineer</br>C++ Develeper</br>CTFer</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">20</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#学习思路"><span class="nav-number">1.</span> <span class="nav-text">学习思路</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ReadMe"><span class="nav-number"></span> <span class="nav-text">ReadMe</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#修改的位置："><span class="nav-number"></span> <span class="nav-text">修改的位置：</span></a></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lnju</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

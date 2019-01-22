@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="环境版本说明IDA 6.8 vmattack需要的python库 123pip install distorm3==3.3.4（一定要指定版本，新版本直接pip貌似会失败）pip install idacute（==1.0.1 如果直接安装有异常，就使用这个版本的库） pycharm pro用于调试 开发环境pycharm 设置idapython的包含路径     调试环境参考文章 How to">
+<meta property="og:type" content="article">
+<meta property="og:title" content="vmattack">
+<meta property="og:url" content="http://www.plaype.cc/uncategorized/vmattack/2019-01-06.html">
+<meta property="og:site_name" content="Lnju&#39;s blogs">
+<meta property="og:description" content="环境版本说明IDA 6.8 vmattack需要的python库 123pip install distorm3==3.3.4（一定要指定版本，新版本直接pip貌似会失败）pip install idacute（==1.0.1 如果直接安装有异常，就使用这个版本的库） pycharm pro用于调试 开发环境pycharm 设置idapython的包含路径     调试环境参考文章 How to">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://www.plaype.cc/images/1546718289495.png">
+<meta property="og:image" content="http://www.plaype.cc/images/1546718382706.png">
+<meta property="og:image" content="http://www.plaype.cc/images/1546718479340.png">
+<meta property="og:image" content="http://www.plaype.cc/images/1546718536280.png">
+<meta property="og:image" content="http://www.plaype.cc/images/clipboard.png">
+<meta property="og:image" content="http://www.plaype.cc/images/1546717200538.png">
+<meta property="og:image" content="http://www.plaype.cc/images/1546717454916.png">
+<meta property="og:image" content="http://www.plaype.cc/images/clipboard-1546719161627.png">
+<meta property="og:updated_time" content="2019-01-06T14:43:21.240Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="vmattack">
+<meta name="twitter:description" content="环境版本说明IDA 6.8 vmattack需要的python库 123pip install distorm3==3.3.4（一定要指定版本，新版本直接pip貌似会失败）pip install idacute（==1.0.1 如果直接安装有异常，就使用这个版本的库） pycharm pro用于调试 开发环境pycharm 设置idapython的包含路径     调试环境参考文章 How to">
+<meta name="twitter:image" content="http://www.plaype.cc/images/1546718289495.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.plaype.cc/uncategorized/vmattack/2019-01-06.html">
+
+
+
+
+
+  <title>vmattack | Lnju's blogs</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Lnju's blogs</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">曾梦想仗剑走天涯</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.plaype.cc/uncategorized/vmattack/2019-01-06.html">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lnju">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://www.plaype.me/uploads/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lnju's blogs">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">vmattack</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-06T03:35:15+08:00">
+                2019-01-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h1><h2 id="版本说明"><a href="#版本说明" class="headerlink" title="版本说明"></a>版本说明</h2><p>IDA 6.8</p>
+<p>vmattack需要的python库</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pip install distorm3==3.3.4（一定要指定版本，新版本直接pip貌似会失败）</span><br><span class="line"></span><br><span class="line">pip install idacute（==1.0.1 如果直接安装有异常，就使用这个版本的库）</span><br></pre></td></tr></table></figure>
+<p>pycharm pro用于调试</p>
+<h2 id="开发环境"><a href="#开发环境" class="headerlink" title="开发环境"></a>开发环境</h2><p>pycharm 设置idapython的包含路径</p>
+<p><img src="/images/1546718289495.png" alt="1546718289495"></p>
+<p><img src="/images/1546718382706.png" alt="1546718382706"></p>
+<p><img src="/images/1546718479340.png" alt="1546718479340"></p>
+<p><img src="/images/1546718536280.png" alt="1546718536280"></p>
+<h2 id="调试环境"><a href="#调试环境" class="headerlink" title="调试环境"></a>调试环境</h2><p>参考文章 <a href="https://mipsme.blogspot.com/2015/03/ida-python.html" target="_blank" rel="noopener">How to debug IDAPython scripts with PyCharm</a></p>
+<blockquote>
+<p>pycharm可以通过远程调试的方式对IDApython脚本进行调试。然而，测试不成功呀。</p>
+</blockquote>
+<p><strong>现象</strong>：在主动调用settrace的时候能断下来一次，此时下断点F5，触发进入断点的条件，断点却无效。</p>
+<p><strong>解决方案</strong>：把这段代码单独拎出来，写在py文件中，需要对哪个函数下断点，import此文件，调用bp函数，即可断下，F10一步到达断点位置</p>
+<p><img src="/images/clipboard.png" alt="img"></p>
+<h1 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h1><p>源码结构如下：</p>
+<p><img src="/images/1546717200538.png" alt="1546717200538"></p>
+<h2 id="菜单选项"><a href="#菜单选项" class="headerlink" title="菜单选项"></a>菜单选项</h2><p><code>VMAttack.py</code> 调用了<code>extend_menu</code>方法为菜单项注册了<code>响应事件</code>，如下：</p>
+<p><img src="/images/1546717454916.png" alt="1546717454916"></p>
+<p><code>UIManager</code>类专门用于处理菜单相关逻辑（在ui文件夹中），不是我们分析的重点。</p>
+<p>通过响应事件函数，我们可以逐项分析该功能的实现…</p>
+<h2 id="生成trace分析"><a href="#生成trace分析" class="headerlink" title="生成trace分析"></a>生成trace分析</h2><p><img src="/images/clipboard-1546719161627.png" alt="img"></p>
+<p>vmattak的功能是基于trace文件去分析vm，第一步就是如何生成一份trace文件。</p>
+<p><code>gen_instruction_trace</code>位于 <code>dynamic\dynamic_deobfuscate.py</code> 位于 <code>dynamic</code>属于 <strong>动态分析</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">gen_instruction_trace</span><span class="params">(choice)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    Generate instruction trace</span></span><br><span class="line"><span class="string">    :param choice: which debugger to use</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    bp()</span><br><span class="line">    dbg_handl = get_dh(choice)</span><br><span class="line">    vmr = get_vmr()</span><br><span class="line">    trace = dbg_handl.gen_instruction_trace()</span><br><span class="line">    <span class="keyword">if</span> trace <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:</span><br><span class="line">        vmr.trace = trace</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">raise</span> Exception(<span class="string">'[*] Trace seems to be None, so it was disregarded!'</span>)</span><br></pre></td></tr></table></figure>
+<p><code>choice</code> 指定调试器，可以有IDA调试器，OD调试器，Immunity调试器，每种调试器在<code>dynamic</code>文件夹内有相应的py文件。目前默认选项是IDA调试器，别的调试器估计还不支持。</p>
+<p><code>get_dh()</code> 根据<code>choice</code>返回相应的调试器实例.get_dh位于<code>dynamic/DebuggerHandler.py</code>，看起来<code>DebuggerHandler</code>用于管理3种不同的调试器</p>
+<p><code>get_vmr</code>返回<code>VMRepresentation</code>类对象，该类是单例，全局类实例唯一。</p>
+<p><code>dbg_handl.gen_instruction_trace()</code> 实际上是调用了<code>dynamic/IDADebugger.py</code>中的<code>gen_trace</code>方法。</p>
+<ol>
+<li>运行到程序入口点</li>
+<li>开启trace，进入大循环</li>
+<li><p>每执行一条指令的trace，<code>dbg_trace</code> 方法被回调，主要是保存一条trace日志，即<code>Traceline</code>对象</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">dbg_trace</span><span class="params">(self, tid, ea)</span>:</span></span><br><span class="line"><span class="comment">#......</span></span><br><span class="line">self.trace.append(Traceline(thread_id=tid, addr=ea, disasm=self.disconv(GetDisasm(ea)), ctx=deepcopy(self.ctx)))</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>为执行过的地址染色，执行次数多则颜色深，大循环结束</p>
+</li>
+</ol>
+<p><code>IDADebugger</code> 类继承了idaapi.DBG_Hooks对象，通过重写dbg_*函数，便可收到回调</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">IDADebugger</span><span class="params">(DBG_Hooks, Debugger)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, *args)</span>:</span></span><br><span class="line">        super(IDADebugger, self).__init__(*args)</span><br><span class="line">        self.hooked = <span class="keyword">False</span></span><br><span class="line">        self.trace = Trace()</span><br></pre></td></tr></table></figure>
+<p>可以看到IDADebugger重写了以下函数，当以下这些调试事件发生时，IDADebugger便能获取到这些事件，其中<code>dbg_trace</code>便是trace事件的回调函数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">dbg_process_start</span><br><span class="line">dbg_process_exit</span><br><span class="line">dbg_library_unload</span><br><span class="line">dbg_process_attach</span><br><span class="line">dbg_process_detach</span><br><span class="line">dbg_library_load</span><br><span class="line">dbg_bpt</span><br><span class="line">dbg_suspend_process</span><br><span class="line">dbg_exception</span><br><span class="line">dbg_trace</span><br></pre></td></tr></table></figure>
+<h2 id="grading分析"><a href="#grading分析" class="headerlink" title="grading分析"></a>grading分析</h2><p>入口点在<code>dynamic/dynamic_deobfuscate.py</code> 的 <code>grading_automaton</code>函数，注释：</p>
+<blockquote>
+<p>Grading System Analysis 为每条trace line计算分数。它基本上是所有可用分析功能的组合，一个接一个地运行它们，增加分析结果中那些trace line的分数，然后运行下一个跟踪分析。在分析运行期间，启动模式匹配运行，根据已知的模式增加/减少某些trace line的分数。模式是根据分析功能的已知缺陷建模的。</p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/uncategorized/x64dbg源码分析/2018-12-01.html" rel="next" title="x64dbg源码分析">
+                <i class="fa fa-chevron-left"></i> x64dbg源码分析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/uncategorized/IO系统/2019-01-10.html" rel="prev" title="">
+                 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="http://www.plaype.me/uploads/avatar.jpg" alt="Lnju">
+            
+              <p class="site-author-name" itemprop="name">Lnju</p>
+              <p class="site-description motion-element" itemprop="description">windows系统安全</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">26</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#环境"><span class="nav-number">1.</span> <span class="nav-text">环境</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#版本说明"><span class="nav-number">1.1.</span> <span class="nav-text">版本说明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#开发环境"><span class="nav-number">1.2.</span> <span class="nav-text">开发环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#调试环境"><span class="nav-number">1.3.</span> <span class="nav-text">调试环境</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#源码分析"><span class="nav-number">2.</span> <span class="nav-text">源码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#菜单选项"><span class="nav-number">2.1.</span> <span class="nav-text">菜单选项</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#生成trace分析"><span class="nav-number">2.2.</span> <span class="nav-text">生成trace分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#grading分析"><span class="nav-number">2.3.</span> <span class="nav-text">grading分析</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lnju</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

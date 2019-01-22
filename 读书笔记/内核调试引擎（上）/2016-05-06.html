@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="内核,调试引擎,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="什么是kernel debug engine? 我们要调试系统内核，就需要做到让系统听我们的话，想随时中断下来就要中断下来让我们调试。假如我们让整个系统都中断了，那么被调试系统中谁来接受我们接下来的调试命令呢？windows的做法是独立出一个和正常操作系统运作没有任何关系，专门用来接受我们（调试器）的调试命令的部分，这部分就是内核调试引擎。 windows操作系统的每个系统部件（每个功能类别）有一">
+<meta name="keywords" content="内核,调试引擎">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2016-05-06-内核调试引擎（上）">
+<meta property="og:url" content="http://www.plaype.cc/读书笔记/内核调试引擎（上）/2016-05-06.html">
+<meta property="og:site_name" content="Lnju&#39;s blogs">
+<meta property="og:description" content="什么是kernel debug engine? 我们要调试系统内核，就需要做到让系统听我们的话，想随时中断下来就要中断下来让我们调试。假如我们让整个系统都中断了，那么被调试系统中谁来接受我们接下来的调试命令呢？windows的做法是独立出一个和正常操作系统运作没有任何关系，专门用来接受我们（调试器）的调试命令的部分，这部分就是内核调试引擎。 windows操作系统的每个系统部件（每个功能类别）有一">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-12-26T16:01:44.971Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="2016-05-06-内核调试引擎（上）">
+<meta name="twitter:description" content="什么是kernel debug engine? 我们要调试系统内核，就需要做到让系统听我们的话，想随时中断下来就要中断下来让我们调试。假如我们让整个系统都中断了，那么被调试系统中谁来接受我们接下来的调试命令呢？windows的做法是独立出一个和正常操作系统运作没有任何关系，专门用来接受我们（调试器）的调试命令的部分，这部分就是内核调试引擎。 windows操作系统的每个系统部件（每个功能类别）有一">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.plaype.cc/读书笔记/内核调试引擎（上）/2016-05-06.html">
+
+
+
+
+
+  <title>2016-05-06-内核调试引擎（上） | Lnju's blogs</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Lnju's blogs</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">曾梦想仗剑走天涯</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.plaype.cc/读书笔记/内核调试引擎（上）/2016-05-06.html">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lnju">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://www.plaype.me/uploads/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lnju's blogs">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">2016-05-06-内核调试引擎（上）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-05-06T21:06:10+08:00">
+                2016-05-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/读书笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">读书笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>什么是<strong>kernel debug engine</strong>? 我们要调试系统内核，就需要做到让系统听我们的话，想随时中断下来就要中断下来让我们调试。假如我们让整个系统都中断了，那么被调试系统中谁来接受我们接下来的调试命令呢？windows的做法是独立出一个和正常操作系统运作没有任何关系，专门用来接受我们（调试器）的调试命令的部分，这部分就是内核调试引擎。</p>
+<p>windows操作系统的每个系统部件（每个功能类别）有一个简短的名字，<strong>MM</strong>代表内存管理器，<strong>OB</strong>代表对象管理器，<strong>PS</strong>代表进程线程管理，类似地内核调试引擎也有这样一个双字母名字叫做<strong>KD</strong>。</p>
+<p><strong>角色</strong>：内核调试引擎是<strong>调试器</strong>和<strong>被调试内核</strong>的桥梁，类似于<strong>调试子系统</strong>在<strong>调试器和被调试程序</strong>中的扮演的角色。支持内核调试的函数、变量都是<strong>KD开头</strong>。内核调试引擎和调试器之前想要通信，必须有一套约定好的协议。调试器通过协议请求调试引擎帮助他控制目标系统内核，调试引擎通过协议报告系统内核状态给调试器。内核调试引擎为调试器（更具体的说是内核调试器）提供了一套特殊的API — <strong>kdAPI</strong>，调试器使用kdAPI可以以远程调用的方式访问到内核，这种方式类似于应用程序通过win32API访问内核服务。<em>在这里做一个关于反外挂的思考，因为驱动程序是对于操作系统内核的一个补充，那是不是用于反外挂的驱动程序，可以做到破坏内核调试引擎不能正常的与调试器进行通讯，就可以达到反外挂的目的。</em></p>
+<a id="more"></a>
+<h1 id="一、组成"><a href="#一、组成" class="headerlink" title="一、组成"></a>一、组成</h1><p><strong>KD用于让系统内核其他部分来调用的接口函数</strong>：内核调试引擎写好了一些函数，供系统内核在适当的时机进行调用。比如：windows启动过程中调用<strong>KdInitSystem</strong>函数让内核调试引擎初始化；当系统分发异常时会调用<strong>KiDebugRotine</strong>；系统时间更新函数KeUpdateRunTime会调用<strong>KdCheckForDebugBreak</strong>来检查调试器是否发出了中断命令。</p>
+<p><strong>通信函数</strong>：负责和另一台机器上的调试器进行通信的函数，收发数据包等。</p>
+<p><strong>断点管理</strong>：使用数组<strong>KdpBreakpointTable</strong>记录断点</p>
+<p><strong>内核调试API</strong>：通过这个接口向调试器提供观察、分析被调试系统的服务。不过不是直接被调试器调用，而是调试器通过数据包将要调用的api号和承诺书传递给调试引擎，调试引擎调用相应的api。</p>
+<p><strong>系统内核控制函数</strong>：KdEnterDebugger—将OS中断到调试器；KdExitDebugger–恢复系统运行（18.6节中讨论）</p>
+<p><strong>管理函数</strong>：包括启用和禁止内核调试引擎的<strong>KdEnableDebugger函数</strong>和<strong>KdDisableDebugger函数</strong>，以及修改选项的<strong>KdChangeOption函数</strong>。WinDBG工具包中的kdbgctrl工具就是使用这些函数来工作的。</p>
+<p><strong>ETW支持函数</strong>：与ETW机制配合将追踪数据通过内核调试通信输出到调试器所在的主机上。负责这一功能的主要函数是<strong>KdReportTraceData</strong>，其内部又调用另一个函数<strong>nt!KdpSendTraceData</strong>进行真正的数据操作。（神马是ETW机制）</p>
+<p><strong>驱动程序更新服务</strong>：即从主机上读取驱动程序文件来更新被调试系统中的驱动程序。WinDBG的.kdfiles命令就是依赖这一服务而工作的。当系统内存管理器的<strong>MiCreateSectionForDriver</strong>为一个驱动程序分配内存节（Section）时，如果检测到当前<strong>处于内核调试状态</strong>，就会调用调试引擎的<strong>KdPullRemoteFile</strong>函数，后者再使用<strong>KdpCreateRemoteFile</strong>、<strong>KdpReadRemoteFile</strong>等函数完成文件更新工作</p>
+<p><strong>本地内核调试支持</strong>：包括NtSystemDebugControl和KdSystemDebugControl.</p>
+<h1 id="二、KDCOM"><a href="#二、KDCOM" class="headerlink" title="二、KDCOM"></a>二、KDCOM</h1><p>从Windows XP开始，内核调试引擎中的通信部分从NT内核中，被拆分到一个单独的DLL模块中，名为<strong>KDCOM.DLL</strong>。KDCOM、NTOSKRNL二者之间是相互依赖、互相调用。</p>
+<p>KDCOM中最重要的就是<strong>KdSendPacket</strong>和<strong>KdReceivePacket</strong>，分别用来发送和接收数据包。系统进入休眠状态时，KdPowerTransition会调用KdD3Transition通知KDCOM；系统被唤醒时KdD0Transition会被调用。KddebuggerInitialize0，KddebuggerInitialize1是KDCOM输出的初始化函数，供windows启动时调用。</p>
+<h1 id="三、建立连接"><a href="#三、建立连接" class="headerlink" title="三、建立连接"></a>三、建立连接</h1><p>内核调试引擎和调试器之间需要通过某种方式先建立好连接才能通信，再根据协议进行调试。连接的方式有串行口、1294(火线)、USB2.0。</p>
+<p>常见的内核调试方式也就是网上说的双机调试环境，即实体机调试虚拟机。这种通信的方式是使用<strong>命名管道模拟串行端口</strong>。</p>
+<p>windbg的命令行参数有点小技巧，以前不知道。虚拟机重启后windbg就不能继续调试了，要关了windbg重开一个才行。这里提到，给命令行参数的最后加上参数</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">, reconnect</span><br></pre></td></tr></table></figure>
+<p>这样虚拟机重启windbg就会重新连接上。</p>
+<h1 id="四、启动选项"><a href="#四、启动选项" class="headerlink" title="四、启动选项"></a>四、启动选项</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/debugport=COM1</span><br></pre></td></tr></table></figure>
+<p>此选项会指定通信端口，COM1表示串行端口1.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/NODEBUG</span><br></pre></td></tr></table></figure>
+<p>禁用内核调试，优先级最高。</p>
+<p>如果系统已经无法正常启动，此时想内核调试，可以通过开机F8进高级启动选项的Debugging Mode选项来启用内核调试。</p>
+<h1 id="五、初始化"><a href="#五、初始化" class="headerlink" title="五、初始化"></a>五、初始化</h1><p>内核调试引擎的初始化随着windows的启动过程而进行。初始化分4部分来讲：</p>
+<ul>
+<li><p>windows启动</p>
+</li>
+<li><p>第1次调用KdInitSystem</p>
+</li>
+<li><p>第2次调用KdInitSystem</p>
+</li>
+<li><p>阶段1初始化通信扩展模块</p>
+</li>
+</ul>
+<h2 id="1-windows启动"><a href="#1-windows启动" class="headerlink" title="1. windows启动"></a>1. windows启动</h2><p>开机后，先执行系统固件即bios，bios执行完后来到MBR，MBR执行系统的加载程序即(NTLDR)。完成实模式到32位保护模式，启动分页机制等之后，加载<strong>NTOSKRNL.EXE</strong>及其依赖文件，KDCOM被加载。之后传递一个描述启动选项的数据结构，调用NT内核的EP即<strong>KiSystemStartup</strong>函数。所以这里是系统内核执行的<strong>入口函数</strong></p>
+<p>KiSystemStartup函数的执行过程：</p>
+<ol>
+<li>初始化CPU</li>
+<li>调用<strong>KdInitSystem</strong>（初始化内核调试引擎）</li>
+<li>调用<strong>KiInitializeKernel</strong>(初始化内核)</li>
+</ol>
+<p>先说能很快说清楚的3，后面再说2。这个函数会调用<strong>KiInitSystem</strong>来<strong>初始化系统的全局数据结构</strong>，调用<strong>KeInitializeProcess</strong>创建并<strong>初始化Idle进程</strong>，调用<strong>KeInitializeThread</strong>初<strong>始化Idle线程</strong>，调用<strong>ExpInitializeExecutive</strong>()进行所谓的<strong>执行体阶段0初始化</strong>。ExpInitializeExecutive会依次调用执行体各个机构的<strong>阶段0初始化函数</strong>，包括调用MmInitSystem构建页表和内存管理器的基本数据结构，调用ObInitSystem建立名称空间，调用SeInitSystem初始化token对象，调用PsInitSystem对进程管理器做阶段0初始化（稍后详细说明），调用PpInitSystem让即插即用管理器初始化设备链表。</p>
+<p>其中进程管理器的阶段1初始化过程中再次调用了KdInitSystem函数，并调用了<strong>KdDebuggerInitialize1</strong>初始化内核调试通信扩展模块</p>
+<p>3返回后，<strong>KiSystemStartup</strong>函数将当前CPU的中断请求级别（IRQL）降低到DISPATCH_LEVEL，然后跳转到KiIdleLoop()，退化为Idle进程中的<strong>第一个Idle线程</strong>。</p>
+<h2 id="2-第1次调用KdInitSystem"><a href="#2-第1次调用KdInitSystem" class="headerlink" title="2.第1次调用KdInitSystem"></a>2.第1次调用KdInitSystem</h2><p>初始化<strong>调试器数据链表</strong>，变量<strong>KdpDebuggerDataListHead</strong>指向这个链表（先初始化链表，把链表的取地址赋值给这个变量）</p>
+<p>初始化数据结构<strong>KdDebuggerDataBlock</strong>，调试器需要这里面的信息了解目标操作系统(该结构包括内核基地址、模块链表指针、调试器数据链表指针)</p>
+<p>根据KiSystemStartup函数的参数（即：启动选项参数找调试相关的选项）寻找和<strong>调试有关的参数</strong>保存到变量。(<strong>注意</strong>这里的变量是反外挂会关注的点)</p>
+<p>调用<strong>KdDebuggerInitialize0</strong>来对通信扩展模块进行阶段0初始化（读到这里我们之前有疑问说：这个过程我们想用vmware双机调试一下，现在看来是做不到了，因为这时候通信模块才刚刚加载，之前的那些过程肯定看不到咯）。如果使用的是串行通信方式，KDCOM中的KdDebuggerInitialize0函数会调用模块内的KdCompInitialize函数来初始化串行口（如果是）。成功初始化COM口后，都会设置HAL模块中所定义的KdComPortInUse全局变量。（这个变量也是检测点咯？）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">调试相关的选项变量</span><br><span class="line">KdPitchDebugger：布尔类型，用来标识是否显式抑制内核调试。当启动选项中包含/NODEBUG选项时，这个变量会被设置为真。</span><br><span class="line"></span><br><span class="line">KdDebuggerEnabled：布尔类型，用来标识内核调试是否被启用。当启动选项中包含/DEBUG或/DEBUGPORT而且不包含/NODEBUG时，这个变量会被设置为真。</span><br><span class="line"></span><br><span class="line">KiDebugRoutine：函数指针类型，用来记录内核调试引擎的异常处理回调函数，当内核调试引擎活动时，它指向KdpTrap函数，否则指向KdpStub函数。</span><br><span class="line"></span><br><span class="line">KdpBreakpointTable：结构数组类型，用来记录代码断点，每个元素为一个BREAKPOINT_ENTRY结构，用来描述一个断点，包括断点地址。</span><br><span class="line"></span><br><span class="line">当使用串行通信方式时，在KDCOM.DLL中定义了两个变量（用来标识下一个要发送/接受的数据包ID）KdCompNextPacketIdToSend和KdCompPacketIdExpected。</span><br></pre></td></tr></table></figure>
+<h2 id="3-第2次调用KdInitSystem"><a href="#3-第2次调用KdInitSystem" class="headerlink" title="3.第2次调用KdInitSystem"></a>3.第2次调用KdInitSystem</h2><p>在执行体的阶段1初始化过程中，系统会第二次调用KdInitSystem。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">kd&gt; kn</span><br><span class="line"># ChildEBP RetAddr  </span><br><span class="line">00 f8958840 8068b0ee nt!KdInitSystem // 内核调试引擎初始化</span><br><span class="line">01 f8958dac 8057c73a nt!Phase1Initialization+0x410 // 执行体的阶段1初始化</span><br><span class="line">02 f8958ddc 805124c1 nt!PspSystemThreadStartup+0x34 // 系统线程启动函数</span><br><span class="line">03 00000000 00000000 nt!KiThreadStartup+0x16 // 内核态的线程启动函数</span><br></pre></td></tr></table></figure>
+<p>只是简单的调用KeQueryPerformanceCounter来对变量KdPerformanceCounterRate（性能计数器的频率）初始化，然后返回。</p>
+<h2 id="4-阶段1初始化通信扩展模块"><a href="#4-阶段1初始化通信扩展模块" class="headerlink" title="4. 阶段1初始化通信扩展模块"></a>4. 阶段1初始化通信扩展模块</h2><p>在阶段1初始化中，系统会调用通信扩展模块的KdDebuggerInitialize1函数来让通信扩展模块得到阶段1初始化的机会。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">kd&gt; kn</span><br><span class="line"># ChildEBP RetAddr  </span><br><span class="line">00 f8958844 8068b313 kdcom!KdDebuggerInitialize1 // 内核调试通信扩展模块</span><br><span class="line">01 f8958dac 8057c73a nt!Phase1Initialization+0x69a // 执行体的阶段1初始化</span><br><span class="line">02 f8958ddc 805124c1 nt!PspSystemThreadStartup+0x34 // 系统线程的启动函数</span><br><span class="line">03 00000000 00000000 nt!KiThreadStartup+0x16 // 内核态的线程启动函数</span><br></pre></td></tr></table></figure>
+<p>目前的KDCOM实现会调用KdCompInitialize1，但是只执行很少的操作就返回了。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/内核/" rel="tag"># 内核</a>
+          
+            <a href="/tags/调试引擎/" rel="tag"># 调试引擎</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/读书笔记/异常分发过程/2016-05-06.html" rel="next" title="异常分发过程笔记">
+                <i class="fa fa-chevron-left"></i> 异常分发过程笔记
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/读书笔记/内核调试引擎（中）/2016-05-07.html" rel="prev" title="内核调试引擎（中）">
+                内核调试引擎（中） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="http://www.plaype.me/uploads/avatar.jpg" alt="Lnju">
+            
+              <p class="site-author-name" itemprop="name">Lnju</p>
+              <p class="site-description motion-element" itemprop="description">windows系统安全</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">26</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一、组成"><span class="nav-number">1.</span> <span class="nav-text">一、组成</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二、KDCOM"><span class="nav-number">2.</span> <span class="nav-text">二、KDCOM</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#三、建立连接"><span class="nav-number">3.</span> <span class="nav-text">三、建立连接</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#四、启动选项"><span class="nav-number">4.</span> <span class="nav-text">四、启动选项</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#五、初始化"><span class="nav-number">5.</span> <span class="nav-text">五、初始化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-windows启动"><span class="nav-number">5.1.</span> <span class="nav-text">1. windows启动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-第1次调用KdInitSystem"><span class="nav-number">5.2.</span> <span class="nav-text">2.第1次调用KdInitSystem</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-第2次调用KdInitSystem"><span class="nav-number">5.3.</span> <span class="nav-text">3.第2次调用KdInitSystem</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-阶段1初始化通信扩展模块"><span class="nav-number">5.4.</span> <span class="nav-text">4. 阶段1初始化通信扩展模块</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lnju</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

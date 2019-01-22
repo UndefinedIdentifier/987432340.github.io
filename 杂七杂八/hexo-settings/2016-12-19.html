@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="blog,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="搭建hexo时的设置，记录备忘…">
+<meta name="keywords" content="blog">
+<meta property="og:type" content="article">
+<meta property="og:title" content="hexo博客">
+<meta property="og:url" content="http://www.plaype.cc/杂七杂八/hexo-settings/2016-12-19.html">
+<meta property="og:site_name" content="Lnju&#39;s blogs">
+<meta property="og:description" content="搭建hexo时的设置，记录备忘…">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://www.plaype.cc/杂七杂八/images/Snipaste_2018-11-25_23-00-35.png">
+<meta property="og:image" content="http://www.plaype.cc/杂七杂八/images/Snipaste_2018-11-25_23-26-20.png">
+<meta property="og:updated_time" content="2018-11-26T18:38:06.374Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="hexo博客">
+<meta name="twitter:description" content="搭建hexo时的设置，记录备忘…">
+<meta name="twitter:image" content="http://www.plaype.cc/杂七杂八/images/Snipaste_2018-11-25_23-00-35.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.plaype.cc/杂七杂八/hexo-settings/2016-12-19.html">
+
+
+
+
+
+  <title>hexo博客 | Lnju's blogs</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Lnju's blogs</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">曾梦想仗剑走天涯</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.plaype.cc/杂七杂八/hexo-settings/2016-12-19.html">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lnju">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://www.plaype.me/uploads/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lnju's blogs">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">hexo博客</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-12-19T04:54:34+08:00">
+                2016-12-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/杂七杂八/" itemprop="url" rel="index">
+                    <span itemprop="name">杂七杂八</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><strong>搭建hexo时的设置，记录备忘</strong>…</p>
+<a id="more"></a>
+<h1 id="放置图片资源"><a href="#放置图片资源" class="headerlink" title="放置图片资源"></a>放置图片资源</h1><ol>
+<li>使用七牛云存储，图片放在七牛云上，在md中引用图片的外链。这样做的优势可能是七牛云存储在国内有CDN加速，加载起来会比较快吧。但是同时也带来一个弊端，每次上传好图片后，本地的图片自己就不会再管理了，万一有天七牛云收费，自己搬运图片比较麻烦。</li>
+<li>把图片资源直接和md文本一起放在hexo的文件夹下，我同步提交md文本的同时也把图片资源一起提交了，这样文本和图片资源放一起方便管理。</li>
+</ol>
+<p><img src="../images/Snipaste_2018-11-25_23-00-35.png" alt="Snipaste_2018-11-25_23-00-35"><br>根据官方文档的指导，放本地也有2种选择：</p>
+<ul>
+<li><p>一种是所有图片统一放images文件夹下</p>
+</li>
+<li><p>还有一种是把同一篇文章内的图片分门别类放置在不同的文件夹下，年龄大了折腾不动了，我们就统一管理吧！</p>
+</li>
+</ul>
+<p>如下图，勾选上<code>typora</code>的2个选项，从桌面上拖动图片到<code>typora</code>时就会自动复制图片到指定的文件夹</p>
+<p><img src="../images/Snipaste_2018-11-25_23-26-20.png" alt="Snipaste_2018-11-25_23-26-20"></p>
+<p><del>此时图片路径为 <code>../images</code>，我们直接渲染会出现图片找不到的问题。所以我写了一个脚本，能够把md文本中的<code>../images</code>替换为<code>/images</code>。</del></p>
+<p><del>如此一来，我们写好了md文本后，直接提交到git仓库，之后使用python脚本处理一下，渲染，部署。这样一次写作就完成了。如果要修改就revert文件，重复以上操作。</del></p>
+<p><a href="https://anynote.me/2018/05/06/local-image-with-typora/" target="_blank" rel="noopener">参考:使用 Typora 在 Hexo 中写博客完美处理本地图片</a></p>
+<p>参考以上链接有了更牛逼的操作，写文章时<code>hexo new my-post</code> 会自带2行typora的配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">typora-root-url: ..					// 图片的根路径在..目录</span><br><span class="line">typora-copy-images-to: ../images	// 复制图片到../目录</span><br></pre></td></tr></table></figure>
+<p>同时设置typora优先使用相对路径，就能在typora中完美显示图片了！</p>
+<h1 id="文章折叠"><a href="#文章折叠" class="headerlink" title="文章折叠"></a>文章折叠</h1><p>在原文中加上<code>&lt;!--more--&gt;</code>标记，那么上面的部分就会显示出来。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">//这是md文本</span><br><span class="line">一段描述</span><br><span class="line">&lt;!--more--&gt;</span><br><span class="line">后面接着写</span><br></pre></td></tr></table></figure>
+<h1 id="保存原始文本以及多客户端同步"><a href="#保存原始文本以及多客户端同步" class="headerlink" title="保存原始文本以及多客户端同步"></a>保存原始文本以及多客户端同步</h1><p>本机上写好md文本，可以通过<code>hexo g</code>渲染，<code>hexo d</code>部署到gitpage上去。</p>
+<p>但是面临2个问题：</p>
+<ol>
+<li>本地的md原始文本仅在我机器上有存一份，万一机器损坏、丢失，那么这些笔记就找不到了</li>
+<li>家里电脑环境搭好了，可以部署，公司电脑怎么把环境复制一份，以便在公司也能写笔记</li>
+</ol>
+<p>解决方案是使用<code>分支</code>，master分支作为gitpage渲染的分支，新建分支存放原始文本所需要的必要文件</p>
+<p>但是发现完全照搬是不可以的，主要是学习他的思路，就是把本地生成hexo博客的目录，作为一个分支，提交到了github上，这样就能给远程仓库上做个备份。具体的操作步骤都是一些git的命令而已。</p>
+<ol>
+<li><p>在你github网页中，新建一个分支，并把主分支切换成新建分支。<br>git clone 项目到本地</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">npm install			//读package.json，将依赖包安装到当前目录的 ./node_modules 文件夹中</span><br><span class="line">npm audit fix		//如果提示让我们修复，我们就修复下</span><br><span class="line">npm cache verify	//出现sha512问题时先直接此命令</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h1 id="hexo-s命令不存在"><a href="#hexo-s命令不存在" class="headerlink" title="hexo s命令不存在"></a>hexo s命令不存在</h1><p>升级hexo后，<code>hexo server</code>提示我没有这个命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">D:\MyBlogs&gt;hexo s</span><br><span class="line">Usage: hexo &lt;command&gt;</span><br><span class="line"></span><br><span class="line">Commands:</span><br><span class="line">  clean     Remove generated files and cache.</span><br><span class="line">  config    Get or set configurations.</span><br><span class="line">  deploy    Deploy your website.</span><br><span class="line">  generate  Generate static files.</span><br><span class="line">  help      Get help on a command.</span><br><span class="line">  init      Create a new Hexo folder.</span><br><span class="line">  list      List the information of the site</span><br><span class="line">  migrate   Migrate your site from other system to Hexo.</span><br><span class="line">  new       Create a new post.</span><br><span class="line">  publish   Moves a draft post from _drafts to _posts folder.</span><br><span class="line">  render    Render files with renderer plugins.</span><br><span class="line">  version   Display version information.</span><br><span class="line"></span><br><span class="line">Global Options:</span><br><span class="line">  --config  Specify config file instead of using _config.yml</span><br><span class="line">  --cwd     Specify the CWD</span><br><span class="line">  --debug   Display all verbose messages in the terminal</span><br><span class="line">  --draft   Display draft posts</span><br><span class="line">  --safe    Disable all plugins and scripts</span><br><span class="line">  --silent  Hide output on console</span><br><span class="line"></span><br><span class="line">For more help, you can use &apos;hexo help [command]&apos; for the detailed information</span><br><span class="line">or you can check the docs: http://hexo.io/docs/</span><br></pre></td></tr></table></figure>
+<p>问题原因是hexo3中 server模块独立出来了，要单独安装。于是单独安装下</p>
+<blockquote>
+<p>npm install hexo-server</p>
+<p>hexo s<br>INFO  Start processing<br>INFO  Hexo is running at <a href="http://0.0.0.0:4000/" target="_blank" rel="noopener">http://0.0.0.0:4000/</a>. Press Ctrl+C to stop.</p>
+</blockquote>
+<p><a href="https://blog.bflyer.com/2017/06/28/Hexo%E5%91%BD%E4%BB%A4server%E6%97%A0%E6%95%88/" target="_blank" rel="noopener">参考：Hexo命令server无效</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/blog/" rel="tag"># blog</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/杂七杂八/两种经济体系/2016-12-04.html" rel="next" title="每天学点经济学">
+                <i class="fa fa-chevron-left"></i> 每天学点经济学
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/uncategorized/x64dbg源码分析/2018-12-01.html" rel="prev" title="x64dbg源码分析">
+                x64dbg源码分析 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="http://www.plaype.me/uploads/avatar.jpg" alt="Lnju">
+            
+              <p class="site-author-name" itemprop="name">Lnju</p>
+              <p class="site-description motion-element" itemprop="description">windows系统安全</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">26</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#放置图片资源"><span class="nav-number">1.</span> <span class="nav-text">放置图片资源</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#文章折叠"><span class="nav-number">2.</span> <span class="nav-text">文章折叠</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#保存原始文本以及多客户端同步"><span class="nav-number">3.</span> <span class="nav-text">保存原始文本以及多客户端同步</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#hexo-s命令不存在"><span class="nav-number">4.</span> <span class="nav-text">hexo s命令不存在</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lnju</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="翻译,漏洞利用,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="这篇博客给了一个驱动练习内核溢出的程序。">
+<meta name="keywords" content="翻译,漏洞利用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一个windows内核漏洞练习驱动">
+<meta property="og:url" content="http://www.plaype.cc/漏洞利用/translate-hacksys-extreme-vulnerable-driver/2016-03-30.html">
+<meta property="og:site_name" content="Lnju&#39;s blogs">
+<meta property="og:description" content="这篇博客给了一个驱动练习内核溢出的程序。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://www.payatu.com/wp-content/uploads/2015/05/2015-06-03_22h27_24.png">
+<meta property="og:image" content="http://www.payatu.com/wp-content/uploads/2015/05/2015-05-27_20h22_35.png">
+<meta property="og:image" content="http://www.payatu.com/wp-content/uploads/2015/05/2015-05-27_20h28_07.png">
+<meta property="og:updated_time" content="2018-11-26T18:08:43.629Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="一个windows内核漏洞练习驱动">
+<meta name="twitter:description" content="这篇博客给了一个驱动练习内核溢出的程序。">
+<meta name="twitter:image" content="http://www.payatu.com/wp-content/uploads/2015/05/2015-06-03_22h27_24.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.plaype.cc/漏洞利用/translate-hacksys-extreme-vulnerable-driver/2016-03-30.html">
+
+
+
+
+
+  <title>一个windows内核漏洞练习驱动 | Lnju's blogs</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Lnju's blogs</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">曾梦想仗剑走天涯</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.plaype.cc/漏洞利用/translate-hacksys-extreme-vulnerable-driver/2016-03-30.html">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lnju">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://www.plaype.me/uploads/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lnju's blogs">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">一个windows内核漏洞练习驱动</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-03-30T00:00:00+08:00">
+                2016-03-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/漏洞利用/" itemprop="url" rel="index">
+                    <span itemprop="name">漏洞利用</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>这篇<a href="http://www.payatu.com/hacksys-extreme-vulnerable-driver/" target="_blank" rel="noopener">博客</a>给了一个驱动练习内核溢出的程序。<br><a id="more"></a></p>
+<h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p><strong>HackSys Extreme Vulnerable Driver</strong>是为了安全爱好者学习、增强内核溢出技术而故意开发的有漏洞的windows驱动程序。</p>
+<p><strong>HackSys Extreme Vulnerable Driver</strong>提供从简单地缓冲区溢出到复杂的UAF以及 Pool Overflows等广阔漏洞范围，这允许安全研究者从所有实现的漏洞去探索溢出技术。</p>
+<h2 id="什么是HACKSYS-EXTREME-VULNERABLE-DRIVER？"><a href="#什么是HACKSYS-EXTREME-VULNERABLE-DRIVER？" class="headerlink" title="什么是HACKSYS EXTREME VULNERABLE DRIVER？"></a>什么是HACKSYS EXTREME VULNERABLE DRIVER？</h2><p>我已经在 <a href="http://null.co.in/profile/411-ashfaq-ansari" target="_blank" rel="noopener">null Security Community’s Pune Chapter</a>谈论过很多关于windows内核溢出技术。所以我认为，最好能写一个包含所有主要漏洞的驱动程序。这个写驱动的想法提供参与者更好地视角去看到在漏洞代码的背后发生了什么，同时在我讨论、练习时会有很大的帮助。</p>
+<h2 id="实现的漏洞列表"><a href="#实现的漏洞列表" class="headerlink" title="实现的漏洞列表"></a>实现的漏洞列表</h2><ul>
+<li><strong>Pool Overflow</strong></li>
+<li><strong>Use After Free</strong></li>
+<li><strong>Type Confusion</strong></li>
+<li><strong>Stack Overflow</strong></li>
+<li><strong>Integer Overflow</strong></li>
+<li><strong>Stack Overflow GS</strong></li>
+<li><strong>Arbitrary Overwrite</strong></li>
+<li><strong>Null Pointer Dereference</strong></li>
+</ul>
+<h2 id="屏幕截图"><a href="#屏幕截图" class="headerlink" title="屏幕截图"></a>屏幕截图</h2><ul>
+<li><p>帮助界面</p>
+<p><img src="http://www.payatu.com/wp-content/uploads/2015/05/2015-06-03_22h27_24.png" alt="http://www.payatu.com/wp-content/uploads/2015/05/2015-06-03_22h27_24.png"></p>
+<p>​</p>
+</li>
+<li><p>溢出</p>
+<p>​</p>
+<p><img src="http://www.payatu.com/wp-content/uploads/2015/05/2015-05-27_20h22_35.png" alt="http://www.payatu.com/wp-content/uploads/2015/05/2015-05-27_20h22_35.png"></p>
+<p>​</p>
+</li>
+<li><p>驱动调试输出</p>
+</li>
+</ul>
+<p><img src="http://www.payatu.com/wp-content/uploads/2015/05/2015-05-27_20h28_07.png" alt="http://www.payatu.com/wp-content/uploads/2015/05/2015-05-27_20h28_07.png"></p>
+<ul>
+<li>源代码</li>
+</ul>
+<p>源代码在<a href="https://github.com/hacksysteam/HackSysExtremeVulnerableDriver" target="_blank" rel="noopener">github</a>上可以下载</p>
+<h2 id="支持的windows版本"><a href="#支持的windows版本" class="headerlink" title="支持的windows版本"></a>支持的windows版本</h2><p>驱动在 <strong>Windows XP SP3 (x86)</strong>, <strong>Windows 2003 SP3 (x86)</strong> 和<strong>Windows 7 SP1 (x86)</strong>测试成功, 同样支持<strong>Windows 8/8.1 (x86)</strong> . <strong>Windows 8/8.1</strong>尚未测试。</p>
+<h2 id="WHAT-ABOUT-EXPLOITS"><a href="#WHAT-ABOUT-EXPLOITS" class="headerlink" title="WHAT ABOUT EXPLOITS?"></a>WHAT ABOUT EXPLOITS?</h2><p>溢出和这个工程一起提供。溢出在<strong>Windows 7 SP1 (x86)</strong> 被测试通过，同时稍作调整可以支持其他windows系统。</p>
+<h2 id="编译驱动"><a href="#编译驱动" class="headerlink" title="编译驱动"></a>编译驱动</h2><ol>
+<li>安装<a href="https://www.microsoft.com/en-in/download/details.aspx?id=11800" target="_blank" rel="noopener">WDK</a></li>
+<li>改变在Build_HEVD_Secure.bat or Build_HEVD_Vulnerable.bat中的 %localSymbolServerPath%</li>
+<li>运行对应的驱动编译脚本 Build_HEVD_Secure.bat或Build_HEVD_Vulnerable.bat</li>
+</ol>
+<h2 id="安装驱动"><a href="#安装驱动" class="headerlink" title="安装驱动"></a>安装驱动</h2><p>使用<a href="https://www.osronline.com/article.cfm?article=157" target="_blank" rel="noopener">OSR Driver Loader</a>安装<strong>HackSys Extreme Vulnerable Driver</strong></p>
+<p>文章后面给了课程链接，我先注册社区，进去发现课程是现实中的沙龙会议那种，感觉写了也没用就省略了。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/翻译/" rel="tag"># 翻译</a>
+          
+            <a href="/tags/漏洞利用/" rel="tag"># 漏洞利用</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/逆向分析/调试器栈回溯如何实现/2015-11-18.html" rel="next" title="调试器栈回溯如何实现">
+                <i class="fa fa-chevron-left"></i> 调试器栈回溯如何实现
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/uncategorized/3月推送消息/2016-03-31.html" rel="prev" title="3月11日到3月31推送消息精选">
+                3月11日到3月31推送消息精选 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="http://www.plaype.me/uploads/avatar.jpg" alt="Lnju">
+            
+              <p class="site-author-name" itemprop="name">Lnju</p>
+              <p class="site-description motion-element" itemprop="description">windows系统安全</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">26</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是HACKSYS-EXTREME-VULNERABLE-DRIVER？"><span class="nav-number">1.1.</span> <span class="nav-text">什么是HACKSYS EXTREME VULNERABLE DRIVER？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现的漏洞列表"><span class="nav-number">1.2.</span> <span class="nav-text">实现的漏洞列表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#屏幕截图"><span class="nav-number">1.3.</span> <span class="nav-text">屏幕截图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#支持的windows版本"><span class="nav-number">1.4.</span> <span class="nav-text">支持的windows版本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WHAT-ABOUT-EXPLOITS"><span class="nav-number">1.5.</span> <span class="nav-text">WHAT ABOUT EXPLOITS?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编译驱动"><span class="nav-number">1.6.</span> <span class="nav-text">编译驱动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装驱动"><span class="nav-number">1.7.</span> <span class="nav-text">安装驱动</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lnju</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

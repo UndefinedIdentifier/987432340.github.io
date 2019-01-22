@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="dalvik,脱壳,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="通用脱壳思路学习乌云上的一篇文章 未完待续">
+<meta name="keywords" content="dalvik,脱壳">
+<meta property="og:type" content="article">
+<meta property="og:title" content="通用脱壳思路学习">
+<meta property="og:url" content="http://www.plaype.cc/移动安全/通用脱壳思路学习/2016-04-28.html">
+<meta property="og:site_name" content="Lnju&#39;s blogs">
+<meta property="og:description" content="通用脱壳思路学习乌云上的一篇文章 未完待续">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-11-26T18:08:43.652Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="通用脱壳思路学习">
+<meta name="twitter:description" content="通用脱壳思路学习乌云上的一篇文章 未完待续">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.plaype.cc/移动安全/通用脱壳思路学习/2016-04-28.html">
+
+
+
+
+
+  <title>通用脱壳思路学习 | Lnju's blogs</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Lnju's blogs</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">曾梦想仗剑走天涯</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.plaype.cc/移动安全/通用脱壳思路学习/2016-04-28.html">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lnju">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://www.plaype.me/uploads/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lnju's blogs">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">通用脱壳思路学习</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-04-28T01:50:47+08:00">
+                2016-04-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/移动安全/" itemprop="url" rel="index">
+                    <span itemprop="name">移动安全</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>通用脱壳思路学习乌云上的一篇文章</p>
+<h1 id="未完待续"><a href="#未完待续" class="headerlink" title="未完待续"></a>未完待续</h1><a id="more"></a>
+<p>修改源码<code>dalvik/vm/mterp/out/InterpC-portable.cpp</code>文件中的</p>
+<blockquote>
+<p>在Dalvik解释执行的每条指令切换处</p>
+<p>这样可以在执行过程中的任意指令处进行脱壳的操作，一边应对边运行边解密的加固程序。</p>
+</blockquote>
+<p>也就是说一边正常运行、一边进行记录执行了哪些指令。</p>
+<p>下载INDROID的<code>InterpC-portable.cpp</code>源码和原始的4.2源码对比发现一处可疑的地方,代码很有趣，杨博士的个人自黑</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">#ifdef LOCCS_DIAOS		</span><br><span class="line"># define FINISH(_offset) &#123;                                                  \</span><br><span class="line">		diaos_monitor_opcode( pc, fp, self, curMethod );					\</span><br><span class="line">        ADJUST_PC(_offset);                                                 \</span><br><span class="line">        inst = FETCH(0);                                                    \</span><br><span class="line">        if (self-&gt;interpBreak.ctl.subMode) &#123;                                \</span><br><span class="line">            dvmCheckBefore(pc, fp, self);                                   \</span><br><span class="line">        &#125;                                                                   \</span><br><span class="line">        goto *handlerTable[INST_INST(inst)];                                \</span><br><span class="line">    &#125;</span><br><span class="line">#else				</span><br><span class="line"># define FINISH(_offset) &#123;                                                  \</span><br><span class="line">        ADJUST_PC(_offset);                                                 \</span><br><span class="line">        inst = FETCH(0);                                                    \</span><br><span class="line">        if (self-&gt;interpBreak.ctl.subMode) &#123;                                \</span><br><span class="line">            dvmCheckBefore(pc, fp, self);                                   \</span><br><span class="line">        &#125;                                                                   \</span><br><span class="line">        goto *handlerTable[INST_INST(inst)];                                \</span><br><span class="line">    &#125;</span><br><span class="line">#endif</span><br></pre></td></tr></table></figure>
+<p>好了进入正题，从InterpC-portable.cpp这个文件入手来学习通用脱壳。<a href="http://bbs.pediy.com/showthread.php?t=203627" target="_blank" rel="noopener">这篇文章</a>写了dalvik的解释执行流程，可以作为参考加快学习进度。</p>
+<blockquote>
+<p>dalvik真正对指令解析是从dvmInterpretPortable(Thread* self)函数开始</p>
+</blockquote>
+<p>dvmInterpretPortable 函数的局部变量</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">    DvmDex* methodClassDex;     // curMethod-&gt;clazz-&gt;pDvmDex 从当前方法找到所在类，再进一步找到dex</span><br><span class="line">    JValue retval;				</span><br><span class="line">/* core state */ 				//最核心的状态</span><br><span class="line">    const Method* curMethod;    // method we&apos;re interpreting	当前解释执行的方法</span><br><span class="line">    const u2* pc;               // program counter</span><br><span class="line">    u4* fp;                     // frame pointer 简单来说fp相当于ebp，参考fp指针链接</span><br><span class="line">    u2 inst;                    // current instruction 当前指令</span><br><span class="line">/* instruction decoding */		//指令解码</span><br><span class="line">    u4 ref;                     // 16 or 32-bit quantity fetched directly</span><br><span class="line">    u2 vsrc1, vsrc2, vdst;      // usually used for register indexes</span><br><span class="line">    /* method call setup */		//方法调用建立</span><br><span class="line">    const Method* methodToCall;	</span><br><span class="line">    bool methodCallRange;</span><br></pre></td></tr></table></figure>
+<p><a href="http://blog.chinaunix.net/uid-25871104-id-2938389.html" target="_blank" rel="noopener">fp指针</a></p>
+<p>关于上面的</p>
+<blockquote>
+<p>在指令执行时可以直接得到该条指令属于的方法，Method这个结构。</p>
+<p>而每个被执行的方法中都有该方法属于的类对象clazz，而clazz（源码目录dalvik/vm/oo/Object.h）中又有pDvmDex（dalvik/vm/DvmDex.h）对象，其中有pDexFile（dalvik/libdex/DexFile.h）结构体代表了DEX文件，也就是说，执行过程中获取当前方法后，用</p>
+<p>curMethod-&gt;clazz-&gt;pDvmDex-&gt;pDexFile就能够得到这个方法属于的DEX文件结构</p>
+</blockquote>
+<p>指令宏定义</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">DEFINE_GOTO_TABLE(handlerTable);		//这实际是一个宏</span><br><span class="line"></span><br><span class="line">//定义在dalvik/libdex/DexOpcodes.h</span><br><span class="line"></span><br><span class="line">334#define DEFINE_GOTO_TABLE(_name) \</span><br><span class="line">335    static const void* _name[kNumPackedOpcodes] = &#123;                      \</span><br><span class="line">336        /* BEGIN(libdex-goto-table); GENERATED AUTOMATICALLY BY opcode-gen */ \</span><br><span class="line">337        H(OP_NOP),                                                            \</span><br><span class="line">338        H(OP_MOVE),                                                           \</span><br><span class="line">339        H(OP_MOVE_FROM16),                                                    \</span><br><span class="line">//	下面的就省略了	</span><br><span class="line">所以展开相当于</span><br><span class="line">handlerTable[kNumPackedOpcodes] = &#123;</span><br><span class="line">	H(OP_NOP),</span><br><span class="line">	H(OP_MOVE),  </span><br><span class="line">	H(OP_MOVE_FROM16), </span><br><span class="line">	……</span><br><span class="line">	&#125;</span><br><span class="line">//而在dalvik/vm/mterp/out/InterpC-portable.cpp中又H()宏的定义</span><br><span class="line"># define H(_op)     &amp;&amp;op_##_op</span><br><span class="line">// ## 进行参数连接</span><br><span class="line">// &amp;&amp;相当于对后面的标号取地址</span><br><span class="line">// H(OP_NOP) 经过宏展开成 &amp;&amp;op_OP_NOP</span><br><span class="line">// 而 &amp;&amp;op_OP_NOP是相当于标号op_OP_NOP，利用goto语句</span><br><span class="line">// goto &amp;&amp;op_OP_NOP即可到达标号op_OP_NOP</span><br></pre></td></tr></table></figure>
+<p>取指令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">FINISH(0); </span><br><span class="line">// 同样是宏 </span><br><span class="line">415# define FINISH(_offset) &#123;                                                  \</span><br><span class="line">416        ADJUST_PC(_offset);                                                 \</span><br><span class="line">417        inst = FETCH(0);                                                    \</span><br><span class="line">418        if (self-&gt;interpBreak.ctl.subMode) &#123;                                \</span><br><span class="line">419            dvmCheckBefore(pc, fp, self);                                   \</span><br><span class="line">420        &#125;                                                                   \</span><br><span class="line">421        goto *handlerTable[INST_INST(inst)];                                \</span><br><span class="line">422    &#125;</span><br><span class="line"></span><br><span class="line">//对于ADJUST_PC，应该就是调整PC指针的值，加垃圾代码在分支编译一下试试能过则说明走的另一分支</span><br><span class="line"></span><br><span class="line">105#ifdef CHECK_BRANCH_OFFSETS</span><br><span class="line">106# define ADJUST_PC(_offset) do &#123;                                            \</span><br><span class="line">107        int myoff = _offset;        /* deref only once */                   \</span><br><span class="line">108        if (pc + myoff &lt; curMethod-&gt;insns ||                                \</span><br><span class="line">109            pc + myoff &gt;= curMethod-&gt;insns + dvmGetMethodInsnsSize(curMethod)) \</span><br><span class="line">110        &#123;                                                                   \</span><br><span class="line">111            char* desc;                                                     \</span><br><span class="line">112            desc = dexProtoCopyMethodDescriptor(&amp;curMethod-&gt;prototype);     \</span><br><span class="line">113            ALOGE(&quot;Invalid branch %d at 0x%04x in %s.%s %s&quot;,                 \</span><br><span class="line">114                myoff, (int) (pc - curMethod-&gt;insns),                       \</span><br><span class="line">115                curMethod-&gt;clazz-&gt;descriptor, curMethod-&gt;name, desc);       \</span><br><span class="line">116            free(desc);                                                     \</span><br><span class="line">117            dvmAbort();                                                     \</span><br><span class="line">118        &#125;                                                                   \</span><br><span class="line">119        pc += myoff;                                                        \</span><br><span class="line">120        EXPORT_EXTRA_PC();                                                  \</span><br><span class="line">121    &#125; while (false)</span><br><span class="line">122#else</span><br><span class="line">123# define ADJUST_PC(_offset) do &#123;                                            \</span><br><span class="line">124        pc += _offset;                                                      \</span><br><span class="line">125        EXPORT_EXTRA_PC();                                                  \</span><br><span class="line">126    &#125; while (false)</span><br><span class="line">127#endif</span><br><span class="line"></span><br><span class="line">// INST_INST(inst) 宏获取单字节的指令</span><br><span class="line"></span><br><span class="line">#define INST_INST(_inst)    ((_inst) &amp; 0xff)</span><br><span class="line"></span><br><span class="line">//比如此时字节码值为0，那么goto *handlerTable[INST_INST(inst)]就是goto op_OP_NOP</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="修改模拟器以portable方式执行"><a href="#修改模拟器以portable方式执行" class="headerlink" title="修改模拟器以portable方式执行"></a>修改模拟器以portable方式执行</h3><p>手上虽然有真机，但是每次修改源码再刷到手机有点麻烦，而且费时。如果使用模拟器，编译好的镜像直接可以拿来用。考虑到这一点，决定先在模拟器上进行试验，让模拟器以protable的方式进行执行。整个过程不难，但是有点折腾，搞好了有点小成就感。</p>
+<p>直接搜索修改dalvik为解释执行模式，找到下面3个有用信息：</p>
+<blockquote>
+<p>The fast interpreter is enabled by default. On platforms without native support, you may want to switch to the portable interpreter. This can be controlled with the<code>dalvik.vm.execution-mode</code> system property. For example, if you:</p>
+<p><code>adb shell &quot;echo dalvik.vm.execution-mode = int:portable &gt;&gt; /data/local.prop&quot;</code></p>
+</blockquote>
+<p>还有人说在</p>
+<blockquote>
+<p>文件夹system/build.prop或者 data/local.prop  </p>
+</blockquote>
+<p>结合</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">在Android系统中，有一些初始化的配置文件，例如:</span><br><span class="line">/init.rc</span><br><span class="line">/default.prop</span><br><span class="line">/system/build.prop</span><br><span class="line">文件里面里面配置了开机设置的系统属性值，</span><br><span class="line">这些属性值，可以通过getprop获取，setprop设置</span><br></pre></td></tr></table></figure>
+<p>​    然而我再模拟器中没有/data/local.prop文件，找到了/system/build.prop这文件。当我想<code>adb pull/push</code>这个文件时，提示文件只读，一脸蒙蔽。</p>
+<p>找到<a href="http://stackoverflow.com/questions/6066030/read-only-file-system-on-android" target="_blank" rel="noopener">stackoverflow</a>上的解答，最简单的方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">chris@cc:~/android-4.3_r1$ adb push build.prop /system</span><br><span class="line">failed to copy &apos;build.prop&apos; to &apos;/system/build.prop&apos;: Read-only file system</span><br><span class="line">chris@cc:~/android-4.3_r1$ adb remount</span><br><span class="line">remount succeeded</span><br><span class="line">chris@cc:~/android-4.3_r1$ adb push build.prop /system</span><br><span class="line">37 KB/s (1700 bytes in 0.043s)</span><br></pre></td></tr></table></figure>
+<p>这时候，一般情况下应该就成功了，但是，可能因为又是电脑比较渣，上面的操作也不会成功。</p>
+<p>遇到的错误是out of memory.</p>
+<p>然后再找原因，是我以默认方式启动模拟器时，模拟器内存不够了，指定一下就好了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">emulator -partition-size 512</span><br></pre></td></tr></table></figure>
+<p>现在也能改文件的配置了，按说就能改执行模式了吧！？一脸蒙蔽的事情又来了，dalvik虚拟机的启动是在开机的时候，所以这里我们需要重启模拟器，然而adb reboot之后，增加了机器的轰鸣声，但是模拟器还是一直没重启，要哭瞎了有没有。</p>
+<p>可是我们是有安卓源码，只要改掉默认的启动选项就好了。根据老罗对安卓源码的分析，这个文件位于<code>frameworks/base/core/jni/AndroidRuntime.cpp</code>，我们修改一处地方即可。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">if (executionMode == kEMIntPortable) &#123;  </span><br><span class="line">    opt.optionString = &quot;-Xint:portable&quot;;  </span><br><span class="line">    mOptions.add(opt);  </span><br><span class="line">&#125; else if (executionMode == kEMIntFast) &#123;  </span><br><span class="line">    opt.optionString = &quot;-Xint:fast&quot;;  </span><br><span class="line">    mOptions.add(opt);  </span><br><span class="line">&#125; else if (executionMode == kEMJitCompiler) &#123;  </span><br><span class="line">    opt.optionString = &quot;-Xint:jit&quot;;  </span><br><span class="line">    mOptions.add(opt); </span><br><span class="line">&#125;</span><br><span class="line">// my add </span><br><span class="line">   opt.optionString = &quot;-Xint:portable&quot;;  </span><br><span class="line">   mOptions.add(opt); </span><br><span class="line">//*******后面创建虚拟器会读取这里的配置************</span><br></pre></td></tr></table></figure>
+<p>重新编译源码，模拟器用新的system.img就会以portable方式执行。为了验证是否以portable执行，我们修改<code>dalvik/vm/mterp/out/InterpC-portable.cpp</code>，添加一行PPP代码，再次编译。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">#define PPP(...) ALOG(LOG_VERBOSE,&quot;LYJ&quot;,__VA_ARGS__)</span><br><span class="line"></span><br><span class="line"># define FINISH(_offset) &#123;                                                  \</span><br><span class="line">		PPP(&quot;LYJ&quot;,&quot;xxxxxxxxxx&quot;);											\</span><br><span class="line">        ADJUST_PC(_offset);                                                 \</span><br><span class="line">        inst = FETCH(0);                                                    \</span><br><span class="line">        if (self-&gt;interpBreak.ctl.subMode) &#123;                                \</span><br><span class="line">            dvmCheckBefore(pc, fp, self);                                   \</span><br><span class="line">        &#125;                                                                   \</span><br><span class="line">        goto *handlerTable[INST_INST(inst)];                                \</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>启动模拟器后，我们用logcat查看一下，不断输出这条log，说明我们改portable成功。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">adb logcat -s LYJ</span><br><span class="line">V/LYJ     (  277): xxxxxxxxxx</span><br></pre></td></tr></table></figure>
+<hr>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/dalvik/" rel="tag"># dalvik</a>
+          
+            <a href="/tags/脱壳/" rel="tag"># 脱壳</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/移动安全/DexHunter学习笔记2/2016-04-28.html" rel="next" title="DexHunter学习笔记2">
+                <i class="fa fa-chevron-left"></i> DexHunter学习笔记2
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/读书笔记/异常分发过程/2016-05-06.html" rel="prev" title="异常分发过程笔记">
+                异常分发过程笔记 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="http://www.plaype.me/uploads/avatar.jpg" alt="Lnju">
+            
+              <p class="site-author-name" itemprop="name">Lnju</p>
+              <p class="site-description motion-element" itemprop="description">windows系统安全</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">26</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#未完待续"><span class="nav-number">1.</span> <span class="nav-text">未完待续</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#修改模拟器以portable方式执行"><span class="nav-number">1.0.1.</span> <span class="nav-text">修改模拟器以portable方式执行</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lnju</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

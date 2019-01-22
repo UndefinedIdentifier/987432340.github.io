@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="源码,编译,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="目标拥有一台google亲儿子， Nexus 4，放在宿舍里大半年也没有排上用场。对它做2件事：  用官方镜像刷机 用自己编译的android系统再刷一次  从镜像工厂能看到nexus 4能刷的版本系统版本从4.2.2到5.1.1，小括号里是此版本的代号。这里我选择用官方4.3的镜像刷机，同时也编译4.3源码刷机。">
+<meta name="keywords" content="源码,编译">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2016安卓源码编译笔记">
+<meta property="og:url" content="http://www.plaype.cc/移动安全/2016安卓源码编译/2016-04-28.html">
+<meta property="og:site_name" content="Lnju&#39;s blogs">
+<meta property="og:description" content="目标拥有一台google亲儿子， Nexus 4，放在宿舍里大半年也没有排上用场。对它做2件事：  用官方镜像刷机 用自己编译的android系统再刷一次  从镜像工厂能看到nexus 4能刷的版本系统版本从4.2.2到5.1.1，小括号里是此版本的代号。这里我选择用官方4.3的镜像刷机，同时也编译4.3源码刷机。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-11-26T18:08:43.646Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="2016安卓源码编译笔记">
+<meta name="twitter:description" content="目标拥有一台google亲儿子， Nexus 4，放在宿舍里大半年也没有排上用场。对它做2件事：  用官方镜像刷机 用自己编译的android系统再刷一次  从镜像工厂能看到nexus 4能刷的版本系统版本从4.2.2到5.1.1，小括号里是此版本的代号。这里我选择用官方4.3的镜像刷机，同时也编译4.3源码刷机。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.plaype.cc/移动安全/2016安卓源码编译/2016-04-28.html">
+
+
+
+
+
+  <title>2016安卓源码编译笔记 | Lnju's blogs</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Lnju's blogs</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">曾梦想仗剑走天涯</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.plaype.cc/移动安全/2016安卓源码编译/2016-04-28.html">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lnju">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://www.plaype.me/uploads/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lnju's blogs">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">2016安卓源码编译笔记</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-04-28T01:23:30+08:00">
+                2016-04-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/移动安全/" itemprop="url" rel="index">
+                    <span itemprop="name">移动安全</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h1><p>拥有一台google亲儿子， Nexus 4，放在宿舍里大半年也没有排上用场。对它做2件事：</p>
+<ol>
+<li>用官方镜像刷机</li>
+<li>用自己编译的android系统再刷一次</li>
+</ol>
+<p>从<a href="https://developers.google.com/android/nexus/images#occam" target="_blank" rel="noopener">镜像工厂</a>能看到nexus 4能刷的版本系统版本从4.2.2到5.1.1，小括号里是此版本的代号。这里我选择用官方4.3的镜像刷机，同时也编译4.3源码刷机。</p>
+<a id="more"></a>
+<h1 id="一、安装虚拟机"><a href="#一、安装虚拟机" class="headerlink" title="一、安装虚拟机"></a>一、安装虚拟机</h1><p>下载 Ubuntu 14.04 LTS 64位版本的系统，也是官方推荐的系统版本，在虚拟机中用简易安装的方式，连VMtools都是自动装好，非常方便。（后记：我的机子带不动虚拟机引发问题3，后用实体机编译源码成功）。</p>
+<p>注意事项：</p>
+<ul>
+<li>系统的硬盘大小在100G以上最好</li>
+</ul>
+<ul>
+<li>如果机子不好请用实体机（多么痛的领悟）</li>
+</ul>
+<h2 id="1-配置网络连接"><a href="#1-配置网络连接" class="headerlink" title="1. 配置网络连接"></a>1. 配置网络连接</h2><p>简易安装自带NAT联网方式，DHCP貌似没什么卵用，需要手动配置DNS。本着简单粗暴的原则，我把联网方式改为桥接，直接就连上了。</p>
+<h2 id="2-修改更新源"><a href="#2-修改更新源" class="headerlink" title="2. 修改更新源"></a>2. 修改更新源</h2><p>自带的官方更新源比较慢，换成阿里的更新源。</p>
+<ul>
+<li>备份原文件</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo cp /etc/apt/sources.list /etc/apt/sources.list_bak</span><br></pre></td></tr></table></figure>
+<ul>
+<li>打开source.list文件</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo gedit /etc/apt/sources.list</span><br></pre></td></tr></table></figure>
+<ul>
+<li>删除所有内容，贴入下面的源</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">deb http://mirrors.aliyun.com/ubuntu/ trusty main restricted universe multiverse</span><br><span class="line"></span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ trusty-security main restricted universe multiverse</span><br><span class="line"></span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ trusty-updates main restricted universe multiverse</span><br><span class="line"></span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ trusty-proposed main restricted universe multiverse</span><br><span class="line"></span><br><span class="line">deb http://mirrors.aliyun.com/ubuntu/ trusty-backports main restricted universe multiverse</span><br><span class="line"></span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ trusty main restricted universe multiverse</span><br><span class="line"></span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ trusty-security main restricted universe multiverse</span><br><span class="line"></span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ trusty-updates main restricted universe multiverse</span><br><span class="line"></span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ trusty-proposed main restricted universe multiverse</span><br><span class="line"></span><br><span class="line">deb-src http://mirrors.aliyun.com/ubuntu/ trusty-backports main restricted universe multiverse</span><br></pre></td></tr></table></figure>
+<ul>
+<li>刷新列表(一定要刷一下)</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br></pre></td></tr></table></figure>
+<p>  到了这一步，虚拟机环境配置的工作就完成了。</p>
+<h1 id="二、源码编译环境搭建"><a href="#二、源码编译环境搭建" class="headerlink" title="二、源码编译环境搭建"></a>二、源码编译环境搭建</h1><p>这一步主要是安装一些编译环境所需的工具，如果安装成功了，则可以直接编译android源码。</p>
+<h2 id="1-安装JDK"><a href="#1-安装JDK" class="headerlink" title="1. 安装JDK"></a>1. 安装JDK</h2><p>在Android 4.4和更老的版本中，使用的是Oracle JDK，而到了Android 5.0以后，Google将其换为OpenJDK（也许是为了专利考虑）.我们编译4.3源码，就用Oracle JDK。并且官方给了提示，不同版本的android源码选用的JDK版本也不尽相同.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">To develop older versions of Android, download and install the corresponding version of the Java JDK:</span><br><span class="line">Java 7: for Lollipop through Marshmallow</span><br><span class="line">Java 6: for Gingerbread through KitKat</span><br><span class="line">Java 5: for Cupcake through Froyo</span><br></pre></td></tr></table></figure>
+<p>我们4.3源码落在JAVA6的范围中。去<a href="http://www.oracle.com/technetwork/java/javasebusiness/downloads/java-archive-downloads-javase6-419409.html#jdk-6u45-oth-JPR" target="_blank" rel="noopener">oracle官网</a>下载linux64位版本的JDK1.6。可是下载还要账号，找到了别人在新浪微盘分享的JDK1.6的安装包jdk-6u45-linux-x64.bin。</p>
+<p>接下来，几乎全部参考这个<a href="http://blog.csdn.net/gobitan/article/details/24322561" target="_blank" rel="noopener">链接</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">(1) 创建java目录</span><br><span class="line">$ sudo mkdir -p /usr/local/java</span><br><span class="line">将你下载的jdk-6u45-linux-x64.bin拷贝至/usr/local/java目录</span><br><span class="line">$ cd /usr/local/java</span><br><span class="line">$ sudo cp /home/dennis/Downloads/jdk-6u45-linux-x64.bin .</span><br><span class="line"></span><br><span class="line">(2) 解压bin文件</span><br><span class="line">$ sudo chmod +x jdk-6u45-linux-x64.bin</span><br><span class="line">$ sudo ./jdk-6u45-linux-x64.bin</span><br><span class="line">$ sudo rm -rf jdk-6u45-linux-x64.bin</span><br><span class="line"></span><br><span class="line">第四步：配置Orache JDK</span><br><span class="line"> (1) 配置JAVA_HOME和PATH环境变量</span><br><span class="line">$ sudo vi /etc/profile</span><br><span class="line">在该文件的末尾加上如下部分：</span><br><span class="line">JAVA_HOME=/usr/local/java/jdk1.6.0_45</span><br><span class="line">PATH=$PATH:$HOME/bin:$JAVA_HOME/bin</span><br><span class="line">export JAVA_HOME</span><br><span class="line">export PATH</span><br><span class="line"></span><br><span class="line">(2) 配置ubuntu的JDK和JRE的位置</span><br><span class="line">$ sudo update-alternatives --install &quot;/usr/bin/java&quot; &quot;java&quot; &quot;/usr/local/java/jdk1.6.0_45/bin/java&quot; 1</span><br><span class="line">$ sudo update-alternatives --install &quot;/usr/bin/javac&quot; &quot;javac&quot; &quot;/usr/local/java/jdk1.6.0_45/bin/javac&quot; 1</span><br><span class="line">$ sudo update-alternatives --install &quot;/usr/bin/javaws&quot; &quot;javaws&quot; &quot;/usr/local/java/jdk1.6.0_45/bin/javaws&quot; 1</span><br><span class="line"></span><br><span class="line">(3) 配置Oracle为系统默认JDK/JRE</span><br><span class="line">$ sudo update-alternatives --set java /usr/local/java/jdk1.6.0_45/bin/java</span><br><span class="line">$ sudo update-alternatives --set javac /usr/local/java/jdk1.6.0_45/bin/javac</span><br><span class="line">$ sudo update-alternatives --set javaws /usr/local/java/jdk1.6.0_45/bin/javaws</span><br><span class="line"></span><br><span class="line">配置完成后，执行如下命令使其立即生效。</span><br><span class="line">$ . /etc/profile</span><br><span class="line">再次执行&quot;java -version&quot;显示如下：</span><br><span class="line">dennis@dubuntu1404:~$ java -version</span><br><span class="line">java version &quot;1.6.0_45&quot;</span><br><span class="line">Java(TM) SE Runtime Environment (build 1.6.0_45-b06)</span><br><span class="line">Java HotSpot(TM) 64-Bit Server VM (build 20.45-b01, mixed mode)</span><br></pre></td></tr></table></figure>
+<h2 id="2-安装其他软件包"><a href="#2-安装其他软件包" class="headerlink" title="2. 安装其他软件包"></a>2. 安装其他软件包</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">android-user@ubuntu:~$ sudo apt-get install bison g++-multilib git gperf libxml2-utils make python-networkx zlib1g-dev:i386 zip</span><br><span class="line"></span><br><span class="line">The following packages have unmet dependencies:</span><br><span class="line"> g++-multilib : Depends: gcc-multilib (&gt;= 4:4.8.2-1ubuntu6) but it is not going to be installed</span><br><span class="line">                Depends: g++ (&gt;= 4:4.8.2-1ubuntu6) but it is not going to be installed</span><br><span class="line">                Depends: g++-4.8-multilib (&gt;= 4.8.2-5~) but it is not going to be installed</span><br><span class="line">E: Unable to correct problems, you have held broken packages.</span><br><span class="line"></span><br><span class="line">android-user@ubuntu:~$ sudo apt-get install gcc-multilib</span><br><span class="line"></span><br><span class="line">android-user@ubuntu:~$ sudo apt-get install bison g++-multilib git gperf libxml2-utils make python-networkx zlib1g-dev:i386 zip</span><br><span class="line">The following packages have unmet dependencies:</span><br><span class="line"> g++-multilib : Depends: g++ (&gt;= 4:4.8.2-1ubuntu6) but it is not going to be installed</span><br><span class="line">E: Unable to correct problems, you have held broken packages.</span><br><span class="line"></span><br><span class="line">android-user@ubuntu:~$ sudo apt-get install g++</span><br><span class="line"></span><br><span class="line">android-user@ubuntu:~$ sudo apt-get install bison g++-multilib git gperf libxml2-utils make python-networkx zlib1g-dev:i386 zip</span><br></pre></td></tr></table></figure>
+<h2 id="3-配置USB访问权限"><a href="#3-配置USB访问权限" class="headerlink" title="3. 配置USB访问权限"></a>3. 配置USB访问权限</h2><p>这一步相当于在windows下安装设备的驱动一样，如果不这样做，就算电脑连上了我们的手机，系统也识别不出来。</p>
+<p><strong>写配置文件</strong>：将如下内容加入到/etc/udev/rules.d/51-android.rules文件中</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"># adb protocol on passion (Nexus One)</span><br><span class="line">SUBSYSTEM==&quot;usb&quot;, ATTR&#123;idVendor&#125;==&quot;18d1&quot;, ATTR&#123;idProduct&#125;==&quot;4e12&quot;, MODE=&quot;0600&quot;, OWNER=&quot;&lt;username&gt;&quot;</span><br><span class="line"># fastboot protocol on passion (Nexus One)</span><br><span class="line">SUBSYSTEM==&quot;usb&quot;, ATTR&#123;idVendor&#125;==&quot;0bb4&quot;, ATTR&#123;idProduct&#125;==&quot;0fff&quot;, MODE=&quot;0600&quot;, OWNER=&quot;&lt;username&gt;&quot;</span><br><span class="line"># adb protocol on crespo/crespo4g (Nexus S)</span><br><span class="line">SUBSYSTEM==&quot;usb&quot;, ATTR&#123;idVendor&#125;==&quot;18d1&quot;, ATTR&#123;idProduct&#125;==&quot;4e22&quot;, MODE=&quot;0600&quot;, OWNER=&quot;&lt;username&gt;&quot;</span><br><span class="line"># fastboot protocol on crespo/crespo4g (Nexus S)</span><br><span class="line">SUBSYSTEM==&quot;usb&quot;, ATTR&#123;idVendor&#125;==&quot;18d1&quot;, ATTR&#123;idProduct&#125;==&quot;4e20&quot;, MODE=&quot;0600&quot;, OWNER=&quot;&lt;username&gt;&quot;</span><br><span class="line"># adb protocol on stingray/wingray (Xoom)</span><br><span class="line">SUBSYSTEM==&quot;usb&quot;, ATTR&#123;idVendor&#125;==&quot;22b8&quot;, ATTR&#123;idProduct&#125;==&quot;70a9&quot;, MODE=&quot;0600&quot;, OWNER=&quot;&lt;username&gt;&quot;</span><br><span class="line"># fastboot protocol on stingray/wingray (Xoom)</span><br><span class="line">SUBSYSTEM==&quot;usb&quot;, ATTR&#123;idVendor&#125;==&quot;18d1&quot;, ATTR&#123;idProduct&#125;==&quot;708c&quot;, MODE=&quot;0600&quot;, OWNER=&quot;&lt;username&gt;&quot;</span><br><span class="line"># adb protocol on maguro/toro (Galaxy Nexus)</span><br><span class="line">SUBSYSTEM==&quot;usb&quot;, ATTR&#123;idVendor&#125;==&quot;04e8&quot;, ATTR&#123;idProduct&#125;==&quot;6860&quot;, MODE=&quot;0600&quot;, OWNER=&quot;&lt;username&gt;&quot;</span><br><span class="line"># fastboot protocol on maguro/toro (Galaxy Nexus)</span><br><span class="line">SUBSYSTEM==&quot;usb&quot;, ATTR&#123;idVendor&#125;==&quot;18d1&quot;, ATTR&#123;idProduct&#125;==&quot;4e30&quot;, MODE=&quot;0600&quot;, OWNER=&quot;&lt;username&gt;&quot;</span><br><span class="line"># adb protocol on panda (PandaBoard)</span><br><span class="line">SUBSYSTEM==&quot;usb&quot;, ATTR&#123;idVendor&#125;==&quot;0451&quot;, ATTR&#123;idProduct&#125;==&quot;d101&quot;, MODE=&quot;0600&quot;, OWNER=&quot;&lt;username&gt;&quot;</span><br><span class="line"># adb protocol on panda (PandaBoard ES)</span><br><span class="line">SUBSYSTEM==&quot;usb&quot;, ATTR&#123;idVendor&#125;==&quot;18d1&quot;, ATTR&#123;idProduct&#125;==&quot;d002&quot;, MODE=&quot;0600&quot;, OWNER=&quot;&lt;username&gt;&quot;</span><br><span class="line"># fastboot protocol on panda (PandaBoard)</span><br><span class="line">SUBSYSTEM==&quot;usb&quot;, ATTR&#123;idVendor&#125;==&quot;0451&quot;, ATTR&#123;idProduct&#125;==&quot;d022&quot;, MODE=&quot;0600&quot;, OWNER=&quot;&lt;username&gt;&quot;</span><br><span class="line"># usbboot protocol on panda (PandaBoard)</span><br><span class="line">SUBSYSTEM==&quot;usb&quot;, ATTR&#123;idVendor&#125;==&quot;0451&quot;, ATTR&#123;idProduct&#125;==&quot;d00f&quot;, MODE=&quot;0600&quot;, OWNER=&quot;&lt;username&gt;&quot;</span><br><span class="line"># usbboot protocol on panda (PandaBoard ES)</span><br><span class="line">SUBSYSTEM==&quot;usb&quot;, ATTR&#123;idVendor&#125;==&quot;0451&quot;, ATTR&#123;idProduct&#125;==&quot;d010&quot;, MODE=&quot;0600&quot;, OWNER=&quot;&lt;username&gt;&quot;</span><br><span class="line"># adb protocol on grouper/tilapia (Nexus 7)</span><br><span class="line">SUBSYSTEM==&quot;usb&quot;, ATTR&#123;idVendor&#125;==&quot;18d1&quot;, ATTR&#123;idProduct&#125;==&quot;4e42&quot;, MODE=&quot;0600&quot;, OWNER=&quot;&lt;username&gt;&quot;</span><br><span class="line"># fastboot protocol on grouper/tilapia (Nexus 7)</span><br><span class="line">SUBSYSTEM==&quot;usb&quot;, ATTR&#123;idVendor&#125;==&quot;18d1&quot;, ATTR&#123;idProduct&#125;==&quot;4e40&quot;, MODE=&quot;0600&quot;, OWNER=&quot;&lt;username&gt;&quot;</span><br><span class="line"># adb protocol on manta (Nexus 10)</span><br><span class="line">SUBSYSTEM==&quot;usb&quot;, ATTR&#123;idVendor&#125;==&quot;18d1&quot;, ATTR&#123;idProduct&#125;==&quot;4ee2&quot;, MODE=&quot;0600&quot;, OWNER=&quot;&lt;username&gt;&quot;</span><br><span class="line"># fastboot protocol on manta (Nexus 10)</span><br><span class="line">SUBSYSTEM==&quot;usb&quot;, ATTR&#123;idVendor&#125;==&quot;18d1&quot;, ATTR&#123;idProduct&#125;==&quot;4ee0&quot;, MODE=&quot;0600&quot;, OWNER=&quot;&lt;userame&gt;&quot;</span><br></pre></td></tr></table></figure>
+<p><strong>改配置文件</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#查看当前用户名</span><br><span class="line">android.rulesandroid@ubuntu:/usr/local/java$ echo $USER</span><br><span class="line">android</span><br><span class="line">#把文本中的&lt;username&gt;字串替换成我们自己的用户名，我这里是android</span><br><span class="line">android@ubuntu:/usr/local/java$ sudo sed -i &apos;s/&lt;username&gt;/android/g&apos; /etc/udev/rules.d/51-android.rules</span><br></pre></td></tr></table></figure>
+<h2 id="4-配置ccache"><a href="#4-配置ccache" class="headerlink" title="4. 配置ccache"></a>4. 配置ccache</h2><blockquote>
+<p>You can optionally tell the build to use the ccache compilation tool. Ccache acts as a compiler cache that can be used to speed up rebuilds. This works very well if you use make clean often, or if you frequently switch between different build products.</p>
+</blockquote>
+<p>ccache是加速编译源码的工具，对经常使用make clean，或选择不同编译版本时非常有用。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install ccache  </span><br><span class="line">vim ~/.bashrc</span><br></pre></td></tr></table></figure>
+<p>在最后一行加上</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export USE_CCACHE=1</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>下载并解压好源码后</p>
+</blockquote>
+<p><strong>设置ccache</strong>:cd 到源码根目录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">prebuilts/misc/linux-x86/ccache/ccache -M 10G</span><br></pre></td></tr></table></figure>
+<h1 id="三、编译源码"><a href="#三、编译源码" class="headerlink" title="三、编译源码"></a>三、编译源码</h1><h2 id="1-Obtaining-proprietary-binaries"><a href="#1-Obtaining-proprietary-binaries" class="headerlink" title="1. Obtaining proprietary binaries"></a>1. Obtaining proprietary binaries</h2><p>在编译之前要设置好vendor目录。</p>
+<p>打开<a href="https://developers.google.com/android/nexus/drivers" target="_blank" rel="noopener">链接</a>,搜索JWR66Y，在Binaries for Nexus S (“crespo”)目录下找到Nexus 4 binaries for Android 4.3 (JWR66Y)，这里有3个link链接，全下载下来，3个文件都是脚本，解压后放到源码根目录下。依次执行sh extract-xxxx.sh并输入I ACCEPT。最后你会发现源码根目录下增加了vendor目录。</p>
+<ul>
+<li>初始化编译环境(都是在源码根目录下)</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">. build/envsetup.sh</span><br></pre></td></tr></table></figure>
+<ul>
+<li>选择编译目标包</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">chris@cc:~/android-4.3_r1$ lunch</span><br><span class="line"></span><br><span class="line">You&apos;re building on Linux</span><br><span class="line"></span><br><span class="line">Lunch menu... pick a combo:</span><br><span class="line">     1. aosp_arm-eng</span><br><span class="line">     2. aosp_x86-eng</span><br><span class="line">     3. aosp_mips-eng</span><br><span class="line">     4. vbox_x86-eng</span><br><span class="line">     5. aosp_flo-userdebug</span><br><span class="line">     6. full_grouper-userdebug</span><br><span class="line">     7. full_tilapia-userdebug</span><br><span class="line">     8. mini_armv7a_neon-userdebug</span><br><span class="line">     9. mini_mips-userdebug</span><br><span class="line">     10. mini_x86-userdebug</span><br><span class="line">     11. full_mako-userdebug</span><br><span class="line">     12. full_maguro-userdebug</span><br><span class="line">     13. full_manta-userdebug</span><br><span class="line">     14. full_arndale-userdebug</span><br><span class="line">     15. full_toroplus-userdebug</span><br><span class="line">     16. full_toro-userdebug</span><br><span class="line">     17. full_panda-userdebug</span><br></pre></td></tr></table></figure>
+<p>这一步可以参考<a href="https://source.android.com/source/running.html#selecting-device-build" target="_blank" rel="noopener">官方链接</a>，由下图我们知道Nexus4需要选择11</p>
+<table>
+<thead>
+<tr>
+<th>Device</th>
+<th>Code name</th>
+<th>Build configuration</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Nexus 4</td>
+<td>occam (mako)</td>
+<td>full_mako-userdebug</td>
+</tr>
+</tbody>
+</table>
+<p>接着可以编译我们想要的任何模块，我们编译一个最简单的scp模块。j4是同时进行的任务数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">chris@cc:~/android-4.3_r1$ make scp -j4</span><br><span class="line">============================================</span><br><span class="line">PLATFORM_VERSION_CODENAME=REL</span><br><span class="line">PLATFORM_VERSION=4.3</span><br><span class="line">TARGET_PRODUCT=full</span><br><span class="line">TARGET_BUILD_VARIANT=eng</span><br><span class="line">TARGET_BUILD_TYPE=release</span><br><span class="line">TARGET_BUILD_APPS=</span><br><span class="line">TARGET_ARCH=arm</span><br><span class="line">TARGET_ARCH_VARIANT=armv7-a</span><br><span class="line">TARGET_CPU_VARIANT=generic</span><br><span class="line">HOST_ARCH=x86</span><br><span class="line">HOST_OS=linux</span><br><span class="line">HOST_OS_EXTRA=Linux-4.2.0-27-generic-x86_64-with-Ubuntu-14.04-trusty</span><br><span class="line">HOST_BUILD_TYPE=release</span><br><span class="line">BUILD_ID=JWR66V</span><br><span class="line">OUT_DIR=out</span><br><span class="line">============================================</span><br></pre></td></tr></table></figure>
+<p>我这里双核的，直接make -j4，可以编译出system.img等。</p>
+<p>##2. 错误解决方案</p>
+<p><strong>错误1</strong>（<a href="http://blog.csdn.net/nxh_love/article/details/8834849" target="_blank" rel="noopener">参考链接</a>）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/bin/bash: flex: command not found</span><br><span class="line">make: *** [out/host/linux-x86/obj/EXECUTABLES/aidl_intermediates/aidl_language_l.cpp] Error 127</span><br></pre></td></tr></table></figure>
+<p>解决方案：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install flex</span><br></pre></td></tr></table></figure>
+<p><strong>错误2</strong>（<a href="http://stackoverflow.com/questions/23314652/cant-locate-switch-pm" target="_blank" rel="noopener">参考</a>）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Can&apos;t locate Switch.pm in @INC (you may need to install the Switch module) (@INC contains: /etc/perl /usr/local/lib/perl/5.18.2 /usr/local/share/perl/5.18.2 /usr/lib/perl5 /usr/share/perl5 /usr/lib/perl/5.18 /usr/share/perl/5.18 /usr/local/lib/site_perl .) at external/webkit/Source/WebCore/make-hash-tools.pl line 23.</span><br></pre></td></tr></table></figure>
+<p>解决方案：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install libswitch-perl</span><br></pre></td></tr></table></figure>
+<p><strong>错误3(奇葩的错误)</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">collect2: ld ……………………</span><br><span class="line">make: *** [out/target/product/generic/obj/SHARED_LIBRARIES/libwebcore_intermediates/LINKED/libwebcore.so] Error 1</span><br></pre></td></tr></table></figure>
+<p>在网上找到前人的经验都说是wsap分区不够大的问题。我照着解决方法增大swap分区，也就是linux下的虚拟内存。痛点来了，一定是我的小霸王4G物理机带不动，不管加多少内存，都还是一个结果，一气之下我用实体机重新安装了一下编译环境，果然就可以了，上个成功的图吧。</p>
+<p><strong>错误4</strong>：这实际上是一类java的问题</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#错误1 找不到jar</span><br><span class="line">/bin/bash: jar: command not found</span><br><span class="line">make: *** [out/</span><br><span class="line">/common/obj/JAVA_LIBRARIES/voip-common_intermediates/classes-full-debug.jar] Error 127</span><br><span class="line">#错误2 找不到jacadoc</span><br><span class="line">/bin/bash: line 2: javadoc: command not found</span><br><span class="line">make: *** [out/target/common/docs/api-stubs-timestamp] Error 45</span><br><span class="line">make: *** Waiting for unfinished jobs....</span><br></pre></td></tr></table></figure>
+<p>解决方法很简单，把它需要的jar，javah等放在找得到的地方</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo ln -s /usr/local/java/jdk1.6.0_45/bin/jar /bin/jar</span><br><span class="line">sudo ln -s /usr/local/java/jdk1.6.0_45/bin/java /bin/java</span><br><span class="line">sudo ln -s /usr/local/java/jdk1.6.0_45/bin/javac /bin/javac</span><br><span class="line">sudo ln -s /usr/local/java/jdk1.6.0_45/bin/javah /bin/javah</span><br><span class="line">sudo ln -s /usr/local/java/jdk1.6.0_45/bin/javadoc /bin/javadoc</span><br></pre></td></tr></table></figure>
+<p>“/usr/local/java/jdk1.6.0_45”是我的jdk安装目录。</p>
+<p>全部参考链接：</p>
+<p><a href="https://source.android.com/source/initializing.html#optimizing-a-build-environment" target="_blank" rel="noopener">https://source.android.com/source/initializing.html#optimizing-a-build-environment</a><br><a href="https://source.android.com/source/building.html" target="_blank" rel="noopener">https://source.android.com/source/building.html</a><br><a href="https://source.android.com/source/running.html#selecting-device-build" target="_blank" rel="noopener">https://source.android.com/source/running.html#selecting-device-build</a><br><a href="https://developers.google.com/android/nexus/images#occam" target="_blank" rel="noopener">https://developers.google.com/android/nexus/images#occam</a><br><a href="http://www.kaelli.com/10.html" target="_blank" rel="noopener">http://www.kaelli.com/10.html</a><br><a href="http://blog.csdn.net/leiming32/article/details/49658657" target="_blank" rel="noopener">http://blog.csdn.net/leiming32/article/details/49658657</a></p>
+<p><a href="http://blog.csdn.net/gobitan/article/details/24367439" target="_blank" rel="noopener">http://blog.csdn.net/gobitan/article/details/24367439</a></p>
+<h1 id="四、谷歌官方镜像刷机"><a href="#四、谷歌官方镜像刷机" class="headerlink" title="四、谷歌官方镜像刷机"></a>四、谷歌官方镜像刷机</h1><p>参考链接</p>
+<blockquote>
+<p><a href="http://blog.csdn.net/leiming32/article/details/49658657" target="_blank" rel="noopener">http://blog.csdn.net/leiming32/article/details/49658657</a></p>
+<p><a href="https://developers.google.com/android/nexus/images#instructions" target="_blank" rel="noopener">https://developers.google.com/android/nexus/images#instructions</a></p>
+</blockquote>
+<p>从下载镜像<a href="https://developers.google.com/android/nexus/images#occam" target="_blank" rel="noopener">参考链接1</a>看到nexus 4能刷的版本从4.2.2到5.1.1括号里是此版本的代号。我选择的源码是4.3_r1，所以代号是JWR66Y。下载官方镜像</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp ~/Downloads/occam-jwr66y-factory-74b1deab.tgz chris@192.168.1.111:/home/chris</span><br></pre></td></tr></table></figure>
+<p>安装fastboot、adb后边会用到。值得说明的是，作为一个没有安卓源码编译的人，fastboot(flash-all脚本会用到)、adb工具也可以从SDK Manager 的<strong>Android SDK Platform-tools</strong>目录中获取，所以在win上也是可以刷官方镜像的.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install android-tools-fastboot android-tools-adb</span><br></pre></td></tr></table></figure>
+<p>手机连上电脑</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb reboot bootloader	//使用adb命令让设备开机</span><br></pre></td></tr></table></figure>
+<p>按照参考 <a href="https://source.android.com/source/building-devices.html#booting-into-fastboot-mode" target="_blank" rel="noopener">按键链接</a></p>
+<blockquote>
+<p>Press and hold <em>Volume Down</em>, then press and hold <em>Power</em></p>
+</blockquote>
+<p>连续按下音量减小和电源键使手机进入<strong>fastboot模式</strong>，这是针对我的Nexus 4</p>
+<p>解锁设备</p>
+<blockquote>
+<p>fastboot oem unlock</p>
+</blockquote>
+<p>这里提示已经解锁过了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">chris@cc:~$ fastboot oem unlock</span><br><span class="line">...</span><br><span class="line">FAILED (remote: Already Unlocked)</span><br><span class="line">finished. total time: 0.001s</span><br></pre></td></tr></table></figure>
+<p>cd到镜像解压缩后的目录中执行命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.\flash-all</span><br></pre></td></tr></table></figure>
+<p>刷机完成，重启！~</p>
+<p>#五、使用源码刷机</p>
+<p>编译完成之后，切换对于的目录 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">chris@cc:~/android-4.3_r1$ ls out/target/product/</span><br><span class="line">generic  mako</span><br></pre></td></tr></table></figure>
+<p>我们的版本是mako,generic是通用版本</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">chris@cc:~/android-4.3_r1$ ls</span><br><span class="line">abi       cts          device      hardware         ndk       prebuilts  vendor</span><br><span class="line">bionic    dalvik       docs        libcore          out       sdk</span><br><span class="line">bootable  developers   external    libnativehelper  packages  system</span><br><span class="line">build     development  frameworks  Makefile         pdk       tools</span><br></pre></td></tr></table></figure>
+<p>在这里就可以刷入我们新鲜出炉的镜像。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">adb reboot bootloader	#设备重启，按下音量键和电源键切换到fastboot模式</span><br><span class="line">fastboot -w -p flashall	#清除数据</span><br><span class="line">fastboot flash boot boot.img		#刷入boot</span><br><span class="line">fastboot flash recovery recovery.img		刷入img</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/源码/" rel="tag"># 源码</a>
+          
+            <a href="/tags/编译/" rel="tag"># 编译</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/读书笔记/《自制编程语言》阅读笔记2/2016-03-31.html" rel="next" title="《自制编程语言》阅读笔记 - 第二章计算器">
+                <i class="fa fa-chevron-left"></i> 《自制编程语言》阅读笔记 - 第二章计算器
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/移动安全/安卓源码编译续/2016-04-28.html" rel="prev" title="安卓源码编译(续)">
+                安卓源码编译(续) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="http://www.plaype.me/uploads/avatar.jpg" alt="Lnju">
+            
+              <p class="site-author-name" itemprop="name">Lnju</p>
+              <p class="site-description motion-element" itemprop="description">windows系统安全</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">26</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#目标"><span class="nav-number">1.</span> <span class="nav-text">目标</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#一、安装虚拟机"><span class="nav-number">2.</span> <span class="nav-text">一、安装虚拟机</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-配置网络连接"><span class="nav-number">2.1.</span> <span class="nav-text">1. 配置网络连接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-修改更新源"><span class="nav-number">2.2.</span> <span class="nav-text">2. 修改更新源</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二、源码编译环境搭建"><span class="nav-number">3.</span> <span class="nav-text">二、源码编译环境搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-安装JDK"><span class="nav-number">3.1.</span> <span class="nav-text">1. 安装JDK</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-安装其他软件包"><span class="nav-number">3.2.</span> <span class="nav-text">2. 安装其他软件包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-配置USB访问权限"><span class="nav-number">3.3.</span> <span class="nav-text">3. 配置USB访问权限</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-配置ccache"><span class="nav-number">3.4.</span> <span class="nav-text">4. 配置ccache</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#三、编译源码"><span class="nav-number">4.</span> <span class="nav-text">三、编译源码</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Obtaining-proprietary-binaries"><span class="nav-number">4.1.</span> <span class="nav-text">1. Obtaining proprietary binaries</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#四、谷歌官方镜像刷机"><span class="nav-number">5.</span> <span class="nav-text">四、谷歌官方镜像刷机</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lnju</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

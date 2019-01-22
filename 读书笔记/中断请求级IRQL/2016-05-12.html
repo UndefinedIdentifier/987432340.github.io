@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="驱动,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="同步机制依赖于中断请求的级别划分(IRQL)，简称中断请求级。和社会的系统类似即使在计算机系统上，也会有严格的等级制度划分，不可能做到绝对的人人平等。">
+<meta name="keywords" content="驱动">
+<meta property="og:type" content="article">
+<meta property="og:title" content="中断请求级IRQL">
+<meta property="og:url" content="http://www.plaype.cc/读书笔记/中断请求级IRQL/2016-05-12.html">
+<meta property="og:site_name" content="Lnju&#39;s blogs">
+<meta property="og:description" content="同步机制依赖于中断请求的级别划分(IRQL)，简称中断请求级。和社会的系统类似即使在计算机系统上，也会有严格的等级制度划分，不可能做到绝对的人人平等。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://7xn4yz.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-05-12%20%E4%B8%8A%E5%8D%882.45.06.png">
+<meta property="og:updated_time" content="2018-11-26T18:08:43.655Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="中断请求级IRQL">
+<meta name="twitter:description" content="同步机制依赖于中断请求的级别划分(IRQL)，简称中断请求级。和社会的系统类似即使在计算机系统上，也会有严格的等级制度划分，不可能做到绝对的人人平等。">
+<meta name="twitter:image" content="http://7xn4yz.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-05-12%20%E4%B8%8A%E5%8D%882.45.06.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.plaype.cc/读书笔记/中断请求级IRQL/2016-05-12.html">
+
+
+
+
+
+  <title>中断请求级IRQL | Lnju's blogs</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Lnju's blogs</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">曾梦想仗剑走天涯</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.plaype.cc/读书笔记/中断请求级IRQL/2016-05-12.html">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lnju">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://www.plaype.me/uploads/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lnju's blogs">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">中断请求级IRQL</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-05-12T03:21:07+08:00">
+                2016-05-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/读书笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">读书笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>同步机制依赖于中断请求的级别划分(IRQL)，简称中断请求级。和社会的系统类似即使在计算机系统上，也会有严格的等级制度划分，不可能做到绝对的人人平等。</p>
+<a id="more"></a>
+<h2 id="1-IRQL"><a href="#1-IRQL" class="headerlink" title="1. IRQL"></a>1. IRQL</h2><p>windows将中断划分为32个中断请求级别，其中0~2是软件中断（优先级低），3~31是硬件中断（优先级高）。硬件的IRQL简称为DIRQL。windows大部分时间运行在软件中断级别中，当设备中断来临时，操作系统提升IRQL到DIRQL，此时系统只接受硬件设备中断，运行相应的中断处理函数。当硬件中断处理完成后，操作系统再把IRQL降回原来的级别。<br><img src="http://7xn4yz.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-05-12%20%E4%B8%8A%E5%8D%882.45.06.png" alt=""><br>用户模式的代码、驱动程序的DriverEntry函数、派遣函数、AddDevice等函数都是运行在PASSIVE_LEVEL级别（最低级别0），在必要时可以申请进入DISPATCH_LEVEL（级别2）。</p>
+<p>windows负责线程调度的组件工作在DISPATCH_LEVEL上。想一下，当前线程的时间片假如是1s，那么时钟计时1s，当前线程时间片时间到了，那么系统从PASSIVE_LEVEL提升到DISPATCH_LEVEL，执行线程调度的组件；线程切换完成过后，再降低到PASSIVE_LEVEL。</p>
+<p>后面提到的函数StartIO，DPC也运行在DISPATCH_LEVEL上。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">KeGetCurrentIrql()		<span class="comment">//获取当前IRQL</span></span><br></pre></td></tr></table></figure>
+<h2 id="2-线程优先级"><a href="#2-线程优先级" class="headerlink" title="2. 线程优先级"></a>2. 线程优先级</h2><p>反正我觉得书上没写太明白啥是线程优先级，就知道线程优先级和IRQL不同，线程优先级只是有更多的机会被调度，但是应用程序IRQL还是都在PASSIVE_LEVEL上。</p>
+<h2 id="3-IRQL变化"><a href="#3-IRQL变化" class="headerlink" title="3. IRQL变化"></a>3. IRQL变化</h2><p>总结如下：</p>
+<ol>
+<li>低优先级的中断会被高优先级的中断打断，并提升IRQL到高优先级中断的级别</li>
+<li>低优先级不会打断高优先级，必须等高优先级的中断处理函数执行完成后，IRQL降低后再看谁是最高优先级的中断，就处理谁</li>
+</ol>
+<h2 id="4-IRQL与内存分页"><a href="#4-IRQL与内存分页" class="headerlink" title="4.IRQL与内存分页"></a>4.IRQL与内存分页</h2><p>使用分页内存时，有可能使用的内存在磁盘缓存着，那么这时候找不到内存就会引发页异常，执行异常函数从磁盘中加载内容到物理内存中。页异常只允许出现在PASSIVE_LEVEL级别的程序上，如果在DISPATCH_LEVEL及更高的级别上的IRQL程序上，会带来系统崩溃。书上没说原因，我估计是如果分页了但是异常处理程序的IRQL在PASSIVE_LEVEL+1上，所以在DISPATCH_LEVEL上的程序永远也加载不了分页内存进来，引发崩溃。</p>
+<p>所以，驱动程序的StartIO、DPC、中断服务例程都不能用分页内存。</p>
+<h2 id="5-改变IRQL"><a href="#5-改变IRQL" class="headerlink" title="5. 改变IRQL"></a>5. 改变IRQL</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">VOID <span class="title">RasiseIRQL_Test</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	KIRQL oldirql;</span><br><span class="line">	<span class="comment">// 确保当前IRQL等于或小于DISPATCH_LEVEL</span></span><br><span class="line">	ASSERT（KeGetCurrentIrql() &lt;= DIPATCH_LEVEL);</span><br><span class="line">	<span class="comment">// 提升IRQL到DISPATCH_LEVEL，并将先前的IRQL保存起来</span></span><br><span class="line">	KeRaiseIrql(DISPATCH_LEVEL, &amp;oldirql);</span><br><span class="line">	<span class="comment">//...</span></span><br><span class="line">	<span class="comment">// 恢复到先前的IRQL</span></span><br><span class="line">	KeLowerIrql(oldirql);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>发现了一个厉害的<a href="http://blog.csdn.net/chenyujing1234/article/details/7764288" target="_blank" rel="noopener">博客</a>，写了很多驱动开发这本书的笔记，各种高亮关键字，可以参考学习。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/驱动/" rel="tag"># 驱动</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/读书笔记/多线程同步异步/2016-05-12.html" rel="next" title="多线程同步异步">
+                <i class="fa fa-chevron-left"></i> 多线程同步异步
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/读书笔记/自旋锁/2016-05-12.html" rel="prev" title="自旋锁">
+                自旋锁 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="http://www.plaype.me/uploads/avatar.jpg" alt="Lnju">
+            
+              <p class="site-author-name" itemprop="name">Lnju</p>
+              <p class="site-description motion-element" itemprop="description">windows系统安全</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">26</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-IRQL"><span class="nav-number">1.</span> <span class="nav-text">1. IRQL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-线程优先级"><span class="nav-number">2.</span> <span class="nav-text">2. 线程优先级</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-IRQL变化"><span class="nav-number">3.</span> <span class="nav-text">3. IRQL变化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-IRQL与内存分页"><span class="nav-number">4.</span> <span class="nav-text">4.IRQL与内存分页</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-改变IRQL"><span class="nav-number">5.</span> <span class="nav-text">5. 改变IRQL</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lnju</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
